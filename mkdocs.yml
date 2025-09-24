@@ -3,9 +3,14 @@ theme:
   name: material
   features:
     - navigation.tabs
+    - navigation.instant
+    - navigation.tracking
+    - navigation.path
     - navigation.sections
     - toc.integrate
+    - navigation.expand
     - navigation.top
+    - navigation.footer
     - search.suggest
     - search.highlight
     - content.tabs.link
@@ -39,7 +44,66 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.mark
   - attr_list
- 
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
+  - swagger-ui-tag
+  - build_plantuml:
+      render: 'server' # or "local" for local rendering
+      bin_path: '/usr/local/bin/plantuml' # ignored when render: server
+      server: 'http://www.plantuml.com/plantuml' # official plantuml server
+      disable_ssl_certificate_validation: true # for self-signed and invalid certs
+      output_format: 'svg' # or "png"
+      diagram_root: 'docs/diagrams' # should reside under docs_dir
+      output_folder: 'out'
+      input_folder: 'src'
+      input_extensions: '' # comma separated list of extensions to parse, by default every file is parsed
+  - enumerate-headings:
+      exclude:
+        - index.md
+        - page_2.md
+  - print-site:
+        add_to_navigation: true
+        add_full_urls: false
+        add_table_of_contents: true
+        toc_title: "Table of Contents"
+        toc_depth: 2
+        enumerate_headings: true
+        enumerate_figures: true
+        add_cover_page: true
+        path_to_pdf: "assets/site.pdf"
+        exclude:
+          - index.md
+  - autorefs
+
+nav:
+  - Домашняя страница:
+    - index.md
+  - Документация проекта:
+    - page_2.md #Глоссарий
+    - general_info.md #Общие сведения
+    - project_goals.md #Паспорт проекта
+    - goals.md #Назначение и цели создания системы
+    - system_requirements.md
+    
+  - Документация подсистемы:
+    - object_characteristics.md
+    - business_processes.md
+    - subsystem_func_requirements.md
+    - subsystem_requirements.md
+    - User_story.md
+    - information_model.md
+    - C4_model.md
+    - Seq_diagram.md
+    - UI.md
+    - api.md
+  - Задачи:
+    - task.md
+    - test_case.md
 
 copyright: |
   &copy; 2025 <a href="https://github.com/TimIrkutsk/Otus-Project"  target="_blank" rel="noopener">Тимохин Антон</a>
