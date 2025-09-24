@@ -1,0 +1,564 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: 'Dot Eats'
+  description: 'API для заказа блюд через приложение'
+
+paths:
+  /orders/checkout:
+    post:
+      tags:
+        - Заказы
+      summary: Оформление нового заказа
+      description: Создает новый заказ на основе списка выбранных блюд
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutRequest'
+      responses:
+        '201':
+          description: Заказ успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutSuccessResponse'
+          headers:
+            Location:
+              description: URL для отслеживания статуса заказа
+              schema:
+                type: string
+                format: uri
+        '400':
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Требуется авторизация
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+  /orders/{orderNumber}/status:
+    get:
+      tags:
+        - Заказы
+      summary: Получение статуса заказа
+      description: Возвращает текущий статус и детали заказа по его номеру
+      operationId: getOrderStatus
+      parameters:
+        - name: orderNumber
+          in: path
+          required: true
+          description: Номер заказа в формате ММДД-ПорядковыйНомер
+          schema:
+            type: string
+            pattern: '^\d{4}-\d+$'
+            example: "0812-142"
+      responses:
+        '200':
+          description: Статус заказа успешно получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderStatusResponse'
+        '400':
+          description: Неверный формат номера заказа
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Заказ не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseRequest'
+        '401':
+          description: Требуется авторизация
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseRequest'
+  /dishes/{dishId}/reviews:
+    post:
+      tags:
+        - Отзывы
+      summary: Добавить отзыв о блюде
+      description: Создание нового отзыва о заказанном блюде
+      operationId: addDishReview
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dishId
+          in: path
+          required: true
+          description: ID блюда, о котором оставляется отзыв
+          schema:
+            type: string
+            format: uuid
+            example: "550e8400-e29b-41d4-a716-446655440000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddReviewRequest'
+      responses:
+        '201':
+          description: Отзыв успешно добавлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewResponse'
+          headers:
+            Location:
+              description: URL созданного отзыва
+              schema:
+                type: string
+                format: uri
+        '400':
+          description: Неверные данные отзыва
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Блюдо не найдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Отзыв от этого пользователя уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /reviews/{reviewId}:
+    put:
+      tags:
+        - Отзывы
+      summary: Редактировать отзыв
+      description: Обновление существующего отзыва о блюде
+      operationId: updateDishReview
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: reviewId
+          in: path
+          required: true
+          description: ID отзыва для редактирования
+          schema:
+            type: string
+            format: uuid
+            example: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateReviewRequest'
+      responses:
+        '200':
+          description: Отзыв успешно обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewResponse'
+        '400':
+          description: Неверные данные отзыва
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseReview'
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseReview'
+        '403':
+          description: Пользователь не является автором отзыва
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseReview'
+        '404':
+          description: Отзыв не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseReview'
+        '410':
+          description: Отзыв был удален и не может быть изменен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseReview'
+
+components:
+  schemas:
+    OrderStatusResponse:
+      type: object
+      properties:
+        orderNumber:
+          type: string
+          example: "0812-142"
+        status:
+          type: string
+          enum:
+            - "Принят"
+            - "Передан в производство"
+            - "Готовится"
+            - "Готов к выдаче"
+            - "Передан курьеру"
+            - "В пути"
+            - "Доставлен"
+            - "Отменен"
+          example: "Готовится"
+          description: |
+            Возможные статусы:
+            - Принят - заказ принят системой
+            - Передан в производство - передан на кухню
+            - Готовится - начато приготовление
+            - Готов к выдаче - ожидает курьера или самовывоза
+            - Передан курьеру - курьер получил заказ
+            - В пути - курьер доставляет заказ
+            - Доставлен - успешно завершен
+            - Отменен - заказ отменен
+        statusChangedAt:
+          type: string
+          format: date-time
+          example: "2025-08-12T14:30:00Z"
+        statusHistory:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                $ref: '#/components/schemas/OrderStatusResponse/properties/status'
+              changedAt:
+                type: string
+                format: date-time
+              changedBy:
+                type: string
+                nullable: true
+                description: Система или сотрудник, изменивший статус
+          description: История изменения статусов
+          example:
+            - status: "Принят"
+              changedAt: "2025-08-12T14:25:00Z"
+              changedBy: "system"
+            - status: "Передан в производство"
+              changedAt: "2025-08-12T14:28:00Z"
+              changedBy: "Повар Иванов"
+        estimatedCompletionTime:
+          type: string
+          format: date-time
+          nullable: true
+          description: Может быть null если статус delivered или cancelled
+          example: "2025-08-12T15:15:00Z"
+        deliveryAddress:
+          type: string
+          example: "г. Москва, ул. Примерная, д. 1, кв. 2"
+        courierContact:
+          type: object
+          nullable: true
+          properties:
+            name:
+              type: string
+              example: "Иван Петров"
+            phone:
+              type: string
+              example: "+79161234567"
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemStatus'
+        totalAmount:
+          type: number
+          format: float
+          example: 1250.50
+        paymentStatus:
+          type: string
+          enum:
+            - pending
+            - paid
+            - refunded
+            - failed
+          example: "paid"
+
+    OrderItemStatus:
+      type: object
+      properties:
+        dishId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        name:
+          type: string
+          example: "Пицца Маргарита"
+        quantity:
+          type: integer
+          example: 1
+        price:
+          type: number
+          format: float
+          example: 850.00
+        status:
+          type: string
+          enum:
+            - waiting
+            - in_progress
+            - ready
+            - packed
+          example: "in_progress"
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "order_not_found"
+        message:
+          type: string
+          example: "Заказ с указанным номером не найден"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2025-08-12T14:32:10Z"
+
+    CheckoutRequest:
+      type: object
+      required:
+        - items
+        - deliveryAddress
+      properties:
+        items:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        deliveryAddress:
+          type: string
+          minLength: 10
+          example: "г. Москва, ул. Примерная, д. 1, кв. 2"
+        specialRequests:
+          type: string
+          maxLength: 500
+          description: Дополнительные пожелания к заказу
+          example: "Позвонить за 10 минут до доставки"
+        paymentMethod:
+          type: string
+          enum:
+            - cash
+            - card
+            - online
+          default: "online"
+
+    OrderItem:
+      type: object
+      required:
+        - dishId
+        - quantity
+      properties:
+        dishId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        quantity:
+          type: integer
+          minimum: 1
+          maximum: 10
+          example: 2
+        modifications:
+          type: array
+          items:
+            type: string
+          example: ["без лука", "острое"]
+    CheckoutSuccessResponse:
+      type: object
+      properties:
+        orderNumber:
+          type: string
+          pattern: '^\d{4}-\d+$'
+          description: Номер заказа в формате ММДД-ПорядковыйНомер
+          example: "0812-142"
+        estimatedDeliveryTime:
+          type: string
+          format: date-time
+          description: Предполагаемое время доставки
+        totalAmount:
+          type: number
+          format: float
+          minimum: 0
+          description: Итоговая сумма заказа
+          example: 1250.50
+        paymentStatus:
+          type: string
+          enum:
+            - pending
+            - paid
+            - failed
+          example: "pending"
+    ErrorResponseRequest:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "invalid_request"
+        message:
+          type: string
+          example: "Неверные параметры запроса"
+        details:
+          type: array
+          items:
+            type: string
+          example: ["Не указан адрес доставки"]
+    ValidationErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            validationErrors:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                    example: "items[0].quantity"
+                  message:
+                    type: string
+                    example: "Должно быть не менее 1"
+    AddReviewRequest:
+      type: object
+      required:
+        - rating
+        - comment
+      properties:
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 5
+          description: Оценка от 1 до 5 звезд
+        comment:
+          type: string
+          minLength: 10
+          maxLength: 2000
+          example: "Очень вкусное блюдо, всем рекомендую!"
+          description: Текст отзыва
+        photos:
+          type: array
+          maxItems: 5
+          items:
+            type: string
+            format: uri
+            example: "https://example.com/photo1.jpg"
+          description: Ссылки на фотографии блюда
+
+    UpdateReviewRequest:
+      type: object
+      properties:
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 4
+          description: Новая оценка от 1 до 5 звезд
+        comment:
+          type: string
+          minLength: 10
+          maxLength: 2000
+          example: "Было вкусно, но немного пересолено"
+          description: Обновленный текст отзыва
+        photos:
+          type: array
+          maxItems: 5
+          items:
+            type: string
+            format: uri
+            example: "https://example.com/new_photo.jpg"
+          description: Обновленные ссылки на фотографии
+
+    ReviewResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        dishId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        userId:
+          type: string
+          format: uuid
+          example: "a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8"
+        rating:
+          type: integer
+          example: 5
+        comment:
+          type: string
+          example: "Очень вкусное блюдо, всем рекомендую!"
+        photos:
+          type: array
+          items:
+            type: string
+            format: uri
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-08-12T14:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2025-08-12T14:30:00Z"
+        status:
+          type: string
+          enum:
+            - active
+            - deleted
+            - moderated
+          example: "active"
+
+    ErrorResponseReview:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "review_not_found"
+        message:
+          type: string
+          example: "Отзыв с указанным ID не найден"
+        details:
+          type: array
+          items:
+            type: string
+          example: ["Проверьте правильность ID отзыва"]
+        timestamp:
+          type: string
+          format: date-time
+          example: "2025-08-12T14:32:10Z"

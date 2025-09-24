@@ -1,0 +1,45 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+
+rectangle "<b>Этапы реализации</b>" #Application {
+
+  rectangle "MVP" #Business{
+    usecase "UC5: Вести справочники" as UC5
+    usecase "UC3: Провести инвентаризацию" as UC3
+    usecase "UC10: Рассчитать автозаказ" as UC10
+    usecase "UC7: Скорректировать заказ" as UC7
+    usecase "UC9: Заблокировать просроченную партию" as UC9
+    usecase "UC1: Утилизировать партию" as UC1
+  }
+
+  rectangle "Релиз 1.0" #Implementation{
+    usecase "UC6: Настроить правила автозаказа" as UC6
+    usecase "UC12: Передать заказ в ЛЦ" as UC12
+    usecase "UC8: Сформировать задание на утилизацию" as UC8
+    usecase "UC2: Пополнить оперативный запас" as UC2
+    usecase "UC11: Проверить срок годности" as UC11
+    usecase "UC4: Подтвердить списание" as UC4
+  }
+}
+
+' Связи для понимания зависимостей
+UC5 -[hidden]d-> UC6
+UC10 -[hidden]d-> UC12
+UC9 -[hidden]d-> UC8
+UC1 -[hidden]d-> UC4
+UC3 -[hidden]r-> UC2
+UC7 -[hidden]r-> UC11
+
+note right of UC3
+  <b>MVP:</b> Ручное управление
+  на основе отчетов системы
+end note
+
+note right of UC2
+  <b>Релиз 1.0:</b>
+  Полная автоматизация
+  процессов
+end note
+@enduml
