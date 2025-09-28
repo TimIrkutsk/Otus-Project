@@ -1,0 +1,157 @@
+@startuml
+!define table(x) class x << (T,#FFAAAA) >>
+!define primary_key(x) <b><color:red>*</color> x</b>
+!define foreign_key(x) <color:blue>*</color> x
+
+hide methods
+hide stereotypes
+
+table(products) {
+  primary_key(product_id) BIGINT
+  --
+  name VARCHAR(255) NOT NULL
+  category VARCHAR(100) NOT NULL
+  unit_of_measure VARCHAR(20) NOT NULL
+  shelf_life_hours INTEGER NOT NULL
+}
+
+table(batches) {
+  primary_key(batch_id) VARCHAR(100)
+  --
+  foreign_key(product_id) BIGINT NOT NULL
+  foreign_key(location_id) BIGINT NOT NULL
+  production_date DATETIME NOT NULL
+  expiration_date DATETIME NOT NULL
+  initial_quantity DECIMAL(10,3) NOT NULL
+  current_quantity DECIMAL(10,3) NOT NULL
+  status VARCHAR(20) NOT NULL
+  supplier_name VARCHAR(255)
+}
+
+table(storage_locations) {
+  primary_key(location_id) BIGINT
+  --
+  name VARCHAR(255) NOT NULL
+  type VARCHAR(50) NOT NULL
+  parent_location_id BIGINT
+}
+
+table(inventory_counts) {
+  primary_key(count_id) BIGINT
+  --
+  foreign_key(user_id) BIGINT NOT NULL
+  count_date DATETIME NOT NULL
+  status VARCHAR(20) NOT NULL
+}
+
+table(inventory_count_items) {
+  primary_key(item_id) BIGINT
+  --
+  foreign_key(count_id) BIGINT NOT NULL
+  foreign_key(batch_id) VARCHAR(100) NOT NULL
+  actual_quantity DECIMAL(10,3) NOT NULL
+}
+
+table(suppliers) {
+  primary_key(supplier_id) BIGINT
+  --
+  name VARCHAR(255) NOT NULL
+  contact_info TEXT
+}
+
+table(purchase_orders) {
+  primary_key(order_id) BIGINT
+  --
+  foreign_key(supplier_id) BIGINT NOT NULL
+  foreign_key(user_id) BIGINT NOT NULL
+  order_date DATETIME NOT NULL
+  status VARCHAR(50) NOT NULL
+  delivery_date DATETIME
+}
+
+table(order_items) {
+  primary_key(order_item_id) BIGINT
+  --
+  foreign_key(order_id) BIGINT NOT NULL
+  foreign_key(product_id) BIGINT NOT NULL
+  quantity DECIMAL(10,3) NOT NULL
+  suggested_quantity DECIMAL(10,3)
+  final_quantity DECIMAL(10,3) NOT NULL
+}
+
+table(replenishment_rules) {
+  primary_key(rule_id) BIGINT
+  --
+  foreign_key(product_id) BIGINT NOT NULL
+  min_stock DECIMAL(10,3) NOT NULL
+  max_stock DECIMAL(10,3) NOT NULL
+  reorder_point DECIMAL(10,3) NOT NULL
+  lead_time_days INTEGER NOT NULL
+}
+
+table(disposal_tasks) {
+  primary_key(task_id) BIGINT
+  --
+  foreign_key(batch_id) VARCHAR(100) NOT NULL
+  foreign_key(user_id) BIGINT NOT NULL
+  created_date DATETIME NOT NULL
+  priority VARCHAR(20) NOT NULL
+  status VARCHAR(20) NOT NULL
+}
+
+table(disposal_acts) {
+  primary_key(act_id) BIGINT
+  --
+  foreign_key(task_id) BIGINT NOT NULL
+  disposal_date DATETIME NOT NULL
+  quantity DECIMAL(10,3) NOT NULL
+  reason VARCHAR(100) NOT NULL
+}
+
+table(stock_movements) {
+  primary_key(movement_id) BIGINT
+  --
+  foreign_key(batch_id) VARCHAR(100) NOT NULL
+  foreign_key(from_location_id) BIGINT
+  foreign_key(to_location_id) BIGINT
+  foreign_key(user_id) BIGINT NOT NULL
+  movement_date DATETIME NOT NULL
+  quantity DECIMAL(10,3) NOT NULL
+  movement_type VARCHAR(20) NOT NULL
+}
+
+table(users) {
+  primary_key(user_id) BIGINT
+  --
+  name VARCHAR(255) NOT NULL
+  role VARCHAR(50) NOT NULL
+  login VARCHAR(100) NOT NULL
+  password_hash VARCHAR(255) NOT NULL
+}
+
+' Связи между таблицами
+products ||--o{ batches : "product_id"
+storage_locations ||--o{ batches : "location_id"
+storage_locations ||--o{ storage_locations : "parent_location_id"
+
+users ||--o{ inventory_counts : "user_id"
+inventory_counts ||--o{ inventory_count_items : "count_id"
+batches ||--o{ inventory_count_items : "batch_id"
+
+suppliers ||--o{ purchase_orders : "supplier_id"
+users ||--o{ purchase_orders : "user_id"
+purchase_orders ||--o{ order_items : "order_id"
+products ||--o{ order_items : "product_id"
+
+products ||--|| replenishment_rules : "product_id"
+
+batches ||--o{ disposal_tasks : "batch_id"
+users ||--o{ disposal_tasks : "user_id"
+disposal_tasks ||--|| disposal_acts : "task_id"
+
+batches ||--o{ stock_movements : "batch_id"
+storage_locations ||--o{ stock_movements : "from_location_id"
+storage_locations ||--o{ stock_movements : "to_location_id"
+users ||--o{ stock_movements : "user_id"
+
+@enduml
