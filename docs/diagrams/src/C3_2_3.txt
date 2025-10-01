@@ -1,0 +1,54 @@
+@startuml
+!include <C4/C4_Component>
+
+title Сервис отчетности - Компонентная диаграмма
+
+Container_Boundary(reporting_service, "Сервис отчетности", "Spring Boot") {
+    
+    ' Уровень API
+    Component(report_controller, "Контроллер отчетов", "Spring REST Controller", "REST API для генерации отчетов")
+    
+    ' Уровень бизнес-логики
+    Component(expiration_report_service, "Сервис отчетов по срокам", "Spring Service", "Генерация отчетов по истекающим срокам")
+    Component(inventory_report_service, "Сервис отчетов по остаткам", "Spring Service", "Генерация отчетов по текущим остаткам")
+    Component(movement_report_service, "Сервис отчетов по движениям", "Spring Service", "Генерация отчетов по движениям запасов")
+    
+    ' Уровень генерации отчетов
+    Component(report_generator, "Генератор отчетов", "Spring Service", "Оркестрация процесса генерации отчетов")
+    Component(data_aggregator, "Агрегатор данных", "Spring Component", "Агрегация данных из нескольких источников")
+    Component(report_formatter, "Форматировщик отчетов", "Spring Component", "Форматирование отчетов в PDF/Excel")
+    
+    ' Уровень доступа к данным
+    Component(report_repository, "Репозиторий отчетов", "Spring Data JPA", "Доступ к сохраненным отчетам")
+    Component(analytics_repository, "Репозиторий аналитики", "Spring Data JPA", "Доступ к аналитическим данным")
+    
+    ' Уровень обработки событий
+    Component(report_event_consumer, "Консьюмер событий", "Spring Kafka", "Обработка событий для аналитики")
+}
+
+' Внешние зависимости
+ContainerDb(reporting_db, "База отчетности", "ClickHouse")
+Container_Ext(inventory_service, "Сервис инвентаризации", "Spring Boot")
+Container_Ext(message_broker, "Брокер сообщений", "Apache Kafka")
+
+' Внутренние связи
+Rel(report_controller, report_generator, "Запускает генерацию", "Java")
+Rel(report_generator, expiration_report_service, "Использует для отчетов по срокам", "Java")
+Rel(report_generator, inventory_report_service, "Использует для отчетов по остаткам", "Java")
+Rel(report_generator, movement_report_service, "Использует для отчетов по движениям", "Java")
+
+Rel(report_generator, data_aggregator, "Агрегирует данные", "Java")
+Rel(data_aggregator, report_formatter, "Форматирует отчет", "Java")
+
+Rel(expiration_report_service, analytics_repository, "Запрашивает данные", "JPA")
+Rel(inventory_report_service, analytics_repository, "Запрашивает данные", "JPA")
+Rel(analytics_repository, reporting_db, "Читает данные", "JDBC")
+
+Rel(report_repository, reporting_db, "Сохраняет отчеты", "JDBC")
+Rel(report_event_consumer, message_broker, "Получает события", "Kafka Consumer")
+Rel(report_event_consumer, analytics_repository, "Сохраняет аналитику", "JPA")
+
+' Внешние вызовы
+Rel(data_aggregator, inventory_service, "Запрашивает актуальные данные", "REST")
+
+@enduml

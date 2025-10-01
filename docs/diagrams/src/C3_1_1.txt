@@ -1,0 +1,75 @@
+@startuml
+!include <C4/C4_Component>
+
+title Сервис интеграции с логистическим центром - Компонентная диаграмма
+
+Container_Boundary(logistics_integration, "Сервис интеграции с ЛЦ", "Spring Boot") {
+    
+    ' Уровень API
+    Component(logistics_controller, "Контроллер логистики", "Spring REST Controller", "REST API для внутренних сервисов")
+    
+    ' Уровень бизнес-логики
+    Component(order_sync_service, "Сервис синхронизации", "Spring Service", "Синхронизация заказов с ЛЦ")
+    Component(delivery_tracking_service, "Сервис отслеживания", "Spring Service", "Отслеживание поставок")
+    Component(supplier_data_service, "Сервис данных от поставщика", "Spring Service", "Обработка данных от поставщика")
+    
+    ' Уровень внешней интеграции
+    Component(supplier_rest_client, "REST клиент поставщика", "RestTemplate", "REST клиент для API ЛЦ")
+    Component(supplier_soap_client, "SOAP клиент поставщика", "SOAP Client", "SOAP клиент для API ЛЦ")
+    Component(api_adapter, "API адаптер", "Spring Component", "Адаптер различных API поставщика")
+    
+    ' Уровень обработки данных
+    Component(order_mapper, "Преобразование заказа", "Spring Component", "Преобразование форматов заказов")
+    Component(delivery_mapper, "Преобразование доставки", "Spring Component", "Преобразование данных поставок")
+    Component(error_handler, "Обработчик ошибок", "Spring Component", "Обработка ошибок интеграции")
+    
+    ' Уровень доступа к данным
+    Component(supplier_order_repository, "Сервис доступа к данным заказов", "Spring Data JPA", "Доступ к данным заказов поставщика")
+    Component(delivery_repository, "Сервис доступа к данным поставок", "Spring Data JPA", "Доступ к данным поставок")
+    
+}
+
+' Внешние зависимости ("черные ящики")
+ContainerDb(orders_db, "База заказов", "PostgreSQL")
+Container_Ext(order_service, "Сервис заказов", "Spring Boot")
+System_Ext(logistics, "Логистический центр", "REST/SOAP API")
+
+' Внутренние связи компонентов
+
+' Контроллер -> Сервис
+Rel(logistics_controller, order_sync_service, "Вызывает", "Java")
+Rel(logistics_controller, delivery_tracking_service, "Вызывает", "Java")
+
+' Сервис -> Сервис
+Rel(order_sync_service, supplier_data_service, "Обрабатывает данные", "Java")
+Rel(delivery_tracking_service, supplier_data_service, "Обрабатывает данные", "Java")
+
+' Сервис -> Внешняя интеграция
+Rel(order_sync_service, supplier_rest_client, "Отправляет заказы", "Java")
+Rel(delivery_tracking_service, supplier_soap_client, "Получает статусы", "Java")
+
+' Внешняя интеграция -> API адаптеры
+Rel(supplier_rest_client, api_adapter, "Использует адаптер", "Java")
+Rel(supplier_soap_client, api_adapter, "Использует адаптер", "Java")
+
+' API адаптеры -> Внешние системы
+Rel(api_adapter, logistics, "Вызывает API", "REST/SOAP")
+
+' Обработка данных
+Rel(order_sync_service, order_mapper, "Преобразует форматы", "Java")
+Rel(delivery_tracking_service, delivery_mapper, "Преобразует форматы", "Java")
+Rel(order_sync_service, error_handler, "Обрабатывает ошибки", "Java")
+
+' Сервис -> Управление данными
+Rel(order_sync_service, supplier_order_repository, "Сохраняет данные", "JPA")
+Rel(delivery_tracking_service, delivery_repository, "Сохраняет данные", "JPA")
+
+' Управление данными -> База данных
+Rel(supplier_order_repository, orders_db, "Сохраняет данные", "JDBC")
+Rel(delivery_repository, orders_db, "Сохраняет данные", "JDBC")
+
+' Внешние вызовы
+Rel(order_service, logistics_controller, "Передает заказы", "REST")
+
+
+@enduml

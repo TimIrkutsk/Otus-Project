@@ -1,0 +1,64 @@
+@startuml
+!include <C4/C4_Component>
+
+title Сервис инвентаризации - Компонентная диаграмма
+
+Container_Boundary(inventory_service, "Сервис инвентаризации", "Spring Boot") {
+    
+    ' Уровень API
+    Component(batch_controller, "Контроллер партий", "Spring REST Controller", "REST API для управления партиями")
+    Component(inventory_controller, "Контроллер инвентаризации", "Spring REST Controller", "REST API для проведения инвентаризаций")
+    Component(expiration_controller, "Контроллер сроков", "Spring REST Controller", "REST API для контроля сроков годности")
+    
+    ' Уровень бизнес-логики
+    Component(batch_management_service, "Сервис управления партиями", "Spring Service", "Логика работы с партиями товаров")
+    Component(inventory_management_service, "Сервис управления инвентаризацией", "Spring Service", "Логика проведения инвентаризаций")
+    Component(expiration_management_service, "Сервис управления сроками", "Spring Service", "Логика контроля сроков годности")
+    Component(stock_movement_service, "Сервис движений запасов", "Spring Service", "Логика перемещений и списаний")
+    
+    ' Уровень планировщиков
+    Component(expiration_checker, "Проверщик сроков", "Scheduled Service", "Периодическая проверка сроков годности")
+    Component(stock_level_monitor, "Монитор остатков", "Scheduled Service", "Мониторинг уровня запасов")
+    
+    ' Уровень доступа к данным
+    Component(batch_repository, "Репозиторий партий", "Spring Data JPA", "Доступ к данным партий")
+    Component(inventory_repository, "Репозиторий инвентаризации", "Spring Data JPA", "Доступ к данным инвентаризаций")
+    Component(movement_repository, "Репозиторий движений", "Spring Data JPA", "Доступ к данным движений запасов")
+    
+    ' Уровень событий
+    Component(inventory_event_publisher, "Публикатор событий", "Spring Kafka", "Публикация событий изменений")
+    Component(cache_service, "Сервис кэширования", "Spring Service", "Управление кэшем остатков")
+}
+
+' Внешние зависимости
+ContainerDb(inventory_db, "База инвентаризации", "PostgreSQL")
+ContainerDb(cache_db, "Кэш-хранилище", "Redis")
+Container_Ext(robot_integration, "Сервис интеграции с роботом", "Spring Boot")
+Container_Ext(message_broker, "Брокер сообщений", "Apache Kafka")
+
+' Внутренние связи
+Rel(batch_controller, batch_management_service, "Вызывает", "Java")
+Rel(inventory_controller, inventory_management_service, "Вызывает", "Java")
+Rel(expiration_controller, expiration_management_service, "Вызывает", "Java")
+
+Rel(batch_management_service, batch_repository, "Использует", "JPA")
+Rel(inventory_management_service, inventory_repository, "Использует", "JPA")
+Rel(stock_movement_service, movement_repository, "Использует", "JPA")
+
+Rel(batch_repository, inventory_db, "Сохраняет данные", "JDBC")
+Rel(inventory_repository, inventory_db, "Сохраняет данные", "JDBC")
+Rel(movement_repository, inventory_db, "Сохраняет данные", "JDBC")
+
+Rel(expiration_checker, expiration_management_service, "Запускает проверку", "Scheduled")
+Rel(stock_level_monitor, batch_management_service, "Проверяет остатки", "Scheduled")
+
+Rel(batch_management_service, cache_service, "Обновляет кэш", "Java")
+Rel(cache_service, cache_db, "Работает с кэшем", "Redis Protocol")
+
+Rel(batch_management_service, inventory_event_publisher, "Публикует события", "Spring Events")
+Rel(inventory_event_publisher, message_broker, "Отправляет в Kafka", "Kafka Producer")
+
+' Внешние вызовы
+Rel(robot_integration, batch_management_service, "Запрашивает данные партий", "REST")
+
+@enduml

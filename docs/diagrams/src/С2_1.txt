@@ -1,0 +1,67 @@
+@startuml
+!include <C4/C4_Container>
+
+title Система управления запасами - Автозаказ и логистика (Уровень 2)
+
+' Пользователи
+Person(technologist, "Технолог", "Настраивает правила и управляет заказами")
+
+' Внешние системы
+System_Ext(logistics, "Логистический центр", "Поставщик полуфабрикатов")
+
+' Граница системы
+System_Boundary(order_system, "Система автозаказа и логистики") {
+
+    ' Frontend контейнеры
+    Container(web_app, "Веб-приложение", "React, TypeScript", "Управление заказами и правилами")
+    
+    ' Backend контейнеры
+    Container(api_gateway, "API Gateway", "Spring Cloud Gateway", "Единая точка входа")
+    Container(service_discovery, "Обнаружение сервисов", "Netflix Eureka", "Регистрация сервисов")
+    
+    Container(auth_service, "Сервис аутентификации", "Spring Boot, JWT", "Управление доступом")
+    
+    Container(order_service, "Сервис заказов", "Spring Boot", "Автозаказ, правила пополнения, заполнение справочника")
+    Container(logistics_integration, "Сервис интеграции с ЛЦ", "Spring Boot", "Обмен данными с поставщиком")
+    
+    ' Базы данных
+    ContainerDb(orders_db, "База заказов", "PostgreSQL", "Хранение заказов и правил")
+    ContainerDb(cache_db, "Кэш-хранилище", "Redis", "Кэш и сессии")
+    
+    ' Инфраструктурные сервисы
+    Container(message_broker, "Брокер сообщений", "Apache Kafka", "Асинхронная коммуникация")
+}
+
+' Внешние сервисы (из другой группы)
+Container_Ext(inventory_service, "Сервис инвентаризации", "Spring Boot", "Предоставляет данные об остатках")
+
+' Взаимодействия пользователей
+Rel(technologist, web_app, "Настраивает правила, корректирует заказы", "HTTPS")
+
+' Frontend -> Backend
+Rel(web_app, api_gateway, "Вызывает API", "REST")
+
+' Инфраструктурные связи
+Rel(api_gateway, service_discovery, "Обнаружение сервисов", "HTTPS")
+Rel(api_gateway, auth_service, "Проверяет аутентификацию", "JWT")
+Rel(auth_service, service_discovery, "Регистрация сервиса", "HTTPS")
+
+' API Gateway -> Бизнес-сервисы
+Rel(api_gateway, order_service, "Маршрутизирует запросы заказов", "REST")
+Rel(order_service, service_discovery, "Регистрация сервиса", "HTTPS")
+
+' Интеграции с внешними системами
+Rel(logistics_integration, logistics, "Обмен заказами и поставками", "REST")
+
+' Внутренние связи сервисов
+Rel(order_service, logistics_integration, "Передает заказы/ получает инфо о заказах", "REST")
+Rel(order_service, inventory_service, "Запрашивает текущие остатки", "REST")
+
+' Сервисы -> Базы данных
+Rel(order_service, orders_db, "Чтение/запись данных заказов", "JDBC")
+Rel(auth_service, cache_db, "Хранение сессий и токенов", "Redis Protocol")
+
+' Асинхронная коммуникация
+Rel(order_service, message_broker, "Публикует события заказов", "Kafka")
+
+@enduml

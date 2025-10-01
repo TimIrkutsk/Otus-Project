@@ -1,0 +1,56 @@
+@startuml
+!include <C4/C4_Component>
+
+title Сервис интеграции с роботом - Компонентная диаграмма
+
+Container_Boundary(robot_integration, "Сервис интеграции с роботом", "Spring Boot, gRPC") {
+    
+    ' Уровень протоколов
+    Component(robot_grpc_controller, "gRPC контроллер", "gRPC Service", "Обработка gRPC запросов от робота")
+    Component(robot_rest_controller, "REST контроллер", "Spring REST Controller", "REST API для внутренних сервисов")
+    
+    ' Уровень бизнес-логики
+    Component(expiration_check_service, "Сервис проверки сроков", "Spring Service", "Проверка сроков годности для робота")
+    Component(robot_command_service, "Сервис команд роботу", "Spring Service", "Управление командами для робота")
+    Component(stock_replenishment_service, "Сервис пополнения запасов", "Spring Service", "Логика пополнения оперативного запаса")
+    
+    ' Уровень высокопроизводительного доступа
+    Component(cache_service, "Сервис кэширования", "Spring Service", "Высокопроизводительный доступ к данным")
+    Component(real_time_data_service, "Сервис реального времени", "Spring Service", "Обработка данных в реальном времени")
+    
+    ' Уровень интеграции
+    Component(robot_grpc_client, "gRPC клиент", "gRPC Stub", "Клиент для связи с роботом")
+    Component(protocol_adapter, "Адаптер протоколов", "Spring Component", "Адаптация различных протоколов связи")
+    
+    ' Уровень обработки событий
+    Component(robot_event_consumer, "Потребитель событий", "Spring Kafka", "Обработка событий от других сервисов")
+}
+
+' Внешние зависимости
+ContainerDb(cache_db, "Кэш-хранилище", "Redis")
+Container_Ext(inventory_service, "Сервис инвентаризации", "Spring Boot")
+System_Ext(robot, "Роботизированная линия", "gRPC")
+Container_Ext(message_broker, "Брокер сообщений", "Apache Kafka")
+
+' Внутренние связи
+Rel(robot_grpc_controller, expiration_check_service, "Обрабатывает запросы", "Java")
+Rel(robot_rest_controller, stock_replenishment_service, "Обрабатывает запросы", "Java")
+
+Rel(expiration_check_service, cache_service, "Проверяет кэш", "Java")
+Rel(cache_service, cache_db, "Работает с кэшем", "Redis Protocol")
+
+Rel(expiration_check_service, real_time_data_service, "Использует для проверки", "Java")
+Rel(stock_replenishment_service, real_time_data_service, "Использует для пополнения", "Java")
+
+Rel(robot_command_service, robot_grpc_client, "Отправляет команды", "gRPC")
+Rel(robot_grpc_client, protocol_adapter, "Использует адаптер", "Java")
+Rel(protocol_adapter, robot, "Связывается с роботом", "gRPC/WebSocket")
+
+Rel_Right(message_broker, robot_event_consumer, "Передает события", "Kafka Consumer")
+Rel(robot_event_consumer, robot_command_service, "Передает команды", "Java")
+
+' Внешние вызовы при отсутствии данных в кэше
+Rel(inventory_service, robot_rest_controller, "Передает данные партий", "REST")
+Rel(robot, robot_grpc_controller, "Передает данные для пополнения", "REST")
+
+@enduml

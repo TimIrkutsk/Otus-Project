@@ -1,0 +1,79 @@
+@startuml
+!include <C4/C4_Component>
+
+title Сервис заказов - Компонентная диаграмма
+
+Container_Boundary(order_service, "Сервис заказа", "Spring Boot") {
+    
+    ' Уровень API
+    Component(order_controller, "Контроллер заказов", "Spring REST Controller", "REST API для управления заказами")
+    Component(rule_controller, "Контроллер правил", "Spring REST Controller", "REST API для управления правилами")
+    Component(catalog_controller, "Контроллер справочников", "Spring REST Controller", "REST API для справочников")
+    
+    ' Уровень бизнес-правил
+    Component(order_management_service, "Сервис управления заказами", "Spring Service", "Логика работы с заказами")
+    Component(replenishment_service, "Сервис автозаказа", "Spring Service", "Логика автозаказа и расчета")
+    Component(rule_management_service, "Сервис управления правилами", "Spring Service", "Управление правилами пополнения")
+    Component(catalog_service, "Сервис справочников", "Spring Service", "Управление справочниками")
+    
+    ' Механизм расчетов заказа
+    Component(order_calculator, "Блок расчета", "Spring Component", "Расчет заказа на основе правил")
+    Component(rule_engine, "Блок бизнес-правил", "Drools Engine", "Выполнение бизнес-правил")
+    
+    ' Уровень доступка к данным
+    Component(order_repository, "Механизм доступа к данным заказов", "Spring Data JPA", "Доступ к данным заказов")
+    Component(rule_repository, "Механизм доступа к данным бизнес-правил", "Spring Data JPA", "Доступ к правилам пополнения")
+    Component(product_repository, "Механизм доступа к данным справочников", "Spring Data JPA", "Доступ к справочнику товаров")
+    
+    ' Уровень интеграции
+    Component(inventory_client, "Клиент инвентаризации", "Feign Client", "REST клиент для сервиса инвентаризации")
+    Component(logistics_client, "Клиент логистики", "Feign Client", "REST клиент для сервиса интеграции с ЛЦ")
+    
+    ' Уровень синхронизации событий
+    Component(order_event_publisher, "Поставщик событий о заказах", "Spring Kafka", "Публикация событий заказов")
+}
+
+' Внешние зависимости (черные ящики)
+ContainerDb(orders_db, "База заказов", "PostgreSQL")
+Container_Ext(inventory_service, "Сервис инвентаризации", "Spring Boot")
+Container_Ext(logistics_integration, "Сервис интеграции с ЛЦ", "Spring Boot")
+Container_Ext(message_broker, "Брокер сообщений", "Apache Kafka")
+
+' Внутренние связи компонентов
+
+' Контроллер -> Сервис
+Rel(order_controller, order_management_service, "Вызывает", "Java")
+Rel(rule_controller, rule_management_service, "Вызывает", "Java")
+Rel(catalog_controller, catalog_service, "Вызывает", "Java")
+
+' Сервис -> Сервис
+Rel(order_management_service, replenishment_service, "Использует", "Java")
+Rel(replenishment_service, rule_management_service, "Использует", "Java")
+
+' Сервис -> Механизм расчета
+Rel(replenishment_service, order_calculator, "Рассчитывает заказ", "Java")
+Rel(order_calculator, rule_engine, "Выполняет правила", "Drools API")
+
+' Сервис -> Управление данными
+Rel(order_management_service, order_repository, "Использует", "JPA")
+Rel(rule_management_service, rule_repository, "Использует", "JPA")
+Rel(catalog_service, product_repository, "Использует", "JPA")
+
+' Управление данными -> База данных
+Rel(order_repository, orders_db, "Сохраняет/Получает данные", "JDBC")
+Rel(rule_repository, orders_db, "Сохраняет/Получает данные", "JDBC")
+Rel(product_repository, orders_db, "Сохраняет/Получает данные", "JDBC")
+
+' Сервис -> Клиенты для общения с другими сервисами
+Rel(replenishment_service, inventory_client, "Запрашивает остатки", "REST")
+Rel(order_management_service, logistics_client, "Передает заказы", "REST")
+
+' Клиенты для общения с другими сервисами -> Внешние сервисы
+Rel(inventory_client, inventory_service, "Вызывает API", "REST")
+Rel(logistics_client, logistics_integration, "Вызывает API", "REST")
+
+' Публикация событий
+Rel(order_management_service, order_event_publisher, "Публикует события", "Spring Events")
+Rel(order_event_publisher, message_broker, "Отправляет в Kafka", "Kafka Producer")
+
+@enduml
