@@ -1,0 +1,81 @@
+@startuml
+title Создание задания на утилизацию (UC13) - Автоматический процесс
+
+participant "Сервис контроля\nсроков" as shelf_life
+participant "Брокер сообщений\nKafka" as kafka
+participant "Сервис заданий" as tasks
+participant "Сервис уведомлений" as notifications
+participant "Мобильное\nприложение" as mobile
+participant "Оператор" as operator
+participant "Технолог" as technologist
+database "База заданий" as tasks_db
+database "База остатков" as stock_db
+
+== Автоматическое создание задания при блокировке ==
+
+shelf_life -> shelf_life: Обнаружена партия для утилизации\n(истек срок или истекает сегодня)
+shelf_life -> stock_db: Блокировка партии\n(статус = "Заблокирована")
+
+shelf_life -> kafka: Публикация события блокировки\n(batch_id, location, reason, priority)
+kafka -> tasks: Доставка события блокировки
+
+tasks -> tasks_db: Создание задания на утилизацию\n(тип="утилизация", приоритет, batch_id, локация)
+tasks_db --> tasks: ID задания
+
+tasks -> tasks: Определение оператора\n(для ресторана только один оператор)
+
+tasks -> notifications: Уведомление о новом задании
+notifications -> mobile: Push-уведомление оператору\n"Новое задание на утилизацию"
+
+== Массовая блокировка - обработка аномалии ==
+
+group Проверка массовой блокировки
+    tasks -> stock_db: Проверка количества заблокированных партий
+    stock_db --> tasks: Общее количество партий и заблокированных
+    
+    alt Заблокировано > 50% партий
+        tasks -> notifications: Критическое уведомление
+        notifications -> technologist: Email + Push\n"Массовая блокировка: X% партий"
+    end
+end
+
+== Мониторинг сроков выполнения заданий ==
+
+group Проверка просроченных заданий (каждый час)
+    tasks -> tasks_db: Поиск заданий старше 1 часа\nсо статусом "Не выполнено"
+    tasks_db --> tasks: Список просроченных заданий
+    
+    loop Для каждого просроченного задания
+        tasks -> tasks_db: Удаление старого задания
+        tasks -> tasks_db: Создание нового задания\n(повышенный приоритет)
+        tasks -> notifications: Повторное уведомление
+        notifications -> mobile: Push "Срочное задание на утилизацию"
+    end
+end
+
+== Оператор получает и выполняет задание ==
+
+operator -> mobile: Просмотр списка заданий
+mobile -> tasks: Запрос активных заданий
+tasks -> tasks_db: Получение заданий оператора
+tasks_db --> tasks: Список заданий
+tasks --> mobile: Данные заданий
+mobile --> operator: Отображение заданий
+
+operator -> mobile: Выбор задания на утилизацию
+mobile -> tasks: Начало выполнения задания
+tasks -> tasks_db: Обновление статуса "В работе"
+
+note right of shelf_life
+    <b>Критерии блокировки:</b>
+    • Срок годности истек
+    • Истекает сегодня
+    • Статус = "Заблокирована"
+end note
+
+note right of tasks
+    <b>Приоритеты заданий:</b>
+    • Просроченные - высший
+    • Истекающие сегодня - высокий
+    • Срок выполнения: 1 час
+end note

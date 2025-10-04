@@ -1,56 +1,41 @@
 @startuml
 !include <C4/C4_Component>
 
-title Сервис интеграции с роботом - Компонентная диаграмма
+title Сервис интеграции с роботом - Компонентная диаграмма (Уровень 3)
 
-Container_Boundary(robot_integration, "Сервис интеграции с роботом", "Spring Boot, gRPC") {
+Container_Boundary(robot_integration, "Сервис интеграции с роботом") {
+    Component(robot_protocol, "Обработчик протокола", "gRPC Service", "Обработка gRPC/WebSocket соединений")
+    Component(shelf_life_checker, "Проверка сроков", "Spring Bean", "Проверка сроков годности (<100 мс)")
+    Component(stock_cache_manager, "Менеджер кэша", "Spring Bean", "Управление кэшем остатков в Redis")
+    Component(emergency_handler, "Обработчик аварий", "Spring Bean", "Обработка аварийных ситуаций")
     
-    ' Уровень протоколов
-    Component(robot_grpc_controller, "gRPC контроллер", "gRPC Service", "Обработка gRPC запросов от робота")
-    Component(robot_rest_controller, "REST контроллер", "Spring REST Controller", "REST API для внутренних сервисов")
-    
-    ' Уровень бизнес-логики
-    Component(expiration_check_service, "Сервис проверки сроков", "Spring Service", "Проверка сроков годности для робота")
-    Component(robot_command_service, "Сервис команд роботу", "Spring Service", "Управление командами для робота")
-    Component(stock_replenishment_service, "Сервис пополнения запасов", "Spring Service", "Логика пополнения оперативного запаса")
-    
-    ' Уровень высокопроизводительного доступа
-    Component(cache_service, "Сервис кэширования", "Spring Service", "Высокопроизводительный доступ к данным")
-    Component(real_time_data_service, "Сервис реального времени", "Spring Service", "Обработка данных в реальном времени")
-    
-    ' Уровень интеграции
-    Component(robot_grpc_client, "gRPC клиент", "gRPC Stub", "Клиент для связи с роботом")
-    Component(protocol_adapter, "Адаптер протоколов", "Spring Component", "Адаптация различных протоколов связи")
-    
-    ' Уровень обработки событий
-    Component(robot_event_consumer, "Потребитель событий", "Spring Kafka", "Обработка событий от других сервисов")
+    Component(robot_grpc_service, "gRPC Сервис", "gRPC", "gRPC endpoint для робота")
+    Component(cache_sync_service, "Сервис синхронизации", "Spring Bean", "Синхронизация кэша с основными данными")
 }
 
-' Внешние зависимости
-ContainerDb(cache_db, "Кэш-хранилище", "Redis")
-Container_Ext(inventory_service, "Сервис инвентаризации", "Spring Boot")
-System_Ext(robot, "Роботизированная линия", "gRPC")
-Container_Ext(message_broker, "Брокер сообщений", "Apache Kafka")
-
 ' Внутренние связи
-Rel(robot_grpc_controller, expiration_check_service, "Обрабатывает запросы", "Java")
-Rel(robot_rest_controller, stock_replenishment_service, "Обрабатывает запросы", "Java")
+Rel(robot_grpc_service, robot_protocol, "Обработка запросов", "Метод вызов")
+Rel(robot_protocol, shelf_life_checker, "Проверка разрешений", "Метод вызов")
+Rel(shelf_life_checker, stock_cache_manager, "Запрос данных", "Метод вызов")
+Rel(robot_protocol, emergency_handler, "Аварийные ситуации", "Метод вызов")
+Rel(cache_sync_service, stock_cache_manager, "Обновление кэша", "Метод вызов")
 
-Rel(expiration_check_service, cache_service, "Проверяет кэш", "Java")
-Rel(cache_service, cache_db, "Работает с кэшем", "Redis Protocol")
+' Внешние зависимости
+Container_Ext(cache_db, "Кэш-хранилище", "Redis")
+Container_Ext(message_broker, "Брокер сообщений", "Kafka")
+Container_Ext(robot, "Роботизированная линия", "gRPC Client")
+Container_Ext(shelf_life_service, "Сервис контроля сроков", "REST API")
 
-Rel(expiration_check_service, real_time_data_service, "Использует для проверки", "Java")
-Rel(stock_replenishment_service, real_time_data_service, "Использует для пополнения", "Java")
+' Внешние связи
+Rel(robot_grpc_service, robot, "Взаимодействие", "gRPC/WebSocket")
+Rel(stock_cache_manager, cache_db, "Чтение/запись", "Redis Protocol")
+Rel(cache_sync_service, message_broker, "Получение обновлений", "Kafka")
+Rel(shelf_life_checker, shelf_life_service, "Проверка блокировок", "REST")
 
-Rel(robot_command_service, robot_grpc_client, "Отправляет команды", "gRPC")
-Rel(robot_grpc_client, protocol_adapter, "Использует адаптер", "Java")
-Rel(protocol_adapter, robot, "Связывается с роботом", "gRPC/WebSocket")
-
-Rel_Right(message_broker, robot_event_consumer, "Передает события", "Kafka Consumer")
-Rel(robot_event_consumer, robot_command_service, "Передает команды", "Java")
-
-' Внешние вызовы при отсутствии данных в кэше
-Rel(inventory_service, robot_rest_controller, "Передает данные партий", "REST")
-Rel(robot, robot_grpc_controller, "Передает данные для пополнения", "REST")
-
+Note right of shelf_life_checker {
+    <b>Критические требования:</b>
+    • Ответ <100 мс
+    • Прямой доступ к кэшу
+    • Резервирование при сбоях
+}
 @enduml

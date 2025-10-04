@@ -1,0 +1,72 @@
+@startuml
+title Взаимодействие с роботизированной линией - Проверка разрешения на использование
+
+actor "Робот" as robot
+participant "Кэш робота" as cache
+participant "Сервис интеграции\nс роботом" as integration
+participant "Сервис контроля\nсроков" as shelf_life
+participant "Кэш-хранилище\nRedis" as redis
+participant "Сервис уведомлений" as notifications
+participant "Оператор" as operator
+participant "Технолог" as technologist
+
+== Стандартный сценарий (данные в кэше) ==
+
+robot -> cache: Проверка данных партии\n(LineID, ContainerID, ProductID)
+cache --> robot: Данные актуальны\n(срок годности, статус)
+
+alt Данные устарели (>1 часа) или отсутствуют
+    robot -> integration: Запрос разрешения на использование\n(LineID, ContainerID, ProductID, Quantity)
+    integration -> redis: Проверка кэша блокировок\nи сроков годности
+    redis --> integration: Данные из кэша
+    
+    alt Данные в кэше Redis актуальны
+        integration --> robot: Разрешено/Запрещено
+        robot -> cache: Обновление кэша
+        
+    else Данных нет в кэше Redis
+        integration -> shelf_life: Запрос проверки партии\n(LineID, ContainerID, ProductID)
+        shelf_life --> integration: Результат проверки\n(статус, срок годности)
+        integration -> redis: Сохранение в кэш
+        integration --> robot: Разрешено/Запрещено
+        robot -> cache: Обновление кэша
+    end
+end
+
+== Обработка ответа ==
+
+alt Получен ответ "Разрешено"
+    robot -> robot: Взятие полуфабриката
+    robot -> integration: Уведомление о списании\n(LineID, ProductID, Quantity)
+    integration --> robot: 200 OK
+    
+else Получен ответ "Запрещено"
+    robot -> robot: Остановка операции
+    robot -> robot: Показать сообщение оператору\n"Партия заблокирована"
+    integration -> notifications: Уведомление о блокировке
+    notifications -> operator: Push-уведомление
+    notifications -> technologist: Push-уведомление
+    
+else Таймаут 10 секунд
+    robot -> cache: Использование данных из кэша
+    robot -> robot: Продолжение работы с кэшем
+    robot -> integration: Уведомление о проблеме связи
+    integration -> notifications: Уведомление о проблеме связи
+    notifications -> operator: Push-уведомление
+    notifications -> technologist: Push-уведомление
+end
+
+== Асинхронное списание ==
+
+opt После успешного использования
+    robot -> integration: Сообщение о списании\n(LineID, ProductID, Quantity=1)
+    integration --> robot: 200 OK
+end
+
+note right of robot
+    <b>Критические требования:</b>
+    • Ответ <100 мс
+    • Резервирование при сбоях
+    • Кэширование на 1 час
+    • Таймаут 10 секунд
+end note

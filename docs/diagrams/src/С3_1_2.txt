@@ -1,79 +1,41 @@
 @startuml
 !include <C4/C4_Component>
 
-title Сервис заказов - Компонентная диаграмма
+title Сервис остатков - Компонентная диаграмма (Уровень 3)
 
-Container_Boundary(order_service, "Сервис заказа", "Spring Boot") {
+Container_Boundary(stock_service, "Сервис остатков") {
+    Component(batch_manager, "Менеджер партий", "Spring Bean", "Управление жизненным циклом партий")
+    Component(stock_calculator, "Калькулятор остатков", "Spring Bean", "Расчет текущих остатков, FEFO логика")
+    Component(movement_processor, "Процессор перемещений", "Spring Bean", "Обработка перемещений между зонами")
+    Component(inventory_handler, "Обработчик инвентаризации", "Spring Bean", "Поддержка процессов инвентаризации")
     
-    ' Уровень API
-    Component(order_controller, "Контроллер заказов", "Spring REST Controller", "REST API для управления заказами")
-    Component(rule_controller, "Контроллер правил", "Spring REST Controller", "REST API для управления правилами")
-    Component(catalog_controller, "Контроллер справочников", "Spring REST Controller", "REST API для справочников")
-    
-    ' Уровень бизнес-правил
-    Component(order_management_service, "Сервис управления заказами", "Spring Service", "Логика работы с заказами")
-    Component(replenishment_service, "Сервис автозаказа", "Spring Service", "Логика автозаказа и расчета")
-    Component(rule_management_service, "Сервис управления правилами", "Spring Service", "Управление правилами пополнения")
-    Component(catalog_service, "Сервис справочников", "Spring Service", "Управление справочниками")
-    
-    ' Механизм расчетов заказа
-    Component(order_calculator, "Блок расчета", "Spring Component", "Расчет заказа на основе правил")
-    Component(rule_engine, "Блок бизнес-правил", "Drools Engine", "Выполнение бизнес-правил")
-    
-    ' Уровень доступка к данным
-    Component(order_repository, "Механизм доступа к данным заказов", "Spring Data JPA", "Доступ к данным заказов")
-    Component(rule_repository, "Механизм доступа к данным бизнес-правил", "Spring Data JPA", "Доступ к правилам пополнения")
-    Component(product_repository, "Механизм доступа к данным справочников", "Spring Data JPA", "Доступ к справочнику товаров")
-    
-    ' Уровень интеграции
-    Component(inventory_client, "Клиент инвентаризации", "Feign Client", "REST клиент для сервиса инвентаризации")
-    Component(logistics_client, "Клиент логистики", "Feign Client", "REST клиент для сервиса интеграции с ЛЦ")
-    
-    ' Уровень синхронизации событий
-    Component(order_event_publisher, "Поставщик событий о заказах", "Spring Kafka", "Публикация событий заказов")
+    Component(stock_controller, "REST Контроллер", "Spring MVC", "REST API для управления остатками")
+    Component(stock_repository, "Репозиторий остатков", "Spring Data", "Доступ к данным партий и остатков")
 }
 
-' Внешние зависимости (черные ящики)
-ContainerDb(orders_db, "База заказов", "PostgreSQL")
-Container_Ext(inventory_service, "Сервис инвентаризации", "Spring Boot")
-Container_Ext(logistics_integration, "Сервис интеграции с ЛЦ", "Spring Boot")
-Container_Ext(message_broker, "Брокер сообщений", "Apache Kafka")
+' Внутренние связи
+Rel(batch_manager, stock_calculator, "Запросы расчета", "Метод вызов")
+Rel(movement_processor, batch_manager, "Обновление партий", "Метод вызов")
+Rel(inventory_handler, batch_manager, "Корректировка остатков", "Метод вызов")
+Rel(stock_controller, batch_manager, "API вызовы", "Метод вызов")
+Rel(stock_controller, movement_processor, "API вызовы", "Метод вызов")
+Rel(stock_repository, batch_manager, "Сохранение данных", "Метод вызов")
 
-' Внутренние связи компонентов
+' Внешние зависимости
+ContainerDb(stock_db, "База остатков", "PostgreSQL")
+Container_Ext(cache_db, "Кэш-хранилище", "Redis")
+Container_Ext(message_broker, "Брокер сообщений", "Kafka")
 
-' Контроллер -> Сервис
-Rel(order_controller, order_management_service, "Вызывает", "Java")
-Rel(rule_controller, rule_management_service, "Вызывает", "Java")
-Rel(catalog_controller, catalog_service, "Вызывает", "Java")
+' Внешние связи
+Rel(stock_repository, stock_db, "Чтение/запись", "JDBC")
+Rel(stock_calculator, cache_db, "Кэширование расчетов", "Redis Protocol")
+Rel(batch_manager, message_broker, "События изменений", "Kafka")
+Rel(movement_processor, message_broker, "События перемещений", "Kafka")
 
-' Сервис -> Сервис
-Rel(order_management_service, replenishment_service, "Использует", "Java")
-Rel(replenishment_service, rule_management_service, "Использует", "Java")
-
-' Сервис -> Механизм расчета
-Rel(replenishment_service, order_calculator, "Рассчитывает заказ", "Java")
-Rel(order_calculator, rule_engine, "Выполняет правила", "Drools API")
-
-' Сервис -> Управление данными
-Rel(order_management_service, order_repository, "Использует", "JPA")
-Rel(rule_management_service, rule_repository, "Использует", "JPA")
-Rel(catalog_service, product_repository, "Использует", "JPA")
-
-' Управление данными -> База данных
-Rel(order_repository, orders_db, "Сохраняет/Получает данные", "JDBC")
-Rel(rule_repository, orders_db, "Сохраняет/Получает данные", "JDBC")
-Rel(product_repository, orders_db, "Сохраняет/Получает данные", "JDBC")
-
-' Сервис -> Клиенты для общения с другими сервисами
-Rel(replenishment_service, inventory_client, "Запрашивает остатки", "REST")
-Rel(order_management_service, logistics_client, "Передает заказы", "REST")
-
-' Клиенты для общения с другими сервисами -> Внешние сервисы
-Rel(inventory_client, inventory_service, "Вызывает API", "REST")
-Rel(logistics_client, logistics_integration, "Вызывает API", "REST")
-
-' Публикация событий
-Rel(order_management_service, order_event_publisher, "Публикует события", "Spring Events")
-Rel(order_event_publisher, message_broker, "Отправляет в Kafka", "Kafka Producer")
-
+Note right of batch_manager {
+    <b>Ключевая логика:</b>
+    • Управление статусами партий
+    • FEFO при списаниях
+    • Консистентность остатков
+}
 @enduml

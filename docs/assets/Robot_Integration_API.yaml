@@ -1,0 +1,414 @@
+openapi: 3.0.3
+info:
+  title: Robot Integration API
+  description: |
+    API для интеграции с роботизированными линиями приготовления блюд.
+    **Критические требования:**
+    - Время ответа < 100 мс
+    - Доступность 99.99%
+    - gRPC/WebSocket + REST fallback
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@automated-restaurant.ru
+
+servers:
+  - url: https://api.automated-restaurant.ru/robot/v1
+    description: Production server
+  - url: https://api-staging.automated-restaurant.ru/robot/v1
+    description: Staging server
+
+tags:
+  - name: Permission
+    description: Проверка разрешений на использование полуфабрикатов
+  - name: Usage
+    description: Подтверждение использования и списания
+  - name: Emergency
+    description: Аварийные ситуации и уведомления
+
+paths:
+  /check-permission:
+    post:
+      tags: [Permission]
+      summary: Проверка разрешения на использование полуфабриката
+      description: |
+        Робот запрашивает разрешение на использование конкретной партии полуфабриката.
+        **Требование: время ответа < 100 мс**
+      operationId: checkPermission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RobotPermissionRequest'
+            examples:
+              StandardRequest:
+                summary: Стандартный запрос
+                value:
+                  line_id: "line_001"
+                  container_id: "container_A12"
+                  product_id: "PF_12345"
+                  quantity: 1
+                  robot_id: "robot_alpha_001"
+                  request_timestamp: "2024-01-15T14:30:00Z"
+      responses:
+        '200':
+          description: Успешный ответ с разрешением
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RobotPermissionResponse'
+              examples:
+                PermissionGranted:
+                  summary: Разрешение предоставлено
+                  value:
+                    request_id: "req_123456789"
+                    allowed: true
+                    batch_id: "BATCH_ABC123"
+                    expiration_date: "2024-01-20T23:59:59Z"
+                    virtual_expiration: "2024-01-18T15:30:00Z"
+                    response_timestamp: "2024-01-15T14:30:00.050Z"
+                PermissionDenied:
+                  summary: Разрешение отклонено
+                  value:
+                    request_id: "req_123456790"
+                    allowed: false
+                    reason: "BATCH_EXPIRED"
+                    message: "Срок годности партии истек"
+                    batch_status: "BLOCKED"
+                    response_timestamp: "2024-01-15T14:30:00.060Z"
+        '400':
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '408':
+          description: Таймаут проверки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /confirm-usage:
+    post:
+      tags: [Usage]
+      summary: Подтверждение использования полуфабриката
+      description: Робот подтверждает фактическое использование полуфабриката
+      operationId: confirmUsage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsageConfirmation'
+            examples:
+              StandardUsage:
+                summary: Стандартное подтверждение
+                value:
+                  line_id: "line_001"
+                  container_id: "container_A12"
+                  product_id: "PF_12345"
+                  quantity: 1
+                  batch_id: "BATCH_ABC123"
+                  usage_timestamp: "2024-01-15T14:30:05Z"
+                  robot_id: "robot_alpha_001"
+      responses:
+        '200':
+          description: Использование подтверждено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfirmationResponse'
+        '400':
+          description: Неверные данные использования
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Партия не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /emergency-stop:
+    post:
+      tags: [Emergency]
+      summary: Уведомление об аварийной остановке
+      description: Робот уведомляет об аварийной остановке линии
+      operationId: emergencyStop
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmergencyStop'
+            examples:
+              BatchBlocked:
+                summary: Остановка из-за заблокированной партии
+                value:
+                  line_id: "line_001"
+                  robot_id: "robot_alpha_001"
+                  emergency_code: "BATCH_BLOCKED"
+                  reason: "Партия заблокирована системой"
+                  batch_id: "BATCH_ABC123"
+                  container_id: "container_A12"
+                  stop_timestamp: "2024-01-15T14:30:10Z"
+              SystemFailure:
+                summary: Системный сбой
+                value:
+                  line_id: "line_001"
+                  robot_id: "robot_alpha_001"
+                  emergency_code: "SYSTEM_FAILURE"
+                  reason: "Потеря связи с системой управления"
+                  stop_timestamp: "2024-01-15T14:30:15Z"
+      responses:
+        '200':
+          description: Уведомление принято
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmergencyAck'
+
+components:
+  schemas:
+    RobotPermissionRequest:
+      type: object
+      required:
+        - line_id
+        - container_id
+        - product_id
+        - quantity
+        - robot_id
+        - request_timestamp
+      properties:
+        line_id:
+          type: string
+          description: ID производственной линии
+          example: "line_001"
+        container_id:
+          type: string
+          description: ID контейнера оперативного запаса
+          example: "container_A12"
+        product_id:
+          type: string
+          description: ID полуфабриката
+          example: "PF_12345"
+        quantity:
+          type: number
+          format: float
+          minimum: 0.001
+          description: Количество для использования
+          example: 1
+        robot_id:
+          type: string
+          description: ID робота
+          example: "robot_alpha_001"
+        request_timestamp:
+          type: string
+          format: date-time
+          description: Метка времени запроса от робота
+          example: "2024-01-15T14:30:00Z"
+
+    RobotPermissionResponse:
+      type: object
+      required:
+        - request_id
+        - allowed
+        - response_timestamp
+      properties:
+        request_id:
+          type: string
+          description: Уникальный ID запроса
+          example: "req_123456789"
+        allowed:
+          type: boolean
+          description: Разрешено ли использование
+          example: true
+        batch_id:
+          type: string
+          description: ID партии (только если allowed=true)
+          example: "BATCH_ABC123"
+        expiration_date:
+          type: string
+          format: date-time
+          description: Фактический срок годности партии
+          example: "2024-01-20T23:59:59Z"
+        virtual_expiration:
+          type: string
+          format: date-time
+          description: Виртуальный срок годности (для смешанных партий)
+          example: "2024-01-18T15:30:00Z"
+        reason:
+          type: string
+          description: Причина отказа (только если allowed=false)
+          enum: [BATCH_EXPIRED, BATCH_BLOCKED, INSUFFICIENT_QUANTITY, PRODUCT_NOT_FOUND]
+          example: "BATCH_EXPIRED"
+        message:
+          type: string
+          description: Человекочитаемое сообщение
+          example: "Срок годности партии истек"
+        batch_status:
+          type: string
+          description: Статус партии
+          enum: [ACTIVE, BLOCKED, EXPIRED, UTILIZED]
+          example: "BLOCKED"
+        response_timestamp:
+          type: string
+          format: date-time
+          description: Метка времени ответа
+          example: "2024-01-15T14:30:00.050Z"
+
+    UsageConfirmation:
+      type: object
+      required:
+        - line_id
+        - container_id
+        - product_id
+        - quantity
+        - batch_id
+        - usage_timestamp
+        - robot_id
+      properties:
+        line_id:
+          type: string
+          example: "line_001"
+        container_id:
+          type: string
+          example: "container_A12"
+        product_id:
+          type: string
+          example: "PF_12345"
+        quantity:
+          type: number
+          format: float
+          minimum: 0.001
+          example: 1
+        batch_id:
+          type: string
+          example: "BATCH_ABC123"
+        usage_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T14:30:05Z"
+        robot_id:
+          type: string
+          example: "robot_alpha_001"
+
+    ConfirmationResponse:
+      type: object
+      properties:
+        confirmation_id:
+          type: string
+          example: "conf_987654321"
+        status:
+          type: string
+          enum: [CONFIRMED, PARTIALLY_CONFIRMED, REJECTED]
+          example: "CONFIRMED"
+        remaining_quantity:
+          type: number
+          format: float
+          description: Оставшееся количество в оперативном запасе
+          example: 48.5
+        message:
+          type: string
+          example: "Использование подтверждено"
+
+    EmergencyStop:
+      type: object
+      required:
+        - line_id
+        - robot_id
+        - emergency_code
+        - reason
+        - stop_timestamp
+      properties:
+        line_id:
+          type: string
+          example: "line_001"
+        robot_id:
+          type: string
+          example: "robot_alpha_001"
+        emergency_code:
+          type: string
+          enum: [BATCH_BLOCKED, SYSTEM_FAILURE, COMMUNICATION_LOST, SAFETY_STOP]
+          example: "BATCH_BLOCKED"
+        reason:
+          type: string
+          example: "Партия заблокирована системой"
+        batch_id:
+          type: string
+          description: ID партии (если применимо)
+          example: "BATCH_ABC123"
+        container_id:
+          type: string
+          description: ID контейнера (если применимо)
+          example: "container_A12"
+        stop_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T14:30:10Z"
+
+    EmergencyAck:
+      type: object
+      properties:
+        ack_id:
+          type: string
+          example: "ack_456789123"
+        received_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T14:30:10.100Z"
+        action_taken:
+          type: string
+          enum: [NOTIFICATION_SENT, OPERATOR_ALERTED, TECHNICIAN_NOTIFIED]
+          example: "OPERATOR_ALERTED"
+        estimated_resolution_time:
+          type: integer
+          description: Оценочное время решения проблемы (в минутах)
+          example: 5
+
+    Error:
+      type: object
+      properties:
+        error_id:
+          type: string
+          example: "err_789456123"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T14:30:00.200Z"
+        code:
+          type: string
+          enum: [VALIDATION_ERROR, TIMEOUT, BATCH_NOT_FOUND, SYSTEM_UNAVAILABLE]
+          example: "TIMEOUT"
+        message:
+          type: string
+          example: "Превышено время ожидания ответа"
+        details:
+          type: string
+          example: "Сервис проверки сроков годности не ответил за 95 мс"
+
+securitySchemes:
+  RobotApiKey:
+    type: apiKey
+    in: header
+    name: X-Robot-API-Key
+    description: API ключ для аутентификации роботов
+  SignatureAuth:
+    type: apiKey
+    in: header
+    name: X-Robot-Signature
+    description: Цифровая подпись запроса
+
+security:
+  - RobotApiKey: []
+  - SignatureAuth: []

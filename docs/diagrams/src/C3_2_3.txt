@@ -1,54 +1,44 @@
 @startuml
 !include <C4/C4_Component>
 
-title Сервис отчетности - Компонентная диаграмма
+title Сервис заданий - Компонентная диаграмма (Уровень 3)
 
-Container_Boundary(reporting_service, "Сервис отчетности", "Spring Boot") {
+Container_Boundary(task_service, "Сервис заданий") {
+    Component(task_dispatcher, "Диспетчер заданий", "Spring Bean", "Распределение заданий операторам")
+    Component(priority_calculator, "Калькулятор приоритетов", "Spring Bean", "Расчет приоритетов заданий")
+    Component(mobile_sync_manager, "Менеджер синхронизации", "Spring Bean", "Синхронизация с мобильным приложением")
+    Component(completion_handler, "Обработчик завершения", "Spring Bean", "Подтверждение выполнения заданий")
     
-    ' Уровень API
-    Component(report_controller, "Контроллер отчетов", "Spring REST Controller", "REST API для генерации отчетов")
-    
-    ' Уровень бизнес-логики
-    Component(expiration_report_service, "Сервис отчетов по срокам", "Spring Service", "Генерация отчетов по истекающим срокам")
-    Component(inventory_report_service, "Сервис отчетов по остаткам", "Spring Service", "Генерация отчетов по текущим остаткам")
-    Component(movement_report_service, "Сервис отчетов по движениям", "Spring Service", "Генерация отчетов по движениям запасов")
-    
-    ' Уровень генерации отчетов
-    Component(report_generator, "Генератор отчетов", "Spring Service", "Оркестрация процесса генерации отчетов")
-    Component(data_aggregator, "Агрегатор данных", "Spring Component", "Агрегация данных из нескольких источников")
-    Component(report_formatter, "Форматировщик отчетов", "Spring Component", "Форматирование отчетов в PDF/Excel")
-    
-    ' Уровень доступа к данным
-    Component(report_repository, "Репозиторий отчетов", "Spring Data JPA", "Доступ к сохраненным отчетам")
-    Component(analytics_repository, "Репозиторий аналитики", "Spring Data JPA", "Доступ к аналитическим данным")
-    
-    ' Уровень обработки событий
-    Component(report_event_consumer, "Консьюмер событий", "Spring Kafka", "Обработка событий для аналитики")
+    Component(task_controller, "REST Контроллер", "Spring MVC", "API для управления заданиями")
+    Component(task_repository, "Репозиторий заданий", "Spring Data", "Доступ к данным заданий")
+    Component(offline_queue, "Очередь оффлайн-работы", "Spring Bean", "Управление оффлайн-операциями")
 }
 
-' Внешние зависимости
-ContainerDb(reporting_db, "База отчетности", "ClickHouse")
-Container_Ext(inventory_service, "Сервис инвентаризации", "Spring Boot")
-Container_Ext(message_broker, "Брокер сообщений", "Apache Kafka")
-
 ' Внутренние связи
-Rel(report_controller, report_generator, "Запускает генерацию", "Java")
-Rel(report_generator, expiration_report_service, "Использует для отчетов по срокам", "Java")
-Rel(report_generator, inventory_report_service, "Использует для отчетов по остаткам", "Java")
-Rel(report_generator, movement_report_service, "Использует для отчетов по движениям", "Java")
+Rel(task_dispatcher, priority_calculator, "Расчет приоритетов", "Метод вызов")
+Rel(task_dispatcher, mobile_sync_manager, "Отправка заданий", "Метод вызов")
+Rel(mobile_sync_manager, completion_handler, "Подтверждения", "Метод вызов")
+Rel(completion_handler, task_repository, "Обновление статусов", "Метод вызов")
+Rel(task_controller, task_dispatcher, "API вызовы", "Метод вызов")
+Rel(offline_queue, mobile_sync_manager, "Синхронизация", "Метод вызов")
 
-Rel(report_generator, data_aggregator, "Агрегирует данные", "Java")
-Rel(data_aggregator, report_formatter, "Форматирует отчет", "Java")
+' Внешние зависимости
+ContainerDb(tasks_db, "База заданий", "PostgreSQL")
+Container_Ext(message_broker, "Брокер сообщений", "Kafka")
+Container_Ext(mobile_app, "Мобильное приложение", "REST API")
+Container_Ext(stock_service, "Сервис остатков", "REST API")
 
-Rel(expiration_report_service, analytics_repository, "Запрашивает данные", "JPA")
-Rel(inventory_report_service, analytics_repository, "Запрашивает данные", "JPA")
-Rel(analytics_repository, reporting_db, "Читает данные", "JDBC")
+' Внешние связи
+Rel(task_repository, tasks_db, "Чтение/запись", "JDBC")
+Rel(message_broker, task_dispatcher, "Получение заданий", "Kafka")
+Rel(mobile_sync_manager, mobile_app, "Push уведомления", "REST")
+Rel(completion_handler, stock_service, "Подтверждение операций", "REST")
+Rel(offline_queue, message_broker, "Синхронизация событий", "Kafka")
 
-Rel(report_repository, reporting_db, "Сохраняет отчеты", "JDBC")
-Rel(report_event_consumer, message_broker, "Получает события", "Kafka Consumer")
-Rel(report_event_consumer, analytics_repository, "Сохраняет аналитику", "JPA")
-
-' Внешние вызовы
-Rel(data_aggregator, inventory_service, "Запрашивает актуальные данные", "REST")
-
+Note right of task_dispatcher {
+    <b>Логика распределения:</b>
+    • Приоритет: утилизация > пополнение
+    • Балансировка нагрузки
+    • Учет оффлайн-статуса
+}
 @enduml

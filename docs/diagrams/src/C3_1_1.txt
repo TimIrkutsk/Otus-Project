@@ -1,75 +1,49 @@
 @startuml
 !include <C4/C4_Component>
 
-title Сервис интеграции с логистическим центром - Компонентная диаграмма
+title Сервис оперативного запаса - Компонентная диаграмма (Уровень 3)
 
-Container_Boundary(logistics_integration, "Сервис интеграции с ЛЦ", "Spring Boot") {
+Container_Boundary(operational_stock_service, "Сервис оперативного запаса") {
+    Component(replenishment_calculator, "Калькулятор пополнения", "Spring Bean", "Расчет необходимости пополнения линии")
+    Component(line_monitor, "Монитор линии", "Spring Bean", "Мониторинг остатков на роботизированных линиях")
+    Component(virtual_stock_manager, "Менеджер виртуального запаса", "Spring Bean", "Управление виртуальными партиями на линии")
+    Component(emergency_replenishment, "Экстренное пополнение", "Spring Bean", "Обработка критического уровня запаса")
     
-    ' Уровень API
-    Component(logistics_controller, "Контроллер логистики", "Spring REST Controller", "REST API для внутренних сервисов")
-    
-    ' Уровень бизнес-логики
-    Component(order_sync_service, "Сервис синхронизации", "Spring Service", "Синхронизация заказов с ЛЦ")
-    Component(delivery_tracking_service, "Сервис отслеживания", "Spring Service", "Отслеживание поставок")
-    Component(supplier_data_service, "Сервис данных от поставщика", "Spring Service", "Обработка данных от поставщика")
-    
-    ' Уровень внешней интеграции
-    Component(supplier_rest_client, "REST клиент поставщика", "RestTemplate", "REST клиент для API ЛЦ")
-    Component(supplier_soap_client, "SOAP клиент поставщика", "SOAP Client", "SOAP клиент для API ЛЦ")
-    Component(api_adapter, "API адаптер", "Spring Component", "Адаптер различных API поставщика")
-    
-    ' Уровень обработки данных
-    Component(order_mapper, "Преобразование заказа", "Spring Component", "Преобразование форматов заказов")
-    Component(delivery_mapper, "Преобразование доставки", "Spring Component", "Преобразование данных поставок")
-    Component(error_handler, "Обработчик ошибок", "Spring Component", "Обработка ошибок интеграции")
-    
-    ' Уровень доступа к данным
-    Component(supplier_order_repository, "Сервис доступа к данным заказов", "Spring Data JPA", "Доступ к данным заказов поставщика")
-    Component(delivery_repository, "Сервис доступа к данным поставок", "Spring Data JPA", "Доступ к данным поставок")
-    
+    Component(operational_controller, "REST Контроллер", "Spring MVC", "API для управления оперативным запасом")
+    Component(line_repository, "Репозиторий линий", "Spring Data", "Доступ к данным роботизированных линий")
+    Component(fefo_selector, "Селектор FEFO", "Spring Bean", "Выбор партий по принципу FEFO")
 }
 
-' Внешние зависимости ("черные ящики")
-ContainerDb(orders_db, "База заказов", "PostgreSQL")
-Container_Ext(order_service, "Сервис заказов", "Spring Boot")
-System_Ext(logistics, "Логистический центр", "REST/SOAP API")
+' Внутренние связи
+Rel(line_monitor, replenishment_calculator, "Уведомление о низком запасе", "Метод вызов")
+Rel(replenishment_calculator, fefo_selector, "Запрос партий по FEFO", "Метод вызов")
+Rel(virtual_stock_manager, line_monitor, "Обновление данных", "Метод вызов")
+Rel(emergency_replenishment, replenishment_calculator, "Принудительный расчет", "Метод вызов")
+Rel(operational_controller, line_monitor, "API запросы статуса", "Метод вызов")
+Rel(line_repository, virtual_stock_manager, "Сохранение данных", "Метод вызов")
 
-' Внутренние связи компонентов
+' Внешние зависимости
+ContainerDb(stock_db, "База остатков", "PostgreSQL")
+Container_Ext(cache_db, "Кэш-хранилище", "Redis")
+Container_Ext(message_broker, "Брокер сообщений", "Kafka")
+Container_Ext(stock_service, "Сервис остатков", "REST API")
+Container_Ext(task_service, "Сервис заданий", "Kafka")
+Container_Ext(robot_integration, "Сервис интеграции с роботом", "Kafka")
 
-' Контроллер -> Сервис
-Rel(logistics_controller, order_sync_service, "Вызывает", "Java")
-Rel(logistics_controller, delivery_tracking_service, "Вызывает", "Java")
+' Внешние связи
+Rel(line_repository, stock_db, "Чтение/запись", "JDBC")
+Rel(line_monitor, cache_db, "Кэш текущих остатков", "Redis Protocol")
+Rel(replenishment_calculator, stock_service, "Запрос доступных партий", "REST")
+Rel(fefo_selector, message_broker, "Создание заданий на пополнение", "Kafka")
+Rel(message_broker, task_service, "Передача заданий", "Kafka")
+Rel(virtual_stock_manager, robot_integration, "Обновление данных робота", "Kafka")
+Rel(emergency_replenishment, message_broker, "Критические уведомления", "Kafka")
 
-' Сервис -> Сервис
-Rel(order_sync_service, supplier_data_service, "Обрабатывает данные", "Java")
-Rel(delivery_tracking_service, supplier_data_service, "Обрабатывает данные", "Java")
-
-' Сервис -> Внешняя интеграция
-Rel(order_sync_service, supplier_rest_client, "Отправляет заказы", "Java")
-Rel(delivery_tracking_service, supplier_soap_client, "Получает статусы", "Java")
-
-' Внешняя интеграция -> API адаптеры
-Rel(supplier_rest_client, api_adapter, "Использует адаптер", "Java")
-Rel(supplier_soap_client, api_adapter, "Использует адаптер", "Java")
-
-' API адаптеры -> Внешние системы
-Rel(api_adapter, logistics, "Вызывает API", "REST/SOAP")
-
-' Обработка данных
-Rel(order_sync_service, order_mapper, "Преобразует форматы", "Java")
-Rel(delivery_tracking_service, delivery_mapper, "Преобразует форматы", "Java")
-Rel(order_sync_service, error_handler, "Обрабатывает ошибки", "Java")
-
-' Сервис -> Управление данными
-Rel(order_sync_service, supplier_order_repository, "Сохраняет данные", "JPA")
-Rel(delivery_tracking_service, delivery_repository, "Сохраняет данные", "JPA")
-
-' Управление данными -> База данных
-Rel(supplier_order_repository, orders_db, "Сохраняет данные", "JDBC")
-Rel(delivery_repository, orders_db, "Сохраняет данные", "JDBC")
-
-' Внешние вызовы
-Rel(order_service, logistics_controller, "Передает заказы", "REST")
-
-
+Note right of replenishment_calculator {
+    <b>Логика пополнения:</b>
+    • Мониторинг в реальном времени
+    • Расчет точки пополнения
+    • Выбор партий по FEFO
+    • Учет скорости расхода
+}
 @enduml

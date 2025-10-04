@@ -1,0 +1,36 @@
+@startuml
+title Диаграмма состояний партии полуфабриката
+
+state "Поступление" as start
+state "Активна" as active
+state "Истекает сегодня" as expiring
+state "Просрочена" as expired
+state "Заблокирована" as blocked
+state "Перемещается" as moving
+state "Списывается" as consuming
+state "Утилизирована" as utilized
+state "Завершена" as finished
+
+[*] --> start
+start --> active : Приемка от ЛЦ\n(не просрочена)
+
+active --> expiring : В 00:00 дня\nистечения срока
+expiring --> active : Метка снята\n(технолог)
+
+active --> expired : В 00:00 дня\nпосле истечения срока
+expired --> blocked : Автоматически
+
+active --> moving : Начало перемещения
+moving --> active : Завершение перемещения
+
+active --> consuming : Расход на производство
+consuming --> active : Частичное списание
+consuming --> finished : Партия закончилась
+
+blocked --> utilized : Оператор подтвердил\nутилизацию
+blocked --> active : Разблокировка\nтехнологом
+
+utilized --> [*]
+finished --> [*]
+
+@enduml

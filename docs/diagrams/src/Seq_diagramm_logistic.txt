@@ -1,0 +1,88 @@
+@startuml
+title Интеграция с Логистическим Центром - Передача заказа
+
+actor "Технолог" as technologist
+participant "Веб-приложение" as web
+participant "Сервис заказов" as orders
+participant "Сервис интеграции с ЛЦ" as lc_integration
+participant "Брокер сообщений\nKafka" as kafka
+participant "Логистический\nцентр" as lc
+participant "Сервис уведомлений" as notifications
+database "База заказов" as db
+
+== Утверждение и передача заказа ==
+
+technologist -> web: Утверждает заказ целиком
+web -> orders: API вызов утверждения заказа
+orders -> db: Обновление статуса на "Утвержден"
+
+orders -> lc_integration: Команда передачи заказа в ЛЦ\n(ID заказа, ID ресторана, дата поставки)
+lc_integration -> db: Обновление статуса на "Передается в ЛЦ"
+
+lc_integration -> lc: HTTP POST /orders\n(JSON с данными заказа)
+lc --> lc_integration: 202 Accepted\n(ID заказа в ЛЦ)
+
+lc_integration -> db: Сохранение ID заказа ЛЦ\nСтатус "Передан, ожидание подтверждения"
+
+== Асинхронная обработка ответа от ЛЦ ==
+
+group Получение callback от ЛЦ [в течение 24 часов]
+    lc -> lc_integration: HTTP POST /callback/order-status
+    lc_integration -> db: Обновление статуса заказа
+    
+    alt Статус "Подтвержден"
+        lc_integration -> db: Статус "Подтвержден ЛЦ"
+        
+    else Статус "Изменен"
+        lc_integration -> orders: Применение изменений\n(количества, даты поставки)
+        orders -> db: Автоматическое обновление заказа
+        lc_integration -> notifications: Уведомление об изменениях
+        notifications -> technologist: Email с номером заказа,\nстатусом и изменениями
+        
+    else Статус "Отклонен"
+        lc_integration -> db: Статус "Отклонен ЛЦ"
+        lc_integration -> notifications: Уведомление об отклонении
+        notifications -> technologist: Email с номером заказа\nи статусом "Отклонен"
+    end
+end
+
+== Обработка ошибок связи ==
+
+group Ошибка при первоначальной передаче
+    lc_integration -> lc_integration: Начало повторных попыток\n(интервал 1 минута)
+    
+    loop 15 раз
+        lc_integration -> lc: Повторная отправка заказа
+        alt Успех
+            lc --> lc_integration: 202 Accepted
+            lc_integration -> db: Статус "Передан"
+            break
+        else Ошибка
+            lc_integration -> lc_integration: Ожидание 1 минуту
+        end
+    end
+    
+    alt Все попытки исчерпаны (15 минут)
+        lc_integration -> db: Статус "Ошибка передачи"
+        lc_integration -> notifications: Уведомление об ошибке
+        notifications -> technologist: Email с номером заказа\nи статусом "Ошибка передачи"
+    end
+end
+
+== Мониторинг и ручное вмешательство ==
+
+opt Технолог проверяет статус вручную
+    technologist -> web: Просмотр статусов заказов
+    web -> orders: Запрос статусов
+    orders -> db: Получение данных
+    orders --> web: Данные заказов
+    web --> technologist: Отображение статусов
+end
+
+note right of lc_integration
+    <b>Ключевые параметры:</b>
+    • 15 повторных попыток
+    • Интервал 1 минута
+    • Таймаут 24 часа на ответ ЛЦ
+    • Автоматическое применение изменений
+end note

@@ -1,0 +1,757 @@
+openapi: 3.0.3
+info:
+  title: Sales Forecast API
+  description: |
+    API для получения прогнозов продаж из системы аналитики.
+    **Особенности:**
+    - Интеграция с системой продаж ресторана
+    - Fallback на исторические данные при недоступности
+    - Валидация аномалий прогноза
+    - Поддержка сезонных коэффициентов
+  version: 1.0.0
+  contact:
+    name: Analytics Integration Team
+    email: analytics@automated-restaurant.ru
+
+servers:
+  - url: https://api.automated-restaurant.ru/sales/v1
+    description: Production server
+  - url: https://api-staging.automated-restaurant.ru/sales/v1
+    description: Staging server
+
+tags:
+  - name: Forecast
+    description: Получение прогнозов продаж
+  - name: History
+    description: Исторические данные о продажах
+  - name: Analytics
+    description: Аналитические данные и метрики
+
+paths:
+  /forecast:
+    get:
+      tags: [Forecast]
+      summary: Получение прогноза продаж
+      description: |
+        Получение прогноза продаж полуфабрикатов на указанный период.
+        **Процесс обработки:**
+        1. Запрос к системе аналитики продаж
+        2. При недоступности - расчет на основе исторических данных
+        3. Валидация аномалий (отклонение > 75% от среднего)
+        4. Применение сезонных коэффициентов
+      operationId: getSalesForecast
+      parameters:
+        - name: restaurant_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: ID ресторана
+          example: "rest_001"
+        - name: forecast_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Дата, на которую нужен прогноз
+          example: "2024-01-16"
+        - name: period_days
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 7
+            default: 1
+          description: Период прогноза в днях
+          example: 1
+        - name: include_breakdown
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: Включить детализацию по часам
+        - name: use_fallback
+          in: query
+          schema:
+            type: boolean
+            default: true
+          description: Использовать fallback на исторические данные при недоступности
+      responses:
+        '200':
+          description: Прогноз успешно получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForecastResponse'
+              examples:
+                SuccessForecast:
+                  summary: Успешный прогноз от системы
+                  value:
+                    forecast_id: "fc_20240116_001"
+                    restaurant_id: "rest_001"
+                    forecast_date: "2024-01-16"
+                    generated_at: "2024-01-15T08:00:00Z"
+                    data_source: "SALES_SYSTEM"
+                    items:
+                      - product_id: "PF-1001"
+                        product_name: "Котлета куриная"
+                        forecast_quantity: 120
+                        unit: "шт"
+                        confidence_level: 0.85
+                        hourly_breakdown:
+                          "08:00-09:00": 8
+                          "09:00-10:00": 12
+                          "10:00-11:00": 15
+                          "11:00-12:00": 20
+                          "12:00-13:00": 25
+                          "13:00-14:00": 18
+                          "14:00-15:00": 12
+                          "15:00-16:00": 10
+                        seasonality_factor: 1.1
+                        historical_average: 110
+                        deviation_percentage: 9.1
+                FallbackForecast:
+                  summary: Прогноз на основе исторических данных
+                  value:
+                    forecast_id: "fc_20240116_002"
+                    restaurant_id: "rest_001"
+                    forecast_date: "2024-01-16"
+                    generated_at: "2024-01-15T08:05:00Z"
+                    data_source: "HISTORICAL_FALLBACK"
+                    items:
+                      - product_id: "PF-1002"
+                        product_name: "Булочка для бургера"
+                        forecast_quantity: 200
+                        unit: "шт"
+                        confidence_level: 0.65
+                        historical_average: 195
+                        deviation_percentage: 2.6
+                    warning: "Использованы исторические данные из-за недоступности системы продаж"
+        '400':
+          description: Неверные параметры запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Система прогнозирования недоступна
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /forecast/batch:
+    post:
+      tags: [Forecast]
+      summary: Массовое получение прогнозов
+      description: Получение прогнозов для нескольких ресторанов и продуктов
+      operationId: getBatchForecast
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchForecastRequest'
+            examples:
+              MultipleRestaurants:
+                summary: Прогноз для нескольких ресторанов
+                value:
+                  requests:
+                    - restaurant_id: "rest_001"
+                      forecast_date: "2024-01-16"
+                      product_ids: ["PF-1001", "PF-1002"]
+                    - restaurant_id: "rest_002"
+                      forecast_date: "2024-01-16"
+                      product_ids: ["PF-1001", "PF-1003"]
+                  include_breakdown: true
+      responses:
+        '200':
+          description: Прогнозы успешно получены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchForecastResponse'
+
+  /history:
+    get:
+      tags: [History]
+      summary: Получение исторических данных о продажах
+      description: Запрос исторических данных для анализа и верификации прогнозов
+      operationId: getSalesHistory
+      parameters:
+        - name: restaurant_id
+          in: query
+          required: true
+          schema:
+            type: string
+          example: "rest_001"
+        - name: start_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Начальная дата периода
+          example: "2024-01-01"
+        - name: end_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Конечная дата периода
+          example: "2024-01-15"
+        - name: product_ids
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: false
+          description: Список ID продуктов (опционально)
+          example: ["PF-1001", "PF-1002"]
+        - name: aggregation
+          in: query
+          schema:
+            type: string
+            enum: [daily, hourly, weekly]
+            default: daily
+          description: Уровень агрегации данных
+      responses:
+        '200':
+          description: Исторические данные получены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistoryResponse'
+              examples:
+                DailyHistory:
+                  summary: Ежедневные данные
+                  value:
+                    restaurant_id: "rest_001"
+                    start_date: "2024-01-01"
+                    end_date: "2024-01-15"
+                    aggregation: "daily"
+                    items:
+                      - date: "2024-01-01"
+                        products:
+                          - product_id: "PF-1001"
+                            product_name: "Котлета куриная"
+                            quantity: 95
+                            unit: "шт"
+                          - product_id: "PF-1002"
+                            product_name: "Булочка для бургера"
+                            quantity: 190
+                            unit: "шт"
+                      - date: "2024-01-02"
+                        products:
+                          - product_id: "PF-1001"
+                            product_name: "Котлета куриная"
+                            quantity: 110
+                            unit: "шт"
+
+  /analytics/anomalies:
+    get:
+      tags: [Analytics]
+      summary: Проверка аномалий в прогнозе
+      description: Анализ прогноза на предмет значительных отклонений от исторических данных
+      operationId: checkForecastAnomalies
+      parameters:
+        - name: restaurant_id
+          in: query
+          required: true
+          schema:
+            type: string
+          example: "rest_001"
+        - name: forecast_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          example: "2024-01-16"
+        - name: threshold_percentage
+          in: query
+          schema:
+            type: number
+            format: float
+            minimum: 0
+            default: 75
+          description: Порог отклонения для определения аномалии (%)
+      responses:
+        '200':
+          description: Результат проверки аномалий
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnomalyCheckResponse'
+              examples:
+                WithAnomalies:
+                  summary: Обнаружены аномалии
+                  value:
+                    forecast_date: "2024-01-16"
+                    restaurant_id: "rest_001"
+                    threshold_percentage: 75
+                    anomalies_detected: true
+                    anomalies:
+                      - product_id: "PF-1001"
+                        product_name: "Котлета куриная"
+                        forecast_quantity: 250
+                        historical_average: 110
+                        deviation_percentage: 127.3
+                        severity: "HIGH"
+                        possible_reasons: ["Праздничный день", "Акция"]
+                    checked_at: "2024-01-15T08:30:00Z"
+                NoAnomalies:
+                  summary: Аномалий не обнаружено
+                  value:
+                    forecast_date: "2024-01-16"
+                    restaurant_id: "rest_001"
+                    threshold_percentage: 75
+                    anomalies_detected: false
+                    checked_at: "2024-01-15T08:30:00Z"
+
+  /health:
+    get:
+      tags: [Analytics]
+      summary: Проверка доступности сервиса прогнозирования
+      description: Проверка статуса системы прогнозирования продаж
+      operationId: getHealthStatus
+      responses:
+        '200':
+          description: Статус сервиса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+              examples:
+                Healthy:
+                  summary: Сервис работает нормально
+                  value:
+                    status: "HEALTHY"
+                    timestamp: "2024-01-15T08:00:00Z"
+                    components:
+                      sales_system: "AVAILABLE"
+                      forecasting_model: "OPERATIONAL"
+                      historical_database: "AVAILABLE"
+                    response_time_ms: 45
+                Degraded:
+                  summary: Сервис работает в ограниченном режиме
+                  value:
+                    status: "DEGRADED"
+                    timestamp: "2024-01-15T08:00:00Z"
+                    components:
+                      sales_system: "UNAVAILABLE"
+                      forecasting_model: "OPERATIONAL"
+                      historical_database: "AVAILABLE"
+                    warning: "Система продаж недоступна, используется fallback на исторические данные"
+                    response_time_ms: 120
+
+components:
+  schemas:
+    ForecastResponse:
+      type: object
+      required:
+        - forecast_id
+        - restaurant_id
+        - forecast_date
+        - generated_at
+        - data_source
+        - items
+      properties:
+        forecast_id:
+          type: string
+          description: Уникальный идентификатор прогноза
+          example: "fc_20240116_001"
+        restaurant_id:
+          type: string
+          example: "rest_001"
+        forecast_date:
+          type: string
+          format: date
+          example: "2024-01-16"
+        generated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T08:00:00Z"
+        data_source:
+          type: string
+          enum: [SALES_SYSTEM, HISTORICAL_FALLBACK, MANUAL_ADJUSTMENT]
+          description: Источник данных для прогноза
+          example: "SALES_SYSTEM"
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastItem'
+        warning:
+          type: string
+          description: Предупреждение (например, при использовании fallback)
+          example: "Использованы исторические данные из-за недоступности системы продаж"
+        metadata:
+          type: object
+          properties:
+            model_version:
+              type: string
+              example: "v2.1.0"
+            confidence_threshold:
+              type: number
+              format: float
+              example: 0.7
+            seasonality_applied:
+              type: boolean
+              example: true
+
+    ForecastItem:
+      type: object
+      required:
+        - product_id
+        - forecast_quantity
+        - unit
+      properties:
+        product_id:
+          type: string
+          example: "PF-1001"
+        product_name:
+          type: string
+          example: "Котлета куриная"
+        forecast_quantity:
+          type: number
+          format: float
+          minimum: 0
+          description: Прогнозируемое количество
+          example: 120
+        unit:
+          type: string
+          enum: [шт, кг, л, упак]
+          example: "шт"
+        confidence_level:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Уровень уверенности прогноза (0-1)
+          example: 0.85
+        hourly_breakdown:
+          type: object
+          additionalProperties:
+            type: integer
+            minimum: 0
+          description: Детализация по часам (только при include_breakdown=true)
+          example:
+            "08:00-09:00": 8
+            "09:00-10:00": 12
+            "10:00-11:00": 15
+        seasonality_factor:
+          type: number
+          format: float
+          description: Коэффициент сезонности
+          example: 1.1
+        historical_average:
+          type: number
+          format: float
+          description: Среднее историческое значение за 7 дней
+          example: 110
+        deviation_percentage:
+          type: number
+          format: float
+          description: Отклонение от исторического среднего (%)
+          example: 9.1
+        weather_impact:
+          type: number
+          format: float
+          description: Влияние погодных условий на прогноз
+          example: 1.05
+
+    BatchForecastRequest:
+      type: object
+      required:
+        - requests
+      properties:
+        requests:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            type: object
+            required:
+              - restaurant_id
+              - forecast_date
+            properties:
+              restaurant_id:
+                type: string
+                example: "rest_001"
+              forecast_date:
+                type: string
+                format: date
+                example: "2024-01-16"
+              product_ids:
+                type: array
+                items:
+                  type: string
+                description: Список конкретных продуктов (опционально)
+                example: ["PF-1001", "PF-1002"]
+        include_breakdown:
+          type: boolean
+          default: false
+        use_fallback:
+          type: boolean
+          default: true
+
+    BatchForecastResponse:
+      type: object
+      properties:
+        batch_id:
+          type: string
+          example: "batch_fc_20240116_001"
+        generated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T08:00:00Z"
+        forecasts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastResponse'
+        summary:
+          type: object
+          properties:
+            total_forecasts:
+              type: integer
+              example: 2
+            successful_forecasts:
+              type: integer
+              example: 2
+            fallback_used_count:
+              type: integer
+              example: 1
+
+    HistoryResponse:
+      type: object
+      required:
+        - restaurant_id
+        - start_date
+        - end_date
+        - aggregation
+        - items
+      properties:
+        restaurant_id:
+          type: string
+          example: "rest_001"
+        start_date:
+          type: string
+          format: date
+          example: "2024-01-01"
+        end_date:
+          type: string
+          format: date
+          example: "2024-01-15"
+        aggregation:
+          type: string
+          enum: [daily, hourly, weekly]
+          example: "daily"
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoryItem'
+        summary:
+          type: object
+          properties:
+            total_days:
+              type: integer
+              example: 15
+            total_products:
+              type: integer
+              example: 25
+            average_daily_sales:
+              type: number
+              format: float
+              example: 1500.5
+
+    HistoryItem:
+      type: object
+      required:
+        - date
+        - products
+      properties:
+        date:
+          type: string
+          format: date
+          example: "2024-01-01"
+        day_of_week:
+          type: string
+          enum: [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY]
+          example: "MONDAY"
+        is_holiday:
+          type: boolean
+          example: true
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product_id:
+                type: string
+                example: "PF-1001"
+              product_name:
+                type: string
+                example: "Котлета куриная"
+              quantity:
+                type: number
+                format: float
+                example: 95
+              unit:
+                type: string
+                example: "шт"
+              revenue:
+                type: number
+                format: float
+                example: 14250.0
+
+    AnomalyCheckResponse:
+      type: object
+      required:
+        - forecast_date
+        - restaurant_id
+        - threshold_percentage
+        - anomalies_detected
+        - checked_at
+      properties:
+        forecast_date:
+          type: string
+          format: date
+          example: "2024-01-16"
+        restaurant_id:
+          type: string
+          example: "rest_001"
+        threshold_percentage:
+          type: number
+          format: float
+          example: 75
+        anomalies_detected:
+          type: boolean
+          example: true
+        anomalies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Anomaly'
+        checked_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T08:30:00Z"
+
+    Anomaly:
+      type: object
+      required:
+        - product_id
+        - forecast_quantity
+        - historical_average
+        - deviation_percentage
+        - severity
+      properties:
+        product_id:
+          type: string
+          example: "PF-1001"
+        product_name:
+          type: string
+          example: "Котлета куриная"
+        forecast_quantity:
+          type: number
+          format: float
+          example: 250
+        historical_average:
+          type: number
+          format: float
+          example: 110
+        deviation_percentage:
+          type: number
+          format: float
+          example: 127.3
+        severity:
+          type: string
+          enum: [LOW, MEDIUM, HIGH, CRITICAL]
+          example: "HIGH"
+        possible_reasons:
+          type: array
+          items:
+            type: string
+          example: ["Праздничный день", "Акция", "Спортивное мероприятие"]
+        recommended_action:
+          type: string
+          example: "Увеличить заказ на 40%"
+
+    HealthStatus:
+      type: object
+      required:
+        - status
+        - timestamp
+      properties:
+        status:
+          type: string
+          enum: [HEALTHY, DEGRADED, UNAVAILABLE]
+          example: "HEALTHY"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T08:00:00Z"
+        components:
+          type: object
+          properties:
+            sales_system:
+              type: string
+              enum: [AVAILABLE, UNAVAILABLE, DEGRADED]
+              example: "AVAILABLE"
+            forecasting_model:
+              type: string
+              enum: [OPERATIONAL, TRAINING, UNAVAILABLE]
+              example: "OPERATIONAL"
+            historical_database:
+              type: string
+              enum: [AVAILABLE, UNAVAILABLE, SLOW]
+              example: "AVAILABLE"
+        response_time_ms:
+          type: integer
+          example: 45
+        warning:
+          type: string
+          example: "Система продаж недоступна, используется fallback на исторические данные"
+
+    Error:
+      type: object
+      properties:
+        error_id:
+          type: string
+          example: "err_fc_789123"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T08:00:00.200Z"
+        code:
+          type: string
+          enum: [VALIDATION_ERROR, FORECASTING_UNAVAILABLE, HISTORICAL_DATA_UNAVAILABLE, RATE_LIMIT_EXCEEDED]
+          example: "FORECASTING_UNAVAILABLE"
+        message:
+          type: string
+          example: "Система прогнозирования временно недоступна"
+        details:
+          type: string
+          example: "Сервис аналитики не отвечает, попробуйте использовать use_fallback=true"
+        retry_after:
+          type: integer
+          description: Время до следующей попытки (секунды)
+          example: 300
+
+securitySchemes:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: X-Forecast-API-Key
+    description: API ключ для доступа к сервису прогнозирования
+  ServiceAuth:
+    type: http
+    scheme: bearer
+    description: JWT токен для сервисной аутентификации
+
+security:
+  - ApiKeyAuth: []
+  - ServiceAuth: []

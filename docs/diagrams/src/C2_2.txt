@@ -1,78 +1,64 @@
 @startuml
 !include <C4/C4_Container>
 
-title Система управления запасами - Инвентаризация и производство (Уровень 2)
-
-' Пользователи
-Person(operator, "Оператор линии", "Проводит инвентаризацию, утилизацию, пополнение запаса у роботов")
+title Система управления запасами - Интеграция с производством (Уровень 2)
 
 ' Внешние системы
 System_Ext(robot, "Роботизированная линия", "Промышленный робот")
 
 ' Граница системы
-System_Boundary(inventory_system, "Система инвентаризации и управления производством") {
+System_Boundary(production_system, "Интеграция с производством") {
 
-    ' Frontend контейнеры
-    Container(mobile_app, "Мобильное приложение", "React Native", "Инвентаризация, утилизация, пополнение запаса")
+    ' Backend сервисы
+    Container(robot_integration, "Сервис интеграции с роботом", "Spring Boot, gRPC", "Реальное время взаимодействие")
+    Container(operational_stock_service, "Сервис оперативного запаса", "Spring Boot", "Управление запасом на линии")
     
-    ' Backend контейнеры
-    Container(api_gateway, "API Gateway", "Spring Cloud Gateway", "Единая точка входа")
-    Container(service_discovery, "Обнаружение сервисов", "Netflix Eureka", "Регистрация сервисов")
-    
-    Container(auth_service, "Сервис аутентификации", "Spring Boot, JWT", "Управление доступом")
-    
-    Container(inventory_service, "Сервис инвентаризации", "Spring Boot", "Пополнение запаса роботов, управление остатками, сроками")
-    Container(robot_integration, "Сервис интеграции с роботом", "Spring Boot, gRPC", "Взаимодействие с линией")
-    Container(reporting_service, "Сервис отчетности", "Spring Boot", "Аналитика и отчеты")
-    
-    ' Базы данных
-    ContainerDb(inventory_db, "База инвентаризации", "PostgreSQL", "Хранение данных о партиях")
-    ContainerDb(reporting_db, "База отчетности", "ClickHouse", "Аналитические данные")
-    ContainerDb(cache_db, "Кэш-хранилище", "Redis", "Кэш для высокопроизводительного доступа")
-    
-    ' Инфраструктурные сервисы
-    Container(message_broker, "Брокер сообщений", "Apache Kafka", "Асинхронная коммуникация")
+    ' Базы данных и кэш
+    ContainerDb(cache_db, "Кэш-хранилище", "Redis", "Высокопроизводительный кэш")
+    ContainerDb(analytics_db, "База аналитики", "ClickHouse", "Метрики и мониторинг")
 }
 
-' Внешние сервисы (из другой группы)
-Container_Ext(order_service, "Сервис заказов", "Spring Boot", "Получает данные об остатках")
+' Сервисы из ядра системы
+Container_Ext(stock_service, "Сервис остатков", "Spring Boot", "Управление партиями и остатками")
+Container_Ext(shelf_life_service, "Сервис контроля сроков", "Spring Boot", "Блокировка партий")
+Container_Ext(task_service, "Сервис заданий", "Spring Boot", "Управление заданиями операторам")
+Container_Ext(notification_service, "Сервис уведомлений", "Spring Boot", "Уведомления")
 
-' Взаимодействия пользователей
-Rel(operator, mobile_app, "Проводит инвентаризацию, утилизирует партии, пополняет запас", "HTTPS")
+' Критические взаимодействия (<100 мс)
+Rel(robot, robot_integration, "Запрос разрешения на использование\nУведомление о списаниях", "gRPC/WebSocket\n<100 мс")
+Rel(robot_integration, robot, "Блокировка партий\nДанные об остатках", "gRPC/WebSocket\nРеальное время")
 
-' Frontend -> Backend
-Rel(mobile_app, api_gateway, "Вызывает API", "REST")
+' Высокопроизводительный доступ к данным
+Rel(robot_integration, cache_db, "Прямой доступ к кэшу остатков", "Redis Protocol\n<10 мс")
+Rel(operational_stock_service, cache_db, "Кэш оперативного запаса", "Redis Protocol")
 
-' Инфраструктурные связи
-Rel(api_gateway, service_discovery, "Обнаружение сервисов", "HTTPS")
-Rel(api_gateway, auth_service, "Проверяет аутентификацию", "JWT")
-Rel(auth_service, service_discovery, "Регистрация сервиса", "HTTPS")
+' Фоновая синхронизация
+Rel(robot_integration, stock_service, "Синхронизация списаний", "Kafka")
+Rel(robot_integration, shelf_life_service, "Проверка блокировок", "REST")
 
-' API Gateway -> Бизнес-сервисы
-Rel(api_gateway, inventory_service, "Маршрутизирует запросы инвентаризации", "REST")
-Rel(api_gateway, reporting_service, "Маршрутизирует запросы отчетов", "REST")
-Rel(inventory_service, service_discovery, "Регистрация сервиса", "HTTPS")
-Rel(reporting_service, service_discovery, "Регистрация сервиса", "HTTPS")
+' Управление оперативным запасом
+Rel(operational_stock_service, stock_service, "Запросы партий для пополнения", "REST")
+Rel(operational_stock_service, task_service, "Создание заданий на пополнение", "Kafka")
+Rel(operational_stock_service, robot_integration, "Обновление данных робота", "Kafka")
 
-' Интеграции с внешними системами
-Rel(robot_integration, robot, "Обмен данными в реальном времени", "gRPC/WebSocket")
+' Мониторинг и аналитика
+Rel(robot_integration, analytics_db, "Запись метрик производительности", "JDBC")
+Rel(operational_stock_service, analytics_db, "Статистика оперативного запаса", "JDBC")
 
-' Внутренние связи сервисов
-Rel(inventory_service, robot_integration, "Передает данные для проверки срока/получает запрос на пополнение запаса", "REST")
+' Уведомления о критических событиях
+Rel(robot_integration, notification_service, "Уведомления об остановках", "Kafka")
+Rel(operational_stock_service, notification_service, "Уведомления о низком запасе", "Kafka")
 
-' Сервисы -> Базы данных
-Rel(inventory_service, inventory_db, "Чтение/запись данных инвентаризации", "JDBC")
-Rel(reporting_service, reporting_db, "Чтение/запись аналитических данных", "JDBC")
-Rel(auth_service, cache_db, "Хранение сессий и токенов", "Redis Protocol")
+' Загрузка данных в кэш
+Rel(stock_service, cache_db, "Предзагрузка критичных данных", "Redis Protocol")
+Rel(shelf_life_service, cache_db, "Предзагрузка блокировок", "Redis Protocol")
 
-' Кэширование для производительности
-Rel(inventory_service, cache_db, "Кэширование остатков и статусов", "Redis Protocol")
-Rel(robot_integration, cache_db, "Быстрый доступ к данным для робота", "Redis Protocol")
-
-' Асинхронная коммуникация
-Rel(inventory_service, message_broker, "Публикует события изменений", "Kafka")
-Rel(message_broker, reporting_service, "Доставляет события для аналитики", "Kafka")
-Rel(message_broker, robot_integration, "Доставляет события блокировок", "Kafka")
-Rel(message_broker, order_service, "Доставляет события об остатках", "Kafka")
+Note left of robot_integration {
+  <b>Критические требования:</b>
+  • Ответ <100 мс для робота
+  • Прямой доступ к Redis кэшу
+  • Изоляция от медленных сервисов
+  • Резервирование при недоступности
+}
 
 @enduml

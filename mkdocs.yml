@@ -100,7 +100,11 @@ nav:
     - C4_model.md
     - Seq_diagram.md
     - UI.md
-    - api.md
+  - API:
+    - api.md #для ЛЦ
+    - api_robots.md
+    - api_logict.md
+    - api_Sales_Forecast.md
   - Задачи:
     - task.md
     - test_case.md

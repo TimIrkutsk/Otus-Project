@@ -1,67 +1,84 @@
 @startuml
 !include <C4/C4_Container>
 
-title Система управления запасами - Автозаказ и логистика (Уровень 2)
+title Система управления запасами - Ядро и задания (Уровень 2)
 
 ' Пользователи
-Person(technologist, "Технолог", "Настраивает правила и управляет заказами")
-
-' Внешние системы
-System_Ext(logistics, "Логистический центр", "Поставщик полуфабрикатов")
+Person(operator, "Оператор линии", "Выполняет задания по утилизации и пополнению")
+Person(technologist, "Технолог", "Управляет заказами и настройками")
 
 ' Граница системы
-System_Boundary(order_system, "Система автозаказа и логистики") {
+System_Boundary(core_system, "Ядро системы управления запасами") {
 
     ' Frontend контейнеры
-    Container(web_app, "Веб-приложение", "React, TypeScript", "Управление заказами и правилами")
+    Container(web_app, "Веб-приложение", "React, TypeScript", "Управление для технолога и администратора")
+    Container(mobile_app, "Мобильное приложение", "React Native", "Задания и инвентаризация для оператора")
     
     ' Backend контейнеры
     Container(api_gateway, "API Gateway", "Spring Cloud Gateway", "Единая точка входа")
-    Container(service_discovery, "Обнаружение сервисов", "Netflix Eureka", "Регистрация сервисов")
     
-    Container(auth_service, "Сервис аутентификации", "Spring Boot, JWT", "Управление доступом")
-    
-    Container(order_service, "Сервис заказов", "Spring Boot", "Автозаказ, правила пополнения, заполнение справочника")
-    Container(logistics_integration, "Сервис интеграции с ЛЦ", "Spring Boot", "Обмен данными с поставщиком")
-    
-    ' Базы данных
-    ContainerDb(orders_db, "База заказов", "PostgreSQL", "Хранение заказов и правил")
-    ContainerDb(cache_db, "Кэш-хранилище", "Redis", "Кэш и сессии")
+    ' Бизнес-сервисы (Bounded Contexts)
+    Container(stock_service, "Сервис остатков", "Spring Boot", "Управление партиями, остатками, FEFO")
+    Container(shelf_life_service, "Сервис контроля сроков", "Spring Boot", "Блокировка партий, расчет виртуальных сроков")
+    Container(task_service, "Сервис заданий", "Spring Boot", "Управление заданиями операторам")
+    Container(order_service, "Сервис заказов", "Spring Boot", "Автозаказ, правила пополнения")
     
     ' Инфраструктурные сервисы
+    Container(auth_service, "Сервис аутентификации", "Spring Boot, JWT", "Управление доступом и ролями")
+    Container(notification_service, "Сервис уведомлений", "Spring Boot", "Push, SMS, email уведомления")
+    
+    ' Базы данных
+    ContainerDb(stock_db, "База остатков", "PostgreSQL", "Партии, остатки, перемещения")
+    ContainerDb(orders_db, "База заказов", "PostgreSQL", "Заказы, правила пополнения")
+    ContainerDb(tasks_db, "База заданий", "PostgreSQL", "Задания операторам")
+    ContainerDb(cache_db, "Кэш-хранилище", "Redis", "Кэш остатков и сессий")
+    
+    ' Брокер сообщений
     Container(message_broker, "Брокер сообщений", "Apache Kafka", "Асинхронная коммуникация")
 }
 
-' Внешние сервисы (из другой группы)
-Container_Ext(inventory_service, "Сервис инвентаризации", "Spring Boot", "Предоставляет данные об остатках")
+' Внешние системы
+System_Ext(logistics, "Логистический центр", "Поставщик полуфабрикатов")
+System_Ext(sales, "Система продаж", "Прогнозы спроса")
 
 ' Взаимодействия пользователей
-Rel(technologist, web_app, "Настраивает правила, корректирует заказы", "HTTPS")
+Rel(operator, mobile_app, "Выполняет задания\nПроводит инвентаризацию", "HTTPS\nОффлайн-режим")
+Rel(technologist, web_app, "Управляет заказами\nНастраивает правила", "HTTPS")
 
 ' Frontend -> Backend
 Rel(web_app, api_gateway, "Вызывает API", "REST")
-
-' Инфраструктурные связи
-Rel(api_gateway, service_discovery, "Обнаружение сервисов", "HTTPS")
-Rel(api_gateway, auth_service, "Проверяет аутентификацию", "JWT")
-Rel(auth_service, service_discovery, "Регистрация сервиса", "HTTPS")
+Rel(mobile_app, api_gateway, "Вызывает API", "REST")
 
 ' API Gateway -> Бизнес-сервисы
-Rel(api_gateway, order_service, "Маршрутизирует запросы заказов", "REST")
-Rel(order_service, service_discovery, "Регистрация сервиса", "HTTPS")
+Rel(api_gateway, stock_service, "Запросы остатков и партий", "REST")
+Rel(api_gateway, task_service, "Управление заданиями", "REST")
+Rel(api_gateway, order_service, "Управление заказами", "REST")
+Rel(api_gateway, auth_service, "Аутентификация", "JWT")
 
-' Интеграции с внешними системами
-Rel(logistics_integration, logistics, "Обмен заказами и поставками", "REST")
+' Бизнес-логика
+Rel(stock_service, shelf_life_service, "Запросы блокировки/разблокировки", "REST")
+Rel(shelf_life_service, task_service, "Создание заданий на утилизацию", "Kafka")
+Rel(order_service, stock_service, "Запросы текущих остатков", "REST")
+Rel(task_service, stock_service, "Подтверждение операций", "REST")
 
-' Внутренние связи сервисов
-Rel(order_service, logistics_integration, "Передает заказы/ получает инфо о заказах", "REST")
-Rel(order_service, inventory_service, "Запрашивает текущие остатки", "REST")
+' Интеграции
+Rel(order_service, logistics, "Передача заказов", "REST API")
+Rel(order_service, sales, "Получение прогнозов", "REST API")
 
-' Сервисы -> Базы данных
-Rel(order_service, orders_db, "Чтение/запись данных заказов", "JDBC")
-Rel(auth_service, cache_db, "Хранение сессий и токенов", "Redis Protocol")
+' Базы данных
+Rel(stock_service, stock_db, "Чтение/запись партий", "JDBC")
+Rel(order_service, orders_db, "Чтение/запись заказов", "JDBC")
+Rel(task_service, tasks_db, "Чтение/запись заданий", "JDBC")
+Rel(auth_service, cache_db, "Сессии и токены", "Redis Protocol")
+
+' Кэширование для производительности
+Rel(stock_service, cache_db, "Кэш остатков и статусов", "Redis Protocol")
+Rel(shelf_life_service, cache_db, "Кэш блокировок", "Redis Protocol")
 
 ' Асинхронная коммуникация
-Rel(order_service, message_broker, "Публикует события заказов", "Kafka")
+Rel(shelf_life_service, message_broker, "События блокировки", "Kafka")
+Rel(stock_service, message_broker, "События изменений остатков", "Kafka")
+Rel(message_broker, task_service, "Создание заданий", "Kafka")
+Rel(message_broker, notification_service, "Уведомления", "Kafka")
 
 @enduml
