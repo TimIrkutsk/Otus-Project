@@ -107,9 +107,16 @@ nav:
     - api_shelf_life_control.md
     - api_stock_management.md
     - api.md #api_Sales_Forecast
+    - api_auto_order.md
+    - api_operational_stock.md
   - Задачи:
     - task.md
+    - task_UC.md
+  - Тест-кейсы:
     - test_case.md
+    - test_case_release.md
+    - test_case_UC.md
+    - test_case_UC_release.md
 
 copyright: |
   &copy; 2025 <a href="https://github.com/TimIrkutsk/Otus-Project"  target="_blank" rel="noopener">Тимохин Антон</a>
