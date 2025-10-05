@@ -1,0 +1,772 @@
+openapi: 3.0.3
+info:
+  title: Mobile Task API
+  description: |
+    API для мобильного приложения оператора линии.
+    **Особенности:**
+    - Поддержка оффлайн-режима для инвентаризации
+    - Синхронизация конфликтующих изменений
+    - Раздельные процессы подтверждения для разных типов заданий
+    - Строгая классификация приоритетов
+  version: 1.0.0
+  contact:
+    name: Mobile Development Team
+    email: mobile-support@automated-restaurant.ru
+
+servers:
+  - url: https://api.automated-restaurant.ru/mobile/v1
+    description: Production server
+  - url: https://api-staging.automated-restaurant.ru/mobile/v1
+    description: Staging server
+
+tags:
+  - name: Tasks
+    description: Управление заданиями оператора
+  - name: Inventory
+    description: Процесс инвентаризации (UC4)
+  - name: Utilization
+    description: Задания на утилизацию (UC2, UC13)
+  - name: Replenishment
+    description: Пополнение оперативного запаса (UC3)
+  - name: Offline
+    description: Оффлайн-режим и синхронизация
+
+paths:
+  /tasks/pending:
+    get:
+      tags: [Tasks]
+      summary: Получение списка активных заданий
+      description: |
+        Получение списка заданий для оператора линии.
+        Сортировка по приоритету - задания на утилизацию важнее пополнения.
+      operationId: getPendingTasks
+      parameters:
+        - name: operator_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: ID оператора линии
+          example: "operator_001"
+        - name: task_type
+          in: query
+          schema:
+            type: string
+            enum: [UTILIZATION, REPLENISHMENT, INVENTORY]
+          description: Фильтр по типу задания
+      responses:
+        '200':
+          description: Список активных заданий
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskListResponse'
+              examples:
+                MixedTasks:
+                  summary: Задания разных типов
+                  value:
+                    operator_id: "operator_001"
+                    tasks:
+                      - task_id: "task_util_001"
+                        type: "UTILIZATION"
+                        priority: "HIGH"
+                        title: "Утилизировать партию"
+                        description: "Партия PF-1001 с истекшим сроком годности"
+                        batch_barcode: "BC-001-20240116-001"
+                        location: "Холодильник А, полка 2"
+                        created_at: "2024-01-15T08:00:00Z"
+                        status: "PENDING"
+                      - task_id: "task_repl_001"
+                        type: "REPLENISHMENT"
+                        priority: "MEDIUM"
+                        title: "Пополнить оперативный запас"
+                        description: "Полуфабрикат PF-1002 для линии line_001"
+                        source_batch_barcode: "BC-002-20240116-001"
+                        target_container_id: "container_A12"
+                        quantity: 10
+                        location: "Склад → Линия 001"
+                        created_at: "2024-01-15T08:05:00Z"
+                        status: "PENDING"
+
+  /tasks/{task_id}/start:
+    post:
+      tags: [Tasks]
+      summary: Начало выполнения задания
+      description: Оператор начинает выполнение задания
+      operationId: startTask
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID задания
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskActionRequest'
+      responses:
+        '200':
+          description: Задание успешно начато
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskActionResponse'
+
+  /inventory/start:
+    post:
+      tags: [Inventory]
+      summary: Начало процесса инвентаризации (UC4)
+      description: |
+        Оператор начинает инвентаризацию. Система предоставляет данные для оффлайн-работы.
+      operationId: startInventory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryStartRequest'
+      responses:
+        '200':
+          description: Данные для оффлайн-инвентаризации готовы
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryDataResponse'
+
+  /inventory/offline-sync:
+    post:
+      tags: [Offline, Inventory]
+      summary: Синхронизация оффлайн-данных инвентаризации (UC4)
+      description: |
+        Отправка данных, собранных в оффлайн-режиме, с обработкой конфликтующих изменений.
+      operationId: syncOfflineInventory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfflineInventorySync'
+      responses:
+        '200':
+          description: Данные синхронизированы
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncResponse'
+        '409':
+          description: Обнаружены конфликтующие изменения
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictResponse'
+
+  /inventory/conflicts/resolve:
+    post:
+      tags: [Offline, Inventory]
+      summary: Разрешение конфликтующих изменений (UC4)
+      description: |
+        Оператор выбирает приоритет данных при конфликте оффлайн/система.
+      operationId: resolveInventoryConflicts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConflictResolution'
+      responses:
+        '200':
+          description: Конфликты разрешены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictResolutionResponse'
+
+  /utilization/confirm:
+    post:
+      tags: [Utilization]
+      summary: Подтверждение утилизации партии (UC2)
+      description: |
+        Оператор подтверждает факт утилизации партии после сканирования штрих-кода.
+      operationId: confirmUtilization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UtilizationConfirmation'
+      responses:
+        '200':
+          description: Утилизация подтверждена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UtilizationResponse'
+        '400':
+          description: Партия не найдена в отчете к утилизации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /replenishment/confirm:
+    post:
+      tags: [Replenishment]
+      summary: Подтверждение пополнения оперативного запаса (UC3)
+      description: |
+        Оператор подтверждает перемещение полуфабриката со склада на линию.
+        Система пересчитывает виртуальный срок годности.
+      operationId: confirmReplenishment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReplenishmentConfirmation'
+      responses:
+        '200':
+          description: Пополнение подтверждено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReplenishmentResponse'
+
+  /tasks/{task_id}/complete:
+    post:
+      tags: [Tasks]
+      summary: Завершение задания
+      description: Отметка задания как выполненного
+      operationId: completeTask
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCompletion'
+      responses:
+        '200':
+          description: Задание завершено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskActionResponse'
+
+components:
+  schemas:
+    TaskListResponse:
+      type: object
+      required:
+        - operator_id
+        - tasks
+      properties:
+        operator_id:
+          type: string
+          example: "operator_001"
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+
+    Task:
+      type: object
+      required:
+        - task_id
+        - type
+        - priority
+        - title
+        - status
+        - created_at
+      properties:
+        task_id:
+          type: string
+          example: "task_util_001"
+        type:
+          type: string
+          enum: [UTILIZATION, REPLENISHMENT, INVENTORY]
+          example: "UTILIZATION"
+        priority:
+          type: string
+          enum: [HIGH, MEDIUM, LOW]
+          example: "HIGH"
+        title:
+          type: string
+          example: "Утилизировать партию"
+        description:
+          type: string
+          example: "Партия PF-1001 с истекшим сроком годности"
+        batch_barcode:
+          type: string
+          description: Штрих-код партии (для утилизации)
+          example: "BC-001-20240116-001"
+        source_batch_barcode:
+          type: string
+          description: Штрих-код исходной партии (для пополнения)
+          example: "BC-002-20240116-001"
+        target_container_id:
+          type: string
+          description: ID контейнера оперативного запаса (для пополнения)
+          example: "container_A12"
+        quantity:
+          type: number
+          format: float
+          description: Количество для перемещения (для пополнения)
+          example: 10
+        location:
+          type: string
+          description: Локация выполнения задания
+          example: "Холодильник А, полка 2"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T08:00:00Z"
+        status:
+          type: string
+          enum: [PENDING, IN_PROGRESS, COMPLETED, CANCELLED]
+          example: "PENDING"
+
+    TaskActionRequest:
+      type: object
+      required:
+        - operator_id
+        - started_at
+      properties:
+        operator_id:
+          type: string
+          example: "operator_001"
+        started_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:00:00Z"
+
+    TaskActionResponse:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: "task_util_001"
+        status:
+          type: string
+          example: "IN_PROGRESS"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:00:00Z"
+
+    InventoryStartRequest:
+      type: object
+      required:
+        - operator_id
+        - restaurant_id
+        - inventory_type
+      properties:
+        operator_id:
+          type: string
+          example: "operator_001"
+        restaurant_id:
+          type: string
+          example: "rest_001"
+        inventory_type:
+          type: string
+          enum: [FULL, SELECTIVE]
+          example: "FULL"
+        zones:
+          type: array
+          items:
+            type: string
+          description: Список зон для выборочной инвентаризации
+          example: ["zone_a", "zone_b"]
+
+    InventoryDataResponse:
+      type: object
+      required:
+        - inventory_session_id
+        - batches
+        - generated_at
+      properties:
+        inventory_session_id:
+          type: string
+          example: "inv_sess_20240115_001"
+        batches:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchForInventory'
+        generated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:00:00Z"
+        valid_until:
+          type: string
+          format: date-time
+          description: Время актуальности данных для оффлайн-работы
+          example: "2024-01-15T23:59:59Z"
+
+    BatchForInventory:
+      type: object
+      required:
+        - batch_barcode
+        - product_id
+        - product_name
+        - location
+        - system_quantity
+      properties:
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        product_id:
+          type: string
+          example: "PF-1001"
+        product_name:
+          type: string
+          example: "Котлета куриная"
+        location:
+          type: string
+          example: "Холодильник А, полка 2"
+        system_quantity:
+          type: number
+          format: float
+          example: 50.0
+        unit:
+          type: string
+          example: "кг"
+        expiration_date:
+          type: string
+          format: date
+          example: "2024-01-20"
+
+    OfflineInventorySync:
+      type: object
+      required:
+        - inventory_session_id
+        - operator_id
+        - scanned_data
+        - synced_at
+      properties:
+        inventory_session_id:
+          type: string
+          example: "inv_sess_20240115_001"
+        operator_id:
+          type: string
+          example: "operator_001"
+        scanned_data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScannedBatch'
+        synced_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T11:30:00Z"
+
+    ScannedBatch:
+      type: object
+      required:
+        - batch_barcode
+        - actual_quantity
+        - scanned_at
+      properties:
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        actual_quantity:
+          type: number
+          format: float
+          example: 48.5
+        scanned_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:15:00Z"
+        manual_entry:
+          type: boolean
+          description: true если ввод ручной (штрих-код поврежден)
+          example: false
+
+    SyncResponse:
+      type: object
+      properties:
+        sync_id:
+          type: string
+          example: "sync_20240115_001"
+        status:
+          type: string
+          enum: [SYNCED, CONFLICTS_DETECTED]
+          example: "SYNCED"
+        processed_count:
+          type: integer
+          example: 25
+        discrepancies_found:
+          type: integer
+          example: 3
+        message:
+          type: string
+          example: "Данные успешно синхронизированы"
+
+    ConflictResponse:
+      type: object
+      properties:
+        sync_id:
+          type: string
+          example: "sync_20240115_001"
+        status:
+          type: string
+          example: "CONFLICTS_DETECTED"
+        conflicts:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryConflict'
+        message:
+          type: string
+          example: "Обнаружены конфликтующие изменения"
+
+    InventoryConflict:
+      type: object
+      required:
+        - batch_barcode
+        - offline_quantity
+        - system_quantity
+        - discrepancy
+      properties:
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        product_name:
+          type: string
+          example: "Котлета куриная"
+        offline_quantity:
+          type: number
+          format: float
+          example: 48.5
+        system_quantity:
+          type: number
+          format: float
+          example: 45.0
+        discrepancy:
+          type: number
+          format: float
+          example: 3.5
+        location:
+          type: string
+          example: "Холодильник А, полка 2"
+
+    ConflictResolution:
+      type: object
+      required:
+        - sync_id
+        - operator_id
+        - resolutions
+      properties:
+        sync_id:
+          type: string
+          example: "sync_20240115_001"
+        operator_id:
+          type: string
+          example: "operator_001"
+        resolutions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConflictResolutionItem'
+
+    ConflictResolutionItem:
+      type: object
+      required:
+        - batch_barcode
+        - data_priority
+      properties:
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        data_priority:
+          type: string
+          enum: [OFFLINE, SYSTEM]
+          example: "OFFLINE"
+        comment:
+          type: string
+          example: "Пересчитал вручную"
+
+    ConflictResolutionResponse:
+      type: object
+      properties:
+        resolution_id:
+          type: string
+          example: "resolve_20240115_001"
+        status:
+          type: string
+          example: "RESOLVED"
+        resolved_count:
+          type: integer
+          example: 5
+        corrections_applied:
+          type: integer
+          example: 5
+
+    UtilizationConfirmation:
+      type: object
+      required:
+        - task_id
+        - operator_id
+        - batch_barcode
+        - confirmed_at
+      properties:
+        task_id:
+          type: string
+          example: "task_util_001"
+        operator_id:
+          type: string
+          example: "operator_001"
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        actual_quantity:
+          type: number
+          format: float
+          description: Фактическое количество к утилизации
+          example: 50.0
+        confirmed_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:15:00Z"
+        reason:
+          type: string
+          enum: [EXPIRED, DAMAGED, OTHER]
+          default: "EXPIRED"
+        comment:
+          type: string
+          example: "Упаковка вскрыта"
+
+    UtilizationResponse:
+      type: object
+      properties:
+        utilization_id:
+          type: string
+          example: "util_20240115_001"
+        task_id:
+          type: string
+          example: "task_util_001"
+        status:
+          type: string
+          example: "COMPLETED"
+        batch_status:
+          type: string
+          example: "UTILIZED"
+        message:
+          type: string
+          example: "Партия утилизирована"
+
+    ReplenishmentConfirmation:
+      type: object
+      required:
+        - task_id
+        - operator_id
+        - source_batch_barcode
+        - target_container_id
+        - quantity
+        - confirmed_at
+      properties:
+        task_id:
+          type: string
+          example: "task_repl_001"
+        operator_id:
+          type: string
+          example: "operator_001"
+        source_batch_barcode:
+          type: string
+          example: "BC-002-20240116-001"
+        target_container_id:
+          type: string
+          example: "container_A12"
+        quantity:
+          type: number
+          format: float
+          example: 10.0
+        confirmed_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:20:00Z"
+        scan_verification:
+          type: boolean
+          description: Подтверждение сканированием штрих-кода зоны
+          example: true
+
+    ReplenishmentResponse:
+      type: object
+      properties:
+        replenishment_id:
+          type: string
+          example: "repl_20240115_001"
+        task_id:
+          type: string
+          example: "task_repl_001"
+        status:
+          type: string
+          example: "COMPLETED"
+        new_virtual_expiration:
+          type: string
+          format: date-time
+          description: Новый виртуальный срок годности
+          example: "2024-01-18T15:30:00Z"
+        remaining_source_quantity:
+          type: number
+          format: float
+          example: 40.0
+        message:
+          type: string
+          example: "Оперативный запас пополнен"
+
+    TaskCompletion:
+      type: object
+      required:
+        - operator_id
+        - completed_at
+      properties:
+        operator_id:
+          type: string
+          example: "operator_001"
+        completed_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:25:00Z"
+        notes:
+          type: string
+          example: "Задание выполнено без замечаний"
+
+    Error:
+      type: object
+      properties:
+        error_id:
+          type: string
+          example: "err_mobile_001"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:00:00.200Z"
+        code:
+          type: string
+          enum: [TASK_NOT_FOUND, BATCH_NOT_FOUND, INVENTORY_SESSION_EXPIRED, CONFLICT_DETECTED]
+          example: "BATCH_NOT_FOUND"
+        message:
+          type: string
+          example: "Партия не найдена в отчете к утилизации"
+        details:
+          type: string
+          example: "Штрих-код BC-001-20240116-001 не значится в списке партий к утилизации"
+
+securitySchemes:
+  BearerAuth:
+    type: http
+    scheme: bearer
+    description: JWT токен оператора
+  MobileApiKey:
+    type: apiKey
+    in: header
+    name: X-Mobile-API-Key
+    description: API ключ мобильного приложения
+
+security:
+  - BearerAuth: []
+  - MobileApiKey: []

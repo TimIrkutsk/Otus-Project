@@ -1,0 +1,968 @@
+openapi: 3.0.3
+info:
+  title: Auto-Order API
+  description: |
+    API для автоматического расчета и управления заказами полуфабрикатов.
+    **Особенности:**
+    - Расчет автозаказа на основе правил и прогнозов продаж
+    - Утверждение и корректировка заказов технологом
+    - Интеграция с системой прогнозирования продаж
+    - Управление правилами пополнения запасов
+  version: 1.0.0
+  contact:
+    name: Auto-Order Team
+    email: auto-order@automated-restaurant.ru
+
+servers:
+  - url: https://api.automated-restaurant.ru/auto-order/v1
+    description: Production server
+  - url: https://api-staging.automated-restaurant.ru/auto-order/v1
+    description: Staging server
+
+tags:
+  - name: Calculation
+    description: Расчет автозаказа (UC8)
+  - name: Approval
+    description: Утверждение заказов (UC6)
+  - name: Rules
+    description: Управление правилами автозаказа (UC10)
+  - name: Orders
+    description: Управление заказами
+
+paths:
+  /orders/calculate:
+    post:
+      tags: [Calculation]
+      summary: Расчет автозаказа (UC8)
+      description: |
+        Автоматический расчет заказа на основе текущих остатков, правил пополнения и прогноза продаж.
+        Запускается ежедневно по расписанию.
+      operationId: calculateAutoOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCalculationRequest'
+            examples:
+              ScheduledCalculation:
+                summary: Плановый расчет
+                value:
+                  calculation_type: "SCHEDULED"
+                  restaurant_id: "rest_001"
+                  calculation_date: "2024-01-16"
+                  use_sales_forecast: true
+                  include_seasonality: true
+                  initiated_by: "scheduler"
+                  calculation_timestamp: "2024-01-15T08:00:00Z"
+      responses:
+        '200':
+          description: Расчет завершен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderCalculationResponse'
+              examples:
+                SuccessfulCalculation:
+                  summary: Успешный расчет
+                  value:
+                    calculation_id: "calc_20240115_001"
+                    restaurant_id: "rest_001"
+                    calculation_date: "2024-01-16"
+                    draft_order_id: "DRAFT_ORD_20240115_001"
+                    total_items: 15
+                    total_quantity: 450.5
+                    total_estimated_cost: 125000.50
+                    calculation_timestamp: "2024-01-15T08:05:00Z"
+                    message: "Автозаказ рассчитан успешно"
+
+  /orders/draft/{draft_order_id}:
+    get:
+      tags: [Orders]
+      summary: Получение черновика заказа (UC8)
+      description: Просмотр рассчитанного черновика заказа с обоснованием
+      operationId: getDraftOrder
+      parameters:
+        - name: draft_order_id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "DRAFT_ORD_20240115_001"
+      responses:
+        '200':
+          description: Черновик заказа
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DraftOrderResponse'
+
+  /orders/{order_id}/approve:
+    post:
+      tags: [Approval]
+      summary: Утверждение заказа технологом (UC6)
+      description: |
+        Технолог утверждает заказ целиком без изменений.
+        Заказ переходит в статус "Утвержден" для передачи в ЛЦ.
+      operationId: approveOrder
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "DRAFT_ORD_20240115_001"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderApproval'
+            examples:
+              TechnologistApprove:
+                summary: Утверждение технологом
+                value:
+                  approved_by: "technologist_001"
+                  approved_at: "2024-01-15T09:00:00Z"
+                  comment: "Заказ утвержден без изменений"
+      responses:
+        '200':
+          description: Заказ утвержден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderApprovalResponse'
+
+  /orders/{order_id}/adjust:
+    post:
+      tags: [Approval]
+      summary: Корректировка заказа технологом (UC6)
+      description: |
+        Технолог вручную корректирует количество или состав заказа перед утверждением.
+      operationId: adjustOrder
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "DRAFT_ORD_20240115_001"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderAdjustment'
+            examples:
+              QuantityAdjustment:
+                summary: Корректировка количества
+                value:
+                  adjustments:
+                    - product_id: "PF-1001"
+                      original_quantity: 50
+                      adjusted_quantity: 60
+                      reason: "Планируется акция"
+                    - product_id: "PF-1003"
+                      original_quantity: 30
+                      adjusted_quantity: 0
+                      reason: "Временно не используется"
+                  adjusted_by: "technologist_001"
+                  adjusted_at: "2024-01-15T09:15:00Z"
+                  comment: "Учет планируемой акции"
+      responses:
+        '200':
+          description: Заказ скорректирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderAdjustmentResponse'
+
+  /orders/{order_id}/reject:
+    post:
+      tags: [Approval]
+      summary: Отклонение заказа (UC6)
+      description: |
+        Технолог отклоняет заказ с указанием причины.
+        Заказ переходит в статус "Отклонен".
+      operationId: rejectOrder
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "DRAFT_ORD_20240115_001"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRejection'
+            examples:
+              RestaurantClosed:
+                summary: Отклонение из-за закрытия ресторана
+                value:
+                  rejected_by: "technologist_001"
+                  rejected_at: "2024-01-15T09:30:00Z"
+                  reason: "RESTAURANT_CLOSED"
+                  comment: "Ресторан закрыт на санитарный день"
+      responses:
+        '200':
+          description: Заказ отклонен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderRejectionResponse'
+
+  /rules:
+    get:
+      tags: [Rules]
+      summary: Получение списка правил автозаказа (UC10)
+      description: Просмотр всех правил пополнения для продуктов
+      operationId: getReplenishmentRules
+      parameters:
+        - name: product_id
+          in: query
+          schema:
+            type: string
+          description: Фильтр по продукту
+          example: "PF-1001"
+        - name: active_only
+          in: query
+          schema:
+            type: boolean
+            default: true
+          description: Только активные правила
+      responses:
+        '200':
+          description: Список правил
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RulesListResponse'
+
+  /rules/{product_id}:
+    put:
+      tags: [Rules]
+      summary: Настройка правила автозаказа (UC10)
+      description: |
+        Создание или изменение правила автозаказа для конкретного продукта.
+        Включает параметры Min, Max, точку заказа, кратность и сезонность.
+      operationId: updateReplenishmentRule
+      parameters:
+        - name: product_id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "PF-1001"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReplenishmentRule'
+            examples:
+              ChickenPattyRule:
+                summary: Правило для куриной котлеты
+                value:
+                  product_id: "PF-1001"
+                  product_name: "Котлета куриная"
+                  min_stock: 20.0
+                  max_stock: 100.0
+                  reorder_point: 40.0
+                  lead_time_days: 1
+                  min_order_quantity: 10.0
+                  order_multiple: 5.0
+                  seasonality_coefficients:
+                    "01": 1.1
+                    "02": 1.0
+                    "12": 1.3
+                  use_sales_forecast: true
+                  active: true
+                  updated_by: "technologist_001"
+                  updated_at: "2024-01-15T10:00:00Z"
+      responses:
+        '200':
+          description: Правило сохранено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RuleUpdateResponse'
+
+  /rules/batch:
+    post:
+      tags: [Rules]
+      summary: Массовая настройка правил (UC10)
+      description: |
+        Применение настроек правил к группе товаров одновременно.
+      operationId: updateRulesBatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchRulesUpdate'
+            examples:
+              VegetableCategory:
+                summary: Настройка для категории овощей
+                value:
+                  category: "VEGETABLES"
+                  changes:
+                    min_stock: 15.0
+                    max_stock: 80.0
+                    reorder_point: 25.0
+                    lead_time_days: 2
+                  updated_by: "technologist_001"
+                  updated_at: "2024-01-15T10:30:00Z"
+      responses:
+        '200':
+          description: Правила обновлены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchRulesResponse'
+
+  /orders/pending:
+    get:
+      tags: [Orders]
+      summary: Получение заказов на утверждение (UC6)
+      description: Список заказов, ожидающих утверждения технологом
+      operationId: getPendingOrders
+      parameters:
+        - name: restaurant_id
+          in: query
+          schema:
+            type: string
+          example: "rest_001"
+        - name: days_back
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Количество дней для поиска заказов
+      responses:
+        '200':
+          description: Список заказов на утверждение
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PendingOrdersResponse'
+
+components:
+  schemas:
+    OrderCalculationRequest:
+      type: object
+      required:
+        - calculation_type
+        - restaurant_id
+        - calculation_date
+        - initiated_by
+        - calculation_timestamp
+      properties:
+        calculation_type:
+          type: string
+          enum: [SCHEDULED, MANUAL, URGENT]
+          example: "SCHEDULED"
+        restaurant_id:
+          type: string
+          example: "rest_001"
+        calculation_date:
+          type: string
+          format: date
+          example: "2024-01-16"
+        use_sales_forecast:
+          type: boolean
+          default: true
+          example: true
+        include_seasonality:
+          type: boolean
+          default: true
+          example: true
+        initiated_by:
+          type: string
+          example: "scheduler"
+        calculation_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T08:00:00Z"
+
+    OrderCalculationResponse:
+      type: object
+      required:
+        - calculation_id
+        - restaurant_id
+        - calculation_date
+        - draft_order_id
+        - calculation_timestamp
+      properties:
+        calculation_id:
+          type: string
+          example: "calc_20240115_001"
+        restaurant_id:
+          type: string
+          example: "rest_001"
+        calculation_date:
+          type: string
+          format: date
+          example: "2024-01-16"
+        draft_order_id:
+          type: string
+          example: "DRAFT_ORD_20240115_001"
+        total_items:
+          type: integer
+          example: 15
+        total_quantity:
+          type: number
+          format: float
+          example: 450.5
+        total_estimated_cost:
+          type: number
+          format: float
+          example: 125000.50
+        calculation_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T08:05:00Z"
+        message:
+          type: string
+          example: "Автозаказ рассчитан успешно"
+        warnings:
+          type: array
+          items:
+            type: string
+          example: ["Для продукта PF-1005 недостаточно данных для прогноза"]
+
+    DraftOrderResponse:
+      type: object
+      required:
+        - order_id
+        - restaurant_id
+        - order_date
+        - status
+        - items
+      properties:
+        order_id:
+          type: string
+          example: "DRAFT_ORD_20240115_001"
+        restaurant_id:
+          type: string
+          example: "rest_001"
+        order_date:
+          type: string
+          format: date
+          example: "2024-01-16"
+        status:
+          type: string
+          enum: [DRAFT, PENDING_APPROVAL, APPROVED, ADJUSTED, REJECTED]
+          example: "DRAFT"
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemWithRationale'
+        total_quantity:
+          type: number
+          format: float
+          example: 450.5
+        total_estimated_cost:
+          type: number
+          format: float
+          example: 125000.50
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T08:05:00Z"
+
+    OrderItemWithRationale:
+      type: object
+      required:
+        - product_id
+        - product_name
+        - quantity
+        - unit
+        - rationale
+      properties:
+        product_id:
+          type: string
+          example: "PF-1001"
+        product_name:
+          type: string
+          example: "Котлета куриная"
+        quantity:
+          type: number
+          format: float
+          example: 50.0
+        unit:
+          type: string
+          example: "кг"
+        supplier_article:
+          type: string
+          example: "CHICKEN_PATTY_100G"
+        unit_price:
+          type: number
+          format: float
+          example: 450.50
+        total_price:
+          type: number
+          format: float
+          example: 22525.00
+        rationale:
+          type: object
+          properties:
+            current_stock:
+              type: number
+              format: float
+              example: 25.5
+            reorder_point:
+              type: number
+              format: float
+              example: 40.0
+            max_stock:
+              type: number
+              format: float
+              example: 100.0
+            sales_forecast:
+              type: number
+              format: float
+              example: 45.0
+            open_orders:
+              type: number
+              format: float
+              example: 0.0
+            formula_explanation:
+              type: string
+              example: "Max - Текущий остаток - Незавершенные заказы + Прогноз продаж"
+
+    OrderApproval:
+      type: object
+      required:
+        - approved_by
+        - approved_at
+      properties:
+        approved_by:
+          type: string
+          example: "technologist_001"
+        approved_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:00:00Z"
+        comment:
+          type: string
+          example: "Заказ утвержден без изменений"
+
+    OrderApprovalResponse:
+      type: object
+      properties:
+        order_id:
+          type: string
+          example: "DRAFT_ORD_20240115_001"
+        previous_status:
+          type: string
+          example: "DRAFT"
+        new_status:
+          type: string
+          example: "APPROVED"
+        approved_by:
+          type: string
+          example: "technologist_001"
+        approved_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:00:00Z"
+        message:
+          type: string
+          example: "Заказ утвержден и передан в ЛЦ"
+
+    OrderAdjustment:
+      type: object
+      required:
+        - adjustments
+        - adjusted_by
+        - adjusted_at
+      properties:
+        adjustments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderAdjustmentItem'
+        adjusted_by:
+          type: string
+          example: "technologist_001"
+        adjusted_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:15:00Z"
+        comment:
+          type: string
+          example: "Учет планируемой акции"
+
+    OrderAdjustmentItem:
+      type: object
+      required:
+        - product_id
+        - original_quantity
+        - adjusted_quantity
+        - reason
+      properties:
+        product_id:
+          type: string
+          example: "PF-1001"
+        original_quantity:
+          type: number
+          format: float
+          example: 50.0
+        adjusted_quantity:
+          type: number
+          format: float
+          example: 60.0
+        reason:
+          type: string
+          example: "Планируется акция"
+        new_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewOrderItem'
+
+    NewOrderItem:
+      type: object
+      properties:
+        product_id:
+          type: string
+          example: "PF-1005"
+        product_name:
+          type: string
+          example: "Новый соус"
+        quantity:
+          type: number
+          format: float
+          example: 10.0
+        unit:
+          type: string
+          example: "л"
+
+    OrderAdjustmentResponse:
+      type: object
+      properties:
+        order_id:
+          type: string
+          example: "DRAFT_ORD_20240115_001"
+        previous_status:
+          type: string
+          example: "DRAFT"
+        new_status:
+          type: string
+          example: "ADJUSTED"
+        adjusted_by:
+          type: string
+          example: "technologist_001"
+        adjusted_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:15:00Z"
+        total_adjustments:
+          type: integer
+          example: 2
+        new_total_quantity:
+          type: number
+          format: float
+          example: 470.5
+        message:
+          type: string
+          example: "Заказ скорректирован"
+
+    OrderRejection:
+      type: object
+      required:
+        - rejected_by
+        - rejected_at
+        - reason
+      properties:
+        rejected_by:
+          type: string
+          example: "technologist_001"
+        rejected_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:30:00Z"
+        reason:
+          type: string
+          enum: [RESTAURANT_CLOSED, INCORRECT_DATA, OTHER]
+          example: "RESTAURANT_CLOSED"
+        comment:
+          type: string
+          example: "Ресторан закрыт на санитарный день"
+
+    OrderRejectionResponse:
+      type: object
+      properties:
+        order_id:
+          type: string
+          example: "DRAFT_ORD_20240115_001"
+        previous_status:
+          type: string
+          example: "DRAFT"
+        new_status:
+          type: string
+          example: "REJECTED"
+        rejected_by:
+          type: string
+          example: "technologist_001"
+        rejected_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:30:00Z"
+        reason:
+          type: string
+          example: "RESTAURANT_CLOSED"
+        message:
+          type: string
+          example: "Заказ отклонен"
+
+    RulesListResponse:
+      type: object
+      properties:
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReplenishmentRule'
+        total_count:
+          type: integer
+          example: 25
+        active_count:
+          type: integer
+          example: 20
+
+    ReplenishmentRule:
+      type: object
+      required:
+        - product_id
+        - min_stock
+        - max_stock
+        - reorder_point
+        - lead_time_days
+        - active
+        - updated_by
+        - updated_at
+      properties:
+        product_id:
+          type: string
+          example: "PF-1001"
+        product_name:
+          type: string
+          example: "Котлета куриная"
+        min_stock:
+          type: number
+          format: float
+          example: 20.0
+        max_stock:
+          type: number
+          format: float
+          example: 100.0
+        reorder_point:
+          type: number
+          format: float
+          example: 40.0
+        lead_time_days:
+          type: integer
+          example: 1
+        min_order_quantity:
+          type: number
+          format: float
+          example: 10.0
+        order_multiple:
+          type: number
+          format: float
+          example: 5.0
+        seasonality_coefficients:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+          description: Коэффициенты по месяцам (01-12)
+          example:
+            "01": 1.1
+            "02": 1.0
+            "12": 1.3
+        use_sales_forecast:
+          type: boolean
+          example: true
+        active:
+          type: boolean
+          example: true
+        updated_by:
+          type: string
+          example: "technologist_001"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00Z"
+
+    RuleUpdateResponse:
+      type: object
+      properties:
+        product_id:
+          type: string
+          example: "PF-1001"
+        rule_id:
+          type: string
+          example: "rule_20240115_001"
+        action:
+          type: string
+          enum: [CREATED, UPDATED]
+          example: "UPDATED"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00Z"
+        message:
+          type: string
+          example: "Правило успешно сохранено"
+
+    BatchRulesUpdate:
+      type: object
+      required:
+        - category
+        - changes
+        - updated_by
+        - updated_at
+      properties:
+        category:
+          type: string
+          example: "VEGETABLES"
+        product_ids:
+          type: array
+          items:
+            type: string
+          description: Конкретные продукты (альтернатива категории)
+          example: ["PF-1001", "PF-1002"]
+        changes:
+          type: object
+          properties:
+            min_stock:
+              type: number
+              format: float
+            max_stock:
+              type: number
+              format: float
+            reorder_point:
+              type: number
+              format: float
+            lead_time_days:
+              type: integer
+            min_order_quantity:
+              type: number
+              format: float
+            order_multiple:
+              type: number
+              format: float
+        updated_by:
+          type: string
+          example: "technologist_001"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+
+    BatchRulesResponse:
+      type: object
+      properties:
+        batch_id:
+          type: string
+          example: "batch_rules_20240115_001"
+        total_products_updated:
+          type: integer
+          example: 8
+        failed_updates:
+          type: array
+          items:
+            type: object
+            properties:
+              product_id:
+                type: string
+              error:
+                type: string
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+        message:
+          type: string
+          example: "Правила обновлены для 8 продуктов"
+
+    PendingOrdersResponse:
+      type: object
+      properties:
+        restaurant_id:
+          type: string
+          example: "rest_001"
+        pending_orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/PendingOrder'
+        total_count:
+          type: integer
+          example: 3
+
+    PendingOrder:
+      type: object
+      properties:
+        order_id:
+          type: string
+          example: "DRAFT_ORD_20240115_001"
+        order_date:
+          type: string
+          format: date
+          example: "2024-01-16"
+        total_items:
+          type: integer
+          example: 15
+        total_quantity:
+          type: number
+          format: float
+          example: 450.5
+        total_estimated_cost:
+          type: number
+          format: float
+          example: 125000.50
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T08:05:00Z"
+        status:
+          type: string
+          example: "DRAFT"
+
+    Error:
+      type: object
+      properties:
+        error_id:
+          type: string
+          example: "err_auto_order_001"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T08:00:00.200Z"
+        code:
+          type: string
+          enum: [CALCULATION_ERROR, INSUFFICIENT_DATA, RULE_VALIDATION_ERROR, ORDER_NOT_FOUND]
+          example: "RULE_VALIDATION_ERROR"
+        message:
+          type: string
+          example: "Min stock не может быть больше Max stock"
+        details:
+          type: string
+          example: "Min stock: 100.0, Max stock: 80.0"
+
+securitySchemes:
+  BearerAuth:
+    type: http
+    scheme: bearer
+    description: JWT токен для аутентификации
+  ServiceAuth:
+    type: apiKey
+    in: header
+    name: X-Service-API-Key
+    description: API ключ для сервисной аутентификации
+
+security:
+  - BearerAuth: []
+  - ServiceAuth: []

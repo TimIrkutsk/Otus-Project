@@ -1,0 +1,855 @@
+openapi: 3.0.3
+info:
+  title: Shelf Life Control API
+  description: |
+    API для контроля сроков годности партий полуфабрикатов.
+    **Особенности:**
+    - Автоматическое сканирование и блокировка просроченных партий
+    - Создание заданий на утилизацию
+    - Проверка разрешений для роботизированной линии
+    - Расчет виртуальных сроков годности
+  version: 1.0.0
+  contact:
+    name: Shelf Life Control Team
+    email: shelf-life@automated-restaurant.ru
+
+servers:
+  - url: https://api.automated-restaurant.ru/shelf-life/v1
+    description: Production server
+  - url: https://api-staging.automated-restaurant.ru/shelf-life/v1
+    description: Staging server
+
+tags:
+  - name: Scanning
+    description: Сканирование сроков годности
+  - name: Blocking
+    description: Блокировка партий
+  - name: Permissions
+    description: Проверка разрешений для робота
+  - name: VirtualExpiration
+    description: Расчет виртуальных сроков годности
+
+paths:
+  /scan/expiration:
+    post:
+      tags: [Scanning]
+      summary: Сканирование сроков годности партий (UC7)
+      description: |
+        Автоматическое сканирование всех партий на предмет истечения сроков годности.
+        Запускается по расписанию каждые N минут.
+      operationId: scanExpirationDates
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpirationScanRequest'
+            examples:
+              ScheduledScan:
+                summary: Плановое сканирование
+                value:
+                  scan_type: "SCHEDULED"
+                  scan_interval_minutes: 60
+                  block_threshold_hours: 4
+                  initiated_by: "scheduler"
+                  scan_timestamp: "2024-01-15T10:00:00Z"
+      responses:
+        '200':
+          description: Сканирование завершено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpirationScanResponse'
+              examples:
+                ScanWithFindings:
+                  summary: Сканирование с находками
+                  value:
+                    scan_id: "scan_20240115_001"
+                    scan_timestamp: "2024-01-15T10:00:00Z"
+                    total_batches_scanned: 150
+                    batches_expired: 2
+                    batches_expiring_soon: 5
+                    batches_blocked: 2
+                    utilization_tasks_created: 2
+                    message: "Сканирование завершено, созданы задания на утилизацию"
+
+  /batches/{batch_barcode}/block:
+    post:
+      tags: [Blocking]
+      summary: Блокировка партии (UC7)
+      description: |
+        Автоматическая блокировка партии при обнаружении истечения срока годности.
+        Партия переводится в статус "Заблокирована".
+      operationId: blockBatch
+      parameters:
+        - name: batch_barcode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Штрих-код партии
+          example: "BC-001-20240116-001"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockBatchRequest'
+            examples:
+              ExpiredBatch:
+                summary: Блокировка просроченной партии
+                value:
+                  reason: "EXPIRED"
+                  expiration_date: "2024-01-15"
+                  current_time: "2024-01-15T10:00:00Z"
+                  hours_until_expiration: 0
+                  initiated_by: "shelf_life_scanner"
+                  block_timestamp: "2024-01-15T10:00:00Z"
+              ExpiringSoonBatch:
+                summary: Блокировка скоро просроченной партии
+                value:
+                  reason: "EXPIRING_SOON"
+                  expiration_date: "2024-01-15"
+                  current_time: "2024-01-15T06:00:00Z"
+                  hours_until_expiration: 4
+                  initiated_by: "shelf_life_scanner"
+                  block_timestamp: "2024-01-15T06:00:00Z"
+      responses:
+        '200':
+          description: Партия заблокирована
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockBatchResponse'
+        '409':
+          description: Партия уже заблокирована
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /batches/{batch_barcode}/unblock:
+    post:
+      tags: [Blocking]
+      summary: Разблокировка партии
+      description: |
+        Разблокировка партии технологом после проверки.
+        Требует обязательного указания причины.
+      operationId: unblockBatch
+      parameters:
+        - name: batch_barcode
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "BC-001-20240116-001"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnblockBatchRequest'
+            examples:
+              TechnologistUnblock:
+                summary: Разблокировка технологом
+                value:
+                  reason: "FALSE_POSITIVE"
+                  comment: "Срок годности продлен по результатам проверки"
+                  unblocked_by: "technologist_001"
+                  unblock_timestamp: "2024-01-15T11:00:00Z"
+      responses:
+        '200':
+          description: Партия разблокирована
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnblockBatchResponse'
+
+  /permissions/check:
+    post:
+      tags: [Permissions]
+      summary: Проверка разрешения на использование партии (UC11)
+      description: |
+        Проверка разрешения для роботизированной линии на использование партии.
+        **Критическое требование: время ответа < 100 мс**
+      operationId: checkUsagePermission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PermissionCheckRequest'
+            examples:
+              RobotPermissionCheck:
+                summary: Запрос от робота
+                value:
+                  line_id: "line_001"
+                  container_id: "container_A12"
+                  product_id: "PF-1001"
+                  quantity: 1
+                  robot_id: "robot_alpha_001"
+                  request_timestamp: "2024-01-15T10:30:00Z"
+      responses:
+        '200':
+          description: Результат проверки разрешения
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionCheckResponse'
+              examples:
+                PermissionGranted:
+                  summary: Разрешение предоставлено
+                  value:
+                    request_id: "perm_req_20240115_001"
+                    allowed: true
+                    batch_id: "BATCH_001"
+                    batch_barcode: "BC-001-20240116-001"
+                    expiration_date: "2024-01-20T23:59:59Z"
+                    virtual_expiration: "2024-01-18T15:30:00Z"
+                    response_timestamp: "2024-01-15T10:30:00.050Z"
+                PermissionDenied:
+                  summary: Разрешение отклонено
+                  value:
+                    request_id: "perm_req_20240115_002"
+                    allowed: false
+                    reason: "BATCH_BLOCKED"
+                    message: "Партия заблокирована системой"
+                    batch_status: "BLOCKED"
+                    response_timestamp: "2024-01-15T10:30:00.060Z"
+
+  /utilization/tasks:
+    post:
+      tags: [Blocking]
+      summary: Создание задания на утилизацию (UC13)
+      description: |
+        Автоматическое создание задания на утилизацию для заблокированной партии.
+        Вызывается после блокировки партии.
+      operationId: createUtilizationTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UtilizationTaskRequest'
+            examples:
+              ExpiredBatchTask:
+                summary: Задание для просроченной партии
+                value:
+                  batch_barcode: "BC-001-20240116-001"
+                  product_id: "PF-1001"
+                  product_name: "Котлета куриная"
+                  location: "Холодильник А, полка 2"
+                  reason: "EXPIRED"
+                  expiration_date: "2024-01-15"
+                  quantity: 50.0
+                  unit: "кг"
+                  priority: "HIGH"
+                  created_by: "shelf_life_scanner"
+                  created_timestamp: "2024-01-15T10:00:00Z"
+      responses:
+        '200':
+          description: Задание на утилизацию создано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UtilizationTaskResponse'
+
+  /virtual-expiration/calculate:
+    post:
+      tags: [VirtualExpiration]
+      summary: Расчет виртуального срока годности (UC3)
+      description: |
+        Расчет виртуального срока годности при смешивании партий в оперативном запасе.
+        Формула: (Y1*T1 + Y2*T2) / (Y1 + Y2)
+      operationId: calculateVirtualExpiration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VirtualExpirationRequest'
+            examples:
+              MixedBatchesCalculation:
+                summary: Расчет для смешанных партий
+                value:
+                  line_id: "line_001"
+                  container_id: "container_A12"
+                  product_id: "PF-1001"
+                  current_mixture:
+                    - batch_barcode: "BC-001-20240116-001"
+                      quantity: 40.0
+                      expiration_date: "2024-01-20"
+                    - batch_barcode: "BC-001-20240116-002"
+                      quantity: 10.0
+                      expiration_date: "2024-01-22"
+                  calculation_timestamp: "2024-01-15T09:20:00Z"
+      responses:
+        '200':
+          description: Виртуальный срок годности рассчитан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VirtualExpirationResponse'
+
+  /batches/expiring:
+    get:
+      tags: [Scanning]
+      summary: Получение списка просроченных и скоро просроченных партий
+      description: |
+        Получение партий для отчета по срокам годности (UC1).
+        Используется оператором и технологом для ручного контроля.
+      operationId: getExpiringBatches
+      parameters:
+        - name: hours_threshold
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 24
+          description: Порог в часах для "скоро просроченных" партий
+          example: 24
+        - name: include_expired
+          in: query
+          schema:
+            type: boolean
+            default: true
+          description: Включать просроченные партии
+        - name: location_id
+          in: query
+          schema:
+            type: string
+          description: Фильтр по зоне хранения
+          example: "zone_cold_001"
+      responses:
+        '200':
+          description: Список партий
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpiringBatchesResponse'
+
+components:
+  schemas:
+    ExpirationScanRequest:
+      type: object
+      required:
+        - scan_type
+        - initiated_by
+        - scan_timestamp
+      properties:
+        scan_type:
+          type: string
+          enum: [SCHEDULED, MANUAL, TRIGGERED]
+          example: "SCHEDULED"
+        scan_interval_minutes:
+          type: integer
+          description: Интервал сканирования в минутах
+          example: 60
+        block_threshold_hours:
+          type: integer
+          description: Порог блокировки в часах до истечения срока
+          example: 4
+        initiated_by:
+          type: string
+          example: "scheduler"
+        scan_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00Z"
+
+    ExpirationScanResponse:
+      type: object
+      required:
+        - scan_id
+        - scan_timestamp
+        - total_batches_scanned
+      properties:
+        scan_id:
+          type: string
+          example: "scan_20240115_001"
+        scan_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00Z"
+        total_batches_scanned:
+          type: integer
+          example: 150
+        batches_expired:
+          type: integer
+          description: Количество просроченных партий
+          example: 2
+        batches_expiring_soon:
+          type: integer
+          description: Количество скоро просроченных партий
+          example: 5
+        batches_blocked:
+          type: integer
+          description: Количество заблокированных партий
+          example: 2
+        utilization_tasks_created:
+          type: integer
+          description: Количество созданных заданий на утилизацию
+          example: 2
+        message:
+          type: string
+          example: "Сканирование завершено, созданы задания на утилизацию"
+
+    BlockBatchRequest:
+      type: object
+      required:
+        - reason
+        - expiration_date
+        - current_time
+        - hours_until_expiration
+        - initiated_by
+        - block_timestamp
+      properties:
+        reason:
+          type: string
+          enum: [EXPIRED, EXPIRING_SOON, QUALITY_ISSUE]
+          example: "EXPIRED"
+        expiration_date:
+          type: string
+          format: date
+          example: "2024-01-15"
+        current_time:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00Z"
+        hours_until_expiration:
+          type: number
+          format: float
+          description: Часов до истечения срока (отрицательное для просроченных)
+          example: 0
+        initiated_by:
+          type: string
+          example: "shelf_life_scanner"
+        block_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00Z"
+        comment:
+          type: string
+          example: "Автоматическая блокировка по истечении срока годности"
+
+    BlockBatchResponse:
+      type: object
+      properties:
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        previous_status:
+          type: string
+          example: "ACTIVE"
+        new_status:
+          type: string
+          example: "BLOCKED"
+        block_reason:
+          type: string
+          example: "EXPIRED"
+        blocked_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00Z"
+        utilization_task_created:
+          type: boolean
+          example: true
+        utilization_task_id:
+          type: string
+          example: "task_util_001"
+
+    UnblockBatchRequest:
+      type: object
+      required:
+        - reason
+        - unblocked_by
+        - unblock_timestamp
+      properties:
+        reason:
+          type: string
+          enum: [FALSE_POSITIVE, EXTENDED_SHELF_LIFE, QUALITY_APPROVED]
+          example: "FALSE_POSITIVE"
+        comment:
+          type: string
+          example: "Срок годности продлен по результатам проверки"
+        unblocked_by:
+          type: string
+          example: "technologist_001"
+        unblock_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T11:00:00Z"
+
+    UnblockBatchResponse:
+      type: object
+      properties:
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        previous_status:
+          type: string
+          example: "BLOCKED"
+        new_status:
+          type: string
+          example: "ACTIVE"
+        unblock_reason:
+          type: string
+          example: "FALSE_POSITIVE"
+        unblocked_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T11:00:00Z"
+        unblocked_by:
+          type: string
+          example: "technologist_001"
+
+    PermissionCheckRequest:
+      type: object
+      required:
+        - line_id
+        - container_id
+        - product_id
+        - quantity
+        - robot_id
+        - request_timestamp
+      properties:
+        line_id:
+          type: string
+          example: "line_001"
+        container_id:
+          type: string
+          example: "container_A12"
+        product_id:
+          type: string
+          example: "PF-1001"
+        quantity:
+          type: number
+          format: float
+          example: 1
+        robot_id:
+          type: string
+          example: "robot_alpha_001"
+        request_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+
+    PermissionCheckResponse:
+      type: object
+      required:
+        - request_id
+        - allowed
+        - response_timestamp
+      properties:
+        request_id:
+          type: string
+          example: "perm_req_20240115_001"
+        allowed:
+          type: boolean
+          example: true
+        batch_id:
+          type: string
+          example: "BATCH_001"
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        expiration_date:
+          type: string
+          format: date-time
+          example: "2024-01-20T23:59:59Z"
+        virtual_expiration:
+          type: string
+          format: date-time
+          description: Виртуальный срок годности (для смешанных партий)
+          example: "2024-01-18T15:30:00Z"
+        reason:
+          type: string
+          enum: [BATCH_EXPIRED, BATCH_BLOCKED, INSUFFICIENT_QUANTITY, PRODUCT_NOT_FOUND]
+          example: "BATCH_EXPIRED"
+        message:
+          type: string
+          example: "Срок годности партии истек"
+        batch_status:
+          type: string
+          enum: [ACTIVE, BLOCKED, EXPIRED, UTILIZED]
+          example: "BLOCKED"
+        response_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00.050Z"
+
+    UtilizationTaskRequest:
+      type: object
+      required:
+        - batch_barcode
+        - product_id
+        - product_name
+        - location
+        - reason
+        - expiration_date
+        - quantity
+        - unit
+        - priority
+        - created_by
+        - created_timestamp
+      properties:
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        product_id:
+          type: string
+          example: "PF-1001"
+        product_name:
+          type: string
+          example: "Котлета куриная"
+        location:
+          type: string
+          example: "Холодильник А, полка 2"
+        reason:
+          type: string
+          enum: [EXPIRED, EXPIRING_SOON, QUALITY_ISSUE]
+          example: "EXPIRED"
+        expiration_date:
+          type: string
+          format: date
+          example: "2024-01-15"
+        quantity:
+          type: number
+          format: float
+          example: 50.0
+        unit:
+          type: string
+          example: "кг"
+        priority:
+          type: string
+          enum: [HIGH, MEDIUM, LOW]
+          example: "HIGH"
+        created_by:
+          type: string
+          example: "shelf_life_scanner"
+        created_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00Z"
+
+    UtilizationTaskResponse:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: "task_util_001"
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        status:
+          type: string
+          example: "CREATED"
+        assigned_operator_id:
+          type: string
+          example: "operator_001"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00Z"
+        message:
+          type: string
+          example: "Задание на утилизацию создано"
+
+    VirtualExpirationRequest:
+      type: object
+      required:
+        - line_id
+        - container_id
+        - product_id
+        - current_mixture
+        - calculation_timestamp
+      properties:
+        line_id:
+          type: string
+          example: "line_001"
+        container_id:
+          type: string
+          example: "container_A12"
+        product_id:
+          type: string
+          example: "PF-1001"
+        current_mixture:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchMixture'
+        calculation_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:20:00Z"
+
+    BatchMixture:
+      type: object
+      required:
+        - batch_barcode
+        - quantity
+        - expiration_date
+      properties:
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        quantity:
+          type: number
+          format: float
+          example: 40.0
+        expiration_date:
+          type: string
+          format: date-time
+          example: "2024-01-20"
+
+    VirtualExpirationResponse:
+      type: object
+      properties:
+        line_id:
+          type: string
+          example: "line_001"
+        container_id:
+          type: string
+          example: "container_A12"
+        product_id:
+          type: string
+          example: "PF-1001"
+        virtual_expiration_date:
+          type: string
+          format: date-time
+          example: "2024-01-21"
+        total_quantity:
+          type: number
+          format: float
+          example: 50.0
+        calculation_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:20:00Z"
+        calculation_details:
+          type: object
+          properties:
+            formula:
+              type: string
+              example: "(Y1*T1 + Y2*T2) / (Y1 + Y2)"
+            batches_used:
+              type: integer
+              example: 2
+
+    ExpiringBatchesResponse:
+      type: object
+      properties:
+        report_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00Z"
+        hours_threshold:
+          type: integer
+          example: 24
+        batches:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpiringBatch'
+        summary:
+          type: object
+          properties:
+            total_batches:
+              type: integer
+              example: 7
+            expired_count:
+              type: integer
+              example: 2
+            expiring_soon_count:
+              type: integer
+              example: 5
+            blocked_count:
+              type: integer
+              example: 2
+
+    ExpiringBatch:
+      type: object
+      required:
+        - batch_barcode
+        - product_id
+        - product_name
+        - location
+        - expiration_date
+        - status
+        - hours_until_expiration
+      properties:
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        product_id:
+          type: string
+          example: "PF-1001"
+        product_name:
+          type: string
+          example: "Котлета куриная"
+        location:
+          type: string
+          example: "Холодильник А, полка 2"
+        expiration_date:
+          type: string
+          format: date-time
+          example: "2024-01-15"
+        status:
+          type: string
+          enum: [ACTIVE, BLOCKED, EXPIRED]
+          example: "BLOCKED"
+        hours_until_expiration:
+          type: number
+          format: float
+          description: Часов до истечения срока (отрицательное для просроченных)
+          example: -2
+        current_quantity:
+          type: number
+          format: float
+          example: 50.0
+        unit:
+          type: string
+          example: "кг"
+        utilization_task_exists:
+          type: boolean
+          example: true
+
+    Error:
+      type: object
+      properties:
+        error_id:
+          type: string
+          example: "err_shelf_001"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00.200Z"
+        code:
+          type: string
+          enum: [BATCH_NOT_FOUND, BATCH_ALREADY_BLOCKED, PERMISSION_CHECK_TIMEOUT, CALCULATION_ERROR]
+          example: "PERMISSION_CHECK_TIMEOUT"
+        message:
+          type: string
+          example: "Превышено время проверки разрешения"
+        details:
+          type: string
+          example: "Время ответа превысило 95 мс"
+
+securitySchemes:
+  BearerAuth:
+    type: http
+    scheme: bearer
+    description: JWT токен для аутентификации
+  ServiceAuth:
+    type: apiKey
+    in: header
+    name: X-Service-API-Key
+    description: API ключ для сервисной аутентификации
+  RobotAuth:
+    type: apiKey
+    in: header
+    name: X-Robot-API-Key
+    description: API ключ для роботизированных линий
+
+security:
+  - BearerAuth: []
+  - ServiceAuth: []
+  - RobotAuth: []

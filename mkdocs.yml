@@ -101,10 +101,12 @@ nav:
     - Seq_diagram.md
     - UI.md
   - API:
-    - api.md #для ЛЦ
     - api_robots.md
     - api_logict.md
-    - api_Sales_Forecast.md
+    - api_mobile_task.md
+    - api_shelf_life_control.md
+    - api_stock_management.md
+    - api.md #api_Sales_Forecast
   - Задачи:
     - task.md
     - test_case.md
