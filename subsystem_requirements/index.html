@@ -1,0 +1,2203 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="../subsystem_func_requirements/" rel="prev"/>
+<link href="../User_story/" rel="next"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.6.21" name="generator"/>
+<title>Варианты использования и порядок их реализации - Проект "Инвентаризация, автозаказ, контроль сроков хранения"</title>
+<link href="../assets/stylesheets/main.2a3383ac.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../css/print-site.css" rel="stylesheet"/>
+<link href="../css/print-site-material.css" rel="stylesheet"/>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="purple" data-md-color-primary="teal" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#_1">
+          Перейти к содержанию
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Верхний колонтитул" class="md-header__inner md-grid">
+<a aria-label="Проект " class="md-header__button md-logo" data-md-component="logo" href=".." title='Проект "Инвентаризация, автозаказ, контроль сроков хранения"' автозаказ,="" инвентаризация,="" контроль="" сроков="" хранения""="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Проект "Инвентаризация, автозаказ, контроль сроков хранения"
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Варианты использования и порядок их реализации
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="purple" data-md-color-media="" data-md-color-primary="teal" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="lime" data-md-color-media="" data-md-color-primary="teal" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Поиск" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Поиск" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Поиск" class="md-search__options">
+<button aria-label="Очистить" class="md-search__icon md-icon" tabindex="-1" title="Очистить" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Инициализация поиска
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="Вкладки" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+          
+  
+  
+  Домашняя страница
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../page_2/">
+          
+  
+  
+  Документация проекта
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../object_characteristics/">
+          
+  
+  
+  Документация подсистемы
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../api_robots/">
+          
+  
+  
+  API
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../task/">
+          
+  
+  
+  Задачи
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../test_case/">
+          
+  
+  
+  Тест-кейсы
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../print_page/">
+        
+  
+  
+    
+  
+  Print Site
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Навигация" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Проект " class="md-nav__button md-logo" data-md-component="logo" href=".." title='Проект "Инвентаризация, автозаказ, контроль сроков хранения"' автозаказ,="" инвентаризация,="" контроль="" сроков="" хранения""="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Проект "Инвентаризация, автозаказ, контроль сроков хранения"
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+<span class="md-ellipsis">
+    Домашняя страница
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_1_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_1">
+<span class="md-nav__icon md-icon"></span>
+            Домашняя страница
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    О проектной работе
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    Документация проекта
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            Документация проекта
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../page_2/">
+<span class="md-ellipsis">
+    Глоссарий
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../general_info/">
+<span class="md-ellipsis">
+    Общие сведения
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../project_goals/">
+<span class="md-ellipsis">
+    Паспорт проекта
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../goals/">
+<span class="md-ellipsis">
+    Назначение и цели создания системы
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../system_requirements/">
+<span class="md-ellipsis">
+    Нефункциональные требования
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+<span class="md-ellipsis">
+    Документация подсистемы
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            Документация подсистемы
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../object_characteristics/">
+<span class="md-ellipsis">
+    Характеристика объекта автоматизации
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../business_processes/">
+<span class="md-ellipsis">
+    Описание бизнес-процессов
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../subsystem_func_requirements/">
+<span class="md-ellipsis">
+    Функциональные требования к подсистеме
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    Варианты использования и порядок их реализации
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    Варианты использования и порядок их реализации
+    
+  </span>
+</a>
+<nav aria-label="Содержание" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Содержание
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      Диаграмма вариантов использования
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      Диаграмма статусов
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#use-case-mvp">
+<span class="md-ellipsis">
+      Описание Use Case, реализуемых в рамках MVP
+    </span>
+</a>
+<nav aria-label="Описание Use Case, реализуемых в рамках MVP" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc1">
+<span class="md-ellipsis">
+      UC1. Сформировать отчет по сроку годности
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc2-mvp">
+<span class="md-ellipsis">
+      UC2-MVP. Утилизировать партию по отчету
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc3-mvp">
+<span class="md-ellipsis">
+      UC3-MVP. Пополнить оперативный запас у робота по отчету
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc4">
+<span class="md-ellipsis">
+      UC4. Провести инвентаризацию
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc5">
+<span class="md-ellipsis">
+      UC5. Вести справочники
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc6">
+<span class="md-ellipsis">
+      UC6. Скорректировать заказ
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc7">
+<span class="md-ellipsis">
+      UC7. Заблокировать просроченную партию
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc8">
+<span class="md-ellipsis">
+      UC8. Рассчитать автозаказ
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#use-case">
+<span class="md-ellipsis">
+      Описание Use Case реализуемых в рамках первого релиза
+    </span>
+</a>
+<nav aria-label="Описание Use Case реализуемых в рамках первого релиза" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc2">
+<span class="md-ellipsis">
+      UC2. Утилизировать партию
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc3">
+<span class="md-ellipsis">
+      UC3. Пополнить оперативный запас
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc9">
+<span class="md-ellipsis">
+      UC9. Подтвердить списание
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc10">
+<span class="md-ellipsis">
+      UC10. Настроить правила автозаказа
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc11">
+<span class="md-ellipsis">
+      UC11. Проверить срок годности
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc12">
+<span class="md-ellipsis">
+      UC12. Передать заказ в ЛЦ
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc13">
+<span class="md-ellipsis">
+      UC13. Сформировать задание на утилизацию
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../User_story/">
+<span class="md-ellipsis">
+    Пользовательские истории (User Story) и порядок их реализации
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../information_model/">
+<span class="md-ellipsis">
+    Информационная модель
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../C4_model/">
+<span class="md-ellipsis">
+    Компонентная архитектура
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../Seq_diagram/">
+<span class="md-ellipsis">
+    Интеграционное взаимодействие
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../UI/">
+<span class="md-ellipsis">
+    Демонстрация UI макета
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    API
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_robots/">
+<span class="md-ellipsis">
+    API для интеграции с роботизированной линией
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_logict/">
+<span class="md-ellipsis">
+    API для интеграции с логистическими центрами
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_mobile_task/">
+<span class="md-ellipsis">
+    API для мобильного приложения оператора линии
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_shelf_life_control/">
+<span class="md-ellipsis">
+    API для контроля сроков годности партий полуфабрикатов
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_stock_management/">
+<span class="md-ellipsis">
+    API для управления складскими запасами
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api/">
+<span class="md-ellipsis">
+    API для получения прогнозов продаж
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_auto_order/">
+<span class="md-ellipsis">
+    API для автоматического расчета и управления заказами полуфабрикатов
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_operational_stock/">
+<span class="md-ellipsis">
+    API для управления оперативным запасом роботизированных линий
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    Задачи
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            Задачи
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../task/">
+<span class="md-ellipsis">
+    Постановки на разработку по UserStory
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../task_UC/">
+<span class="md-ellipsis">
+    Постановки на разработку по Use Case
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    Тест-кейсы
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            Тест-кейсы
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case/">
+<span class="md-ellipsis">
+    Тест кейсы для UserStory MVP
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case_release/">
+<span class="md-ellipsis">
+    Тест кейсы для UserStory первого релиза
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case_UC/">
+<span class="md-ellipsis">
+    Тест кейсы для UC MVP
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case_UC_release/">
+<span class="md-ellipsis">
+    Тест кейсы для UC первого релиза
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../print_page/">
+<span class="md-ellipsis">
+    Print Site
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.</span> Варианты использования и порядок их реализации</h1>
+<h2 id="_2"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.1</span> Диаграмма вариантов использования</h2>
+<p>На снимке ниже представлены все варианты использования, которые будут реализованы в системе (нотация UML):
+<img alt="use case" src="../assets/UseCase_diagram.png"/></p>
+<h2 id="_3"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.2</span> Диаграмма статусов</h2>
+<p>Партии полуфабрикатов имеют статусы, показанные на снимке:
+<img alt="status_model" src="../diagrams/out/StatusDiagram.svg"/></p>
+<p>Реализацию вариантов использования необходимо разделить на два этапа - MVP и Первая поставка:</p>
+<h2 id="use-case-mvp"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.3</span> Описание Use Case, реализуемых в рамках MVP</h2>
+<h3 id="uc1"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.3.1</span> UC1. Сформировать отчет по сроку годности</h3>
+<p><strong>1. Краткое описание:</strong> Этот Use Case описывает процесс формирования пользователем (Оператором или Технологом) отчета, который отображает актуальные остатки полуфабрикатов с детализацией по партиям и их срокам годности. Отчет позволяет визуально идентифицировать партии, требующие внимания: с истекшим или близким к истечению сроком.</p>
+<p><strong>2. Акторы:</strong></p>
+<ul>
+<li><strong>Основной:</strong> Оператор роботизированной линии.</li>
+<li><strong>Основной:</strong> Технолог.</li>
+</ul>
+<p><strong>3. Предусловия:</strong></p>
+<ul>
+<li>Пользователь авторизован в системе.</li>
+<li>В системе проведена как минимум одна инвентаризация (UC4), обеспечивающая актуальность остатков.</li>
+<li>В системе внесены данные о сроках годности по партиям (через инвентаризацию).</li>
+</ul>
+<p><strong>4.Триггер:</strong></p>
+<ul>
+<li>Пользователь выбирает опцию «Сформировать отчет по срокам годности».</li>
+</ul>
+<p><strong>5. Основной поток событий:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Шаг</th>
+<th style="text-align: left;">Действие Актора</th>
+<th style="text-align: left;">Ответ Системы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система отображает форму для настройки параметров отчета.</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">Пользователь задает <strong>параметры отчета</strong> (опционально): <br/> - <strong>Зона хранения</strong>.<br/> - <strong>Группа товаров</strong> .<br/> - <strong>Статус срока годности</strong>.<br/> - <strong>Формат вывода</strong>.</td>
+<td style="text-align: left;">Система сохраняет предыдущие настройки пользователя по умолчанию.</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">Пользователь нажимает кнопку <strong>"Сформировать"</strong>.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система выполняет запрос к базе данных, выбирая актуальные остатки по партиям, фильтруя и сортируя их согласно заданным параметрам.</td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>формирует и отображает отчет</strong> в виде таблицы.</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">Пользователь <strong>анализирует отчет</strong>. Он ищет партии с статусом <strong>"Просрочен"</strong> или <strong>"Истекает сегодня"</strong>.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">Пользователь <strong>принимает решение</strong> на основе отчета: <br/> - Сообщает Технологу.<br/> - Инициирует процесс утилизации (UC2-MVP).<br/> - Переносит партию на более видное место для скорейшего использования (FIFO/FEFO).</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. Альтернативные потоки:</strong></p>
+<ul>
+<li><strong>А1: Автоматическое формирование отчета по расписанию.</strong></li>
+<li>Технолог может настроить автоматическую генерацию отчета (например, каждое утро в 7:00) и отправку его на email. В этом случае система является инициатором Use Case.</li>
+<li><strong>А2: Детализация партии.</strong></li>
+<li>На шаге 5: Пользователь может кликнуть на строку с партией в отчете, чтобы просмотреть детальную информацию: дату поступления, первоначальное количество, историю движений.</li>
+<li><strong>А3: Печать отчета для бумажного аудита.</strong></li>
+<li>Пользователь выбирает формат вывода "PDF", распечатывает отчет и подшивает его в журнал утилизаций.</li>
+</ul>
+<p><strong>7. Постусловия:</strong></p>
+<ul>
+<li>Сформирован отчет, отвечающий заданным параметрам.</li>
+<li>Пользователь проинформирован о состоянии запасов и сроках годности.</li>
+<li>На основе отчета могут быть инициированы действия: утилизация, перемещение, заказ, пополнение роботизированной линии.</li>
+</ul>
+<p><strong>8. Особые требования (NFR) для MVP:</strong></p>
+<ul>
+<li><strong>Производительность:</strong> Формирование отчета на экран не должно занимать более <strong>5-7 секунд</strong>.</li>
+<li><strong>Удобство использования:</strong> Это критичное требование для MVP. Отчет должен быть интуитивно понятным:</li>
+<li><strong>Визуальная цветовая индикация:</strong> Строки с просроченными партиями подсвечиваются <strong>красным</strong>, истекающие сегодня — <strong>желтым</strong>, истекающие завтра — <strong>оранжевым</strong>, партии со статусом "Заблокирована" — <strong>серым</strong>. Остальные — <strong>белым/зеленым</strong>.</li>
+<li><strong>Сортировка по умолчанию:</strong> Отчет автоматически сортируется по полю "Срок годности" (по возрастанию), чтобы самые проблемные партии были вверху.</li>
+<li><strong>Важные колонки:</strong> В отчете обязательно должны быть колонки: <em>Штрих-код, Наименование, Партия, Срок годности, Остаток, Локация, Статус</em>.</li>
+<li><strong>Доступность:</strong> Отчет должен быть доступен для просмотра на веб-интерфейсе.</li>
+<li><strong>Консистентность:</strong> Данные в отчете должны строго соответствовать данным на момент его формирования. Последующие изменения остатков не должны менять уже сформированный отчет (если он не сформирован заново).</li>
+</ul>
+<h3 id="uc2-mvp"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.3.2</span> UC2-MVP. Утилизировать партию по отчету</h3>
+<p><strong>1. Краткое описание:</strong> Этот Use Case описывает процесс, в котором Оператор линии вручную находит в системе партии, подлежащие утилизации (на основе отчета), физически изымает их и подтверждает факт утилизации в системе. Это упрощенная версия процесса без автоматических заданий для реализации на этапе MVP.</p>
+<p><strong>2. Акторы:</strong></p>
+<ul>
+<li><strong>Основной:</strong> Оператор линии.</li>
+</ul>
+<p><strong>3. Предусловия:</strong></p>
+<ul>
+<li>Оператор авторизован в системе.</li>
+<li>В системе сформировать <strong>отчет "По сроку годности"</strong> (UC1).</li>
+<li>Оператор получил устное или письменное задание от Технолога на проведение утилизации.</li>
+</ul>
+<p><strong>4. Триггер:</strong></p>
+<ul>
+<li>Оператор открывает отчет «По сроку годности».</li>
+</ul>
+<p><strong>5 Основной поток событий:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Шаг</th>
+<th style="text-align: left;">Действие Актора</th>
+<th style="text-align: left;">Ответ Системы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система отображает список партий с истекшим или истекающим сроком годности.</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">Оператор просматривает отчет, определяет партию для утилизации и запоминает ее локацию и штрихкод.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">Оператор следует к указанной локации на складе, находит партию по штрих-коду.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">Оператор сканирует штрих-код партии с помощью мобильного устройства.</td>
+<td style="text-align: left;">Система распознает партию, отображает ее данные и <strong>подтверждает, что она находится в отчете "к утилизации"</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">Оператор физически изымает партию и перемещает ее в зону утилизации.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">Оператор в мобильном приложении нажимает кнопку <strong>"Подтвердить утилизацию"</strong>.</td>
+<td style="text-align: left;">Система запрашивает подтверждение действия.</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">Оператор подтверждает свое намерение.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система выполняет следующие действия:<br/> 1. <strong>Списывает</strong> остаток данной партии до нуля.<br/> 2. Изменяет статус партии на <strong>"Утилизирована"</strong> (снимая блокировку, если она была). 3. <strong>Фиксирует</strong> акт списания в базе данных с указанием причины "Утилизация по сроку годности", даты и ответственного.<br/> 4. <strong>Обновляет</strong> остатки на складе в реальном времени.<br/> 5. <strong>Исключает</strong> партию из отчета "к утилизации".</td>
+</tr>
+<tr>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система отображает на терминале оператора сообщение об успехе.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. Альтернативные потоки:</strong></p>
+<ul>
+<li><strong>А1: Партия не найдена в отчете.</strong></li>
+<li>На шаге 4: Если оператор сканирует партию, которой нет в отчете, система показывает предупреждение: "Данная партия не значится в отчете к утилизации". Процесс утилизации прерывается и начинается шаг 2.</li>
+<li><strong>А2: Ручной ввод.</strong></li>
+<li>На шаге 4: Если штрих-код поврежден, оператор может вручную найти партию в отчете и выбрать ее.</li>
+</ul>
+<p><strong>7. Постусловия:</strong></p>
+<ul>
+<li>Партия физически утилизирована.</li>
+<li>Остатки партии в системе равны 0.</li>
+<li>В системе зафиксирован акт списания.</li>
+<li>Партия удалена из отчета "к утилизации".</li>
+</ul>
+<p><strong>8. Особые требования (NFR) для MVP:</strong></p>
+<ul>
+<li><strong>Актуальность:</strong> Отчет должен формироваться по требованию.</li>
+<li><strong>Доступность:</strong> Оператор должен иметь быстрый доступ к отчету с web-приложения.</li>
+</ul>
+<h3 id="uc3-mvp"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.3.3</span> UC3-MVP. Пополнить оперативный запас у робота по отчету</h3>
+<p><strong>1. Краткое описание:</strong> Этот Use Case описывает процесс, в котором Оператор роботизированной линии вручную проверяет в системе отчет об остатках на линии, самостоятельно принимает решение о необходимости пополнения, находит на складе подходящую партию (руководствуясь принципом FEFO) и фиксирует факт перемещения в системе.</p>
+<p><strong>2. Акторы:</strong></p>
+<ul>
+<li><strong>Основной:</strong> Оператор линии.</li>
+<li><strong>Вторичный:</strong> Технолог (может дать устное указание на пополнение).</li>
+</ul>
+<p><strong>3. Предусловия:</strong></p>
+<ul>
+<li>Оператор авторизован в системе.</li>
+<li>В системе существует"Сроки годности" (UC1).</li>
+</ul>
+<p><strong>4. Триггер:</strong></p>
+<ul>
+<li>Оператор визуально видит, что запас одного полуфабрикатов на производственной линии заканчивается.</li>
+</ul>
+<p><strong>5. Основной поток событий:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Шаг</th>
+<th style="text-align: left;">Действие Актора</th>
+<th style="text-align: left;">Ответ Системы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Оператор открывает "Сроки годности" (UC1) для полуфабриката, который заканчивается.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">Оператор визуально определяет, что остаток одного из полуфабрикатов низкий.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">Оператор открывает <strong>"Сроки годности" (UC1)</strong> для этого полуфабриката.</td>
+<td style="text-align: left;">Система показывает список всех партий этого полуфабриката на складе, отсортированный по сроку годности (FEFO).</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">Оператор <strong>вручную выбирает партию</strong> для пополнения из верхней строки отчета (с самым близким сроком годности) и запоминает ее локацию и штрихкод.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">Оператор следует к указанной <strong>складской ячейке</strong>, находит партию по штрих-коду.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">Оператор сканирует штрих-код партии на складе.</td>
+<td style="text-align: left;">Система распознает партию и отображает ее данные.</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">Оператор забирает необходимое количество (например, целую упаковку) и транспортирует его к линии.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">Оператор физически пополняет <strong>оперативный запас</strong> линии.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">Оператор в мобильном приложении выбирает функцию <strong>"Зафиксировать перемещение"</strong>.</td>
+<td style="text-align: left;">Система предлагает ввести количество (значение по умолчанию = 1).</td>
+</tr>
+<tr>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">Оператор при необходимости изменяет количество.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">11</td>
+<td style="text-align: left;">Оператор нажимает <strong>"Подтвердить"</strong>.</td>
+<td style="text-align: left;">Система выполняет проводку: списывает количество со складской партии и добавляет его к выбранному оперативному запасу.</td>
+</tr>
+<tr>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система отображает сообщение об успешном перемещении.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. Альтернативные потоки:</strong></p>
+<ul>
+<li><strong>А1: Партия не найдена или недостаточно.</strong></li>
+<li>На шаге 5-6: Если выбранной партии нет на месте или ее недостаточно, оператор выбирает следующую в отчете партию по FEFO.</li>
+<li><strong>А2: Обнаружена просроченная партия.</strong></li>
+<li>На шаге 6: При сканировании система может показать предупреждение, что срок годности партии истек. Оператор должен отказаться от ее использования и сообщить Технологу (инициируя процесс утилизации UC2-MVP).</li>
+</ul>
+<p><strong>7. Постусловия:</strong></p>
+<ul>
+<li>Оперативный запас линии пополнен.</li>
+<li>Остатки на складе и на линии корректно обновлены в системе.</li>
+<li>В системе зафиксирован акт внутреннего перемещения.</li>
+</ul>
+<p><strong>8. Особые требования (NFR) для MVP:</strong></p>
+<ul>
+<li><strong>Процесс вместо автоматизации:</strong> Основная цель — не автоматизировать, а обеспечить пользователя всеми данными для принятия правильного решения и простым инструментом для фиксации результата.</li>
+<li><strong>Эффективность:</strong> Процесс фиксации перемещения (шаги 9-12) должен быть максимально упрощен и занимать не более 15-20 секунд.</li>
+</ul>
+<h3 id="uc4"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.3.4</span> UC4. Провести инвентаризацию</h3>
+<p><strong>1. Краткое описание:</strong> Этот Use Case описывает процесс сверки фактического наличия полуфабрикатов на складе и в оперативном запасе роботизированной линии с данными в системе. Оператор проводит подсчет, вносит данные через мобильное приложение, а система фиксирует расхождения, автоматически корректирует остатки и формирует отчет.</p>
+<p><strong>2. Акторы:</strong></p>
+<ul>
+<li><strong>Основной:</strong> Оператор линии.</li>
+<li><strong>Второстепенный:</strong> Система управления запасами (инициирует, обрабатывает данные).</li>
+</ul>
+<p><strong>3. Предусловия:</strong></p>
+<ul>
+<li>Оператор авторизован в системе.</li>
+<li>Мобильное устройство оператора имеет соединение с системой (или может работать в автономном режиме).</li>
+<li>Движение партий на складе и на линии сведено к минимуму (инвентаризация проводится в нерабочие часы или в специально отведенное время).</li>
+</ul>
+<p><strong>4. Триггер:</strong></p>
+<ul>
+<li>Система инициирует процесс по расписанию (ежедневно/еженедельно).</li>
+</ul>
+<p><strong>5. Основной поток событий:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Шаг</th>
+<th style="text-align: left;">Действие Актора</th>
+<th style="text-align: left;">Ответ Системы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Оператор получает <strong>задание "Провести инвентаризацию"</strong> на своем мобильном устройстве. Задание содержит: тип инвентаризации (сплошная/выборочная), перечень зон (склад, линия) или номенклатуры.</td>
+<td style="text-align: left;"><strong>Триггер:</strong> Система инициирует процесс по расписанию (ежедневно/еженедельно).</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">Оператор выбирает зону для начала подсчета.</td>
+<td style="text-align: left;">Система отображает схему зоны и список номенклатуры с ожидаемыми остатками.</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">Оператор последовательно сканирует штрих-код каждой <strong>партии</strong> в зоне и вносит <strong>фактическое количество/вес</strong> в приложение. Для зоны <strong>оперативного запаса</strong> оператор сканирует штрих-код контейнера и вносит фактический остаток.</td>
+<td style="text-align: left;">Система в режиме реального времени проверяет штрих-код на валидность и отображает название полуфабриката для подтверждения.</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">Оператор завершает обход всех указанных зон и в приложении нажимает <strong>"Завершить инвентаризацию"</strong>.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система автоматически выполняет сверку: сравнивает внесенные фактические данные с системными остатками по каждой позиции.</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система рассчитывает <strong>расхождения</strong> (излишки/недостачи) по каждой партии.</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Если расхождение ≤ порога → система автоматически корректирует остатки. Если расхождение &gt; порога → система блокирует позицию для разбирательства и уведомляет Технолога. <strong>Ключевой момент:</strong> Корректировка остатков оперативного запаса на линии <strong>не влияет на его виртуальный срок годности</strong>, так как меняется только количество, а не состав партий. Система не позволяет корректировать остатки по партиям со статусом 'Заблокирована'.</td>
+</tr>
+<tr>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система формирует <strong>электронный акт инвентаризации</strong> (отчет), в котором фиксируются: дата, время, зона, ответственный, все позиции с расхождениями и причина (если указана).</td>
+</tr>
+<tr>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система помечает задание как "Выполнено". Акт инвентаризации сохраняется в базе данных и становится доступным Технологу.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. Альтернативные потоки:</strong></p>
+<ul>
+<li><strong>А1: Обнаружена партия, не учтенная в системе.</strong></li>
+<li>На шаге 3: Оператор может добавить новую позицию через "Добавить партию вручную", указав штрих-код, наименование и количество. Система зафиксирует это как <strong>излишек</strong>.</li>
+<li><strong>А2: Партия не имеет штрих-кода или он поврежден.</strong></li>
+<li>На шаге 3: Оператор может найти полуфабрикат в списке номенклатуры вручную и внести данные.</li>
+<li><strong>А3: Инвентаризация прервана.</strong></li>
+<li>На любом шаге: Оператор может приостановить задание. Система сохранит все внесенные данные. Позже оператор может возобновить инвентаризацию с момента останова.</li>
+<li><strong>А4: Значительное расхождение.</strong></li>
+<li>На шаге 7: Если расхождение &gt; порога, система блокирует позицию и уведомляет Технолога. Технолог подтверждает коррекцию в системе.</li>
+</ul>
+<p><strong>7. Постусловия:</strong></p>
+<ul>
+<li>Фактические остатки полуфабрикатов на складе и на линии соответствуют данным в системе.</li>
+<li>Сформирован и сохранен акт инвентаризации.</li>
+<li>Все расхождения зафиксированы и учтены.</li>
+<li>Данные для автозаказа и контроля сроков годности актуализированы.</li>
+</ul>
+<p><strong>8. Особые требования (NFR):</strong></p>
+<ul>
+<li><strong>Оффлайн-работа:</strong> Мобильное приложение должно обеспечивать <strong>полную оффлайн-функциональность</strong>. Все данные должны кэшироваться на устройстве, а после восстановления связи — автоматически синхронизироваться.</li>
+<li><strong>Производительность:</strong> Внесение данных по одной партии (сканирование + ввод количества) должно занимать у оператора не более 3-5 секунд.</li>
+<li><strong>Точность:</strong> Алгоритм сверки и корректировки остатков должен быть атомарным и гарантировать, что данные не будут потеряны даже при сбое.</li>
+<li><strong>Удобство использования:</strong> Интерфейс должен быть оптимизирован для быстрого последовательного сканирования: после внесения одного значения фокус автоматически переходит на поле для сканирования следующего штрих-кода.</li>
+</ul>
+<h3 id="uc5"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.3.5</span> UC5. Вести справочники</h3>
+<p><strong>1. Краткое описание:</strong> Этот Use Case описывает процесс создания, редактирования основных данных системы: справочника полуфабрикатов (номенклатуры) с установкой для каждого индивидуальных сроков хранения и справочника складских зон.</p>
+<p><strong>2. Акторы:</strong></p>
+<ul>
+<li><strong>Основной:</strong> Технолог.</li>
+<li><strong>Второстепенный:</strong> Система управления запасами.</li>
+</ul>
+<p><strong>3. Предусловия:</strong></p>
+<ul>
+<li>Пользователь (Технолог) авторизован в системе и имеет <strong>административные права</strong> на редактирование справочников.</li>
+<li>Пользователь работает с веб-интерфейсом.</li>
+</ul>
+<p><strong>4. Триггер</strong></p>
+<ul>
+<li>Технологу необходимо занести данные в систему.</li>
+</ul>
+<p><strong>5. Основной поток событий:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Шаг</th>
+<th style="text-align: left;">Действие Актора</th>
+<th style="text-align: left;">Ответ Системы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Технолог в основном меню системы выбирает раздел <strong>"Справочники"</strong> и подраздел <strong>"Номенклатура"</strong>.</td>
+<td style="text-align: left;">Система отображает список всех существующих полуфабрикатов с возможностью сортировки и поиска.</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">Технолог нажимает кнопку <strong>"Добавить"</strong> для создания новой позиции.</td>
+<td style="text-align: left;">Система открывает форму создания новой номенклатурной позиции.</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">Технолог заполняет обязательные атрибуты:<br/> - <strong>Наименование</strong><br/> - <strong>Единица измерения</strong> - выбирается из выпадающего списка.<br/> - <strong>Категория</strong> - выбирается из отдельного справочника.<br/> - <strong>Срок хранения (часов)</strong> – общий срок.<br/> - Срок хранения открытой упаковки (часов).</td>
+<td style="text-align: left;">Система проверяет уникальность наименования.</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">Технолог заполняет дополнительные атрибуты (опционально): штрих-код (для товара в целом), описание, фотография.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">Технолог нажимает кнопку <strong>"Сохранить"</strong>.</td>
+<td style="text-align: left;">Система проверяет данные. Если ошибок нет, создает новую запись в справочнике номенклатуры. Новая позиция становится сразу доступной для заказа, учета и инвентаризации.</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">Технолог переходит в подраздел "Типы зон" (отдельный справочник).</td>
+<td style="text-align: left;">Система отображает список типов зон.</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">Технолог создает или редактирует типы зон. Сохраняет изменения</td>
+<td style="text-align: left;">Система сохраняет типы зон.</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">Технолог переходит в подраздел <strong>"Складские зоны"</strong>.</td>
+<td style="text-align: left;">Система отображает иерархический список зон (например, Склад -&gt; Холодильная камера -&gt; Стеллаж 1 -&gt; Полка 2).</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">Технолог создает или редактирует зоны, назначая им:<br/> - <strong>Уникальный ID/Наименование</strong><br/> - <strong>Тип зоны</strong> – выбирается из справочника типов зон.<br/> - <strong>Штрих-код зоны</strong> (для сканирования оператором).</td>
+<td style="text-align: left;">Система сохраняет изменения.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. Альтернативные потоки:</strong></p>
+<ul>
+<li><strong>А1: Редактирование существующей позиции.</strong></li>
+<li>На шаге 2: Технолог выбирает существующую позицию из списка и нажимает "Изменить". <strong>Важно:</strong> Изменение единицы измерения или срока хранения повлияет на все последующие операции. Система должна запросить подтверждение и показать предупреждение.</li>
+<li><strong>А2: Деактивация/Архивация позиции.</strong></li>
+<li>Технолог ставит галочку "Не активна" у позиции, которая более не используется. Система <strong>не позволяет удалить</strong> позицию, если по ней есть история операций (приход, движение, остатки). Такая позиция исключается из выпадающих списков для нового заказа, но остается в истории.</li>
+</ul>
+<p><strong>7. Постусловия:</strong></p>
+<ul>
+<li>Справочники номенклатуры и зон актуализированы.</li>
+<li>Новые данные доступны для использования во всех процессах системы:</li>
+<li>Для <strong>инвентаризации (UC4)</strong> появилась новая позиция для учета.</li>
+<li>Для <strong>автозаказа (UC8)</strong> система может рассчитывать параметры для новой номенклатуры.</li>
+<li>Для <strong>контроля сроков годности (UC11)</strong> система использует новый установленный срок хранения для расчета даты истечения срока годности.</li>
+<li><strong>Робот</strong> может получать данные о новой номенклатуре через API.</li>
+</ul>
+<p><strong>8. Особые требования (NFR):</strong></p>
+<ul>
+<li><strong>Целостность данных:</strong> Система должна гарантировать <strong>ссылочную целостность</strong>. Нельзя удалить позицию из справочника, если она используется в каких-либо документах (приход, движение, остатки).</li>
+<li><strong>Валидация:</strong> Система должна строго проверять вводимые данные. Например, "Срок хранения" должен быть положительным числом, "Единица измерения" - только из предопределенного списка.</li>
+<li><strong>Производительность:</strong> Загрузка и отображение справочников должны быть быстрыми даже при большом объеме данных (тысячи позиций). Необходимо реализовать пагинацию и поиск.</li>
+<li><strong>Безопасность:</strong> Доступ к редактированию справочников должен быть строго ограничен кругом ответственных лиц (ролевая модель).</li>
+</ul>
+<h3 id="uc6"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.3.6</span> UC6. Скорректировать заказ</h3>
+<p><strong>1. Краткое описание:</strong> Этот Use Case описывает процесс ручного просмотра, проверки и корректировки заказа на полуфабрикаты, автоматически сформированного системой, перед его окончательной отправкой в Логистический Центр (ЛЦ). Технолог может учесть дополнительные факторы, которые не заложены в алгоритме.</p>
+<p><strong>2. Акторы:</strong></p>
+<ul>
+<li><strong>Основной:</strong> Технолог.</li>
+<li><strong>Второстепенный:</strong> Система управления запасами (формирует черновик заказа).</li>
+</ul>
+<p><strong>3. Предусловия:</strong></p>
+<ul>
+<li>Пользователь авторизован в системе и имеет права на подтверждение/корректировку заказов.</li>
+<li>Система автоматически выполнила <strong>UC8: "Рассчитать автозаказ"</strong> и сформировала черновик заказа (проект заказа).</li>
+<li>Заказ находится в статусе "Черновик" или "На согласовании".</li>
+</ul>
+<p><strong>4. Триггер:</strong></p>
+<p>Технолог получает уведомление о сформированном черновике.</p>
+<p><strong>5. Основной поток событий:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Шаг</th>
+<th style="text-align: left;">Действие Актора</th>
+<th style="text-align: left;">Ответ Системы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Технолог получает <strong>уведомление</strong> о сформированном черновике заказа ИЛИ открывает раздел <strong>"Заказы"</strong> и выбирает заказ со статусом "Черновик".</td>
+<td style="text-align: left;">Система отображает интерфейс просмотра заказа.</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">Технолог просматривает предложенные системой позиции, количества и общую сумму заказа.</td>
+<td style="text-align: left;">Система предоставляет детализацию: по каждой позиции можно посмотреть <strong>обоснование</strong> (например: "Остаток: 5 кг, Точка заказа: 10 кг, Рекомендуется заказать: 20 кг (Max=25 кг)").</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">Технолог анализирует заказ. Решает, что корректировка не требуется.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">Технолог нажимает кнопку <strong>"Утвердить и отправить"</strong>.</td>
+<td style="text-align: left;">Система запрашивает подтверждение ("Вы уверены, что хотите отправить заказ в ЛЦ?").</td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">Технолог подтверждает действие.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система меняет статус заказа на "Отправлен в ЛЦ" и автоматически выполняет <strong>UC12: "Передать заказ в ЛЦ"</strong> через API.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. Альтернативные потоки:</strong></p>
+<ul>
+<li><strong>А1: Корректировка количества или состава заказа.</strong></li>
+<li>На шаге 3: Технолог видит необходимость изменить заказ.</li>
+<li>Технолог <strong>редактирует количество</strong> вручную для определенных позиций (например, увеличивает количество из-за планируемой акции или уменьшает, зная о предстоящем простое).</li>
+<li>Технолог <strong>добавляет новую позицию</strong> в заказ, которой нет в автозаказе (например, новый товар для теста).</li>
+<li>Технолог <strong>удаляет позицию</strong> из заказа (например, зная, что на основном складе ЛЦ ее нет в наличии).</li>
+<li>
+<p>После внесения изменений Технолог нажимает "Сохранить черновик" или сразу "Утвердить и отправить". Система сохраняет изменения и следует основному потоку.</p>
+</li>
+<li>
+<p><strong>А2: Отклонение заказа.</strong></p>
+</li>
+<li>На шаге 3: Технолог понимает, что заказ формировать не нужно (например, ресторан закрывается на санитарный день).</li>
+<li>Технолог нажимает кнопку <strong>"Отклонить"</strong> и указывает причину.</li>
+<li>
+<p>Система меняет статус заказа на "Отклонен" и архивирует его. Уведомление не отправляется.</p>
+</li>
+<li>
+<p><strong>А3: Запрос дополнительной информации.</strong></p>
+</li>
+<li>На шаге 3: Технолог может просмотреть <strong>отчет о продажах</strong> по конкретной позиции или <strong>график остатков</strong> за прошедшую неделю, чтобы принять более обоснованное решение. Система предоставляет эту аналитику в виде вкладок или всплывающих окон.</li>
+</ul>
+<p><strong>7. Постусловия:</strong></p>
+<ul>
+<li>Заказ либо отправлен в ЛЦ в исходном или отредактированном виде, либо отклонен.</li>
+<li>Все действия Технолога (просмотр, корректировка, утверждение, отклонение) залогированы в системе для аудита.</li>
+<li>Если заказ отправлен, система ожидает его подтверждения и выполнения от ЛЦ.</li>
+</ul>
+<p><strong>8. Особые требования (NFR):</strong></p>
+<ul>
+<li><strong>Аудит:</strong> Система должна вести базовое логирование изменений по каждому заказу. Это критично для анализа эффективности правил автозаказа.</li>
+<li><strong>Валидация:</strong> При ручном изменении количества система должна проводить проверку: количество &gt; 0 и числовое значение.</li>
+<li><strong>Производительность:</strong> Интерфейс просмотра и редактирования заказа должен загружаться быстро, даже если заказ содержит сотни позиций (необходимо использование пагинации, динамического списка).</li>
+<li><strong>Уведомления</strong>: Система должна иметь механизм оповещения Технолога в интерфейсе системы о появлении нового черновика заказа (фиксированное время до крайнего срока).</li>
+<li><strong>Визуализация:</strong> Для удобства Технолога позиции в заказе можно подсвечивать цветом: зеленый – рекомендовано системой, оранжевый – изменено Технологом.</li>
+</ul>
+<h3 id="uc7"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.3.7</span> UC7. Заблокировать просроченную партию</h3>
+<p><strong>1. Краткое описание:</strong> Этот Use Case описывает процесс автоматического перевода партии полуфабриката в статус "Заблокирована" при обнаружении системой истечения или скорого истечения срока ее годности. Блокировка предотвращает использование партии в любых операциях: пополнении линии, производстве. Это ключевая контрольная точка системы безопасности пищевых продуктов.</p>
+<p><strong>2. Акторы:</strong></p>
+<ul>
+<li><strong>Основной:</strong> Система управления запасами.</li>
+<li><strong>Вторичный:</strong> Оператор линии (получает уведомление/задание).</li>
+</ul>
+<p><strong>3. Предусловия:</strong></p>
+<ul>
+<li>В системе существуют партии полуфабрикатов с актуальными данными о сроках годности.</li>
+<li>Для партии настроен атрибут "Статус" с возможностью значения "Заблокирована".</li>
+</ul>
+<p><strong>4. Триггер</strong></p>
+<ul>
+<li>Наступило время запуска фонового задания (фиксированное время).</li>
+<li>Получен запрос от робота на проверку срока (UC11).</li>
+</ul>
+<p><strong>5. Основной поток событий:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Шаг</th>
+<th style="text-align: left;">Действие Актора</th>
+<th style="text-align: left;">Ответ Системы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Система <strong>запускает фоновую проверку сроков годности</strong></td>
+<td style="text-align: left;">Система итерируется по всем активным партиям.</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>вычисляет</strong> для каждой партии время до истечения срока годности.</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>сравнивает</strong> это время с заданными критическими порогами.</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>находит партию</strong>, которая соответствует <strong>критериям блокировки</strong>:<br/> - <strong>Критерий 1:</strong> <code>Текущая дата &gt;= Срок годности партии</code> (Просрочка).<br/> - <strong>Критерий 2:</strong> <code>Текущая дата + X часов &gt;= Срок годности партии</code> (Скоро закончится срок годности).</td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>автоматически меняет статус</strong> партии на <strong>"Заблокирована"</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>вносит запись в журнал аудита</strong> (кто (система), когда, какую партию и по какой причине заблокировал).</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>распространяет информацию о блокировке</strong> по всем подсистемам: <br/> - Исключает партию из алгоритмов <strong>пополнения (UC2)</strong> и <strong>автозаказа (UC8)</strong>.<br/> - Сообщает <strong>роботу</strong> (если партия в оперативном запасе), что ее использование запрещено.</td>
+</tr>
+<tr>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система обновляет информацию в отчете UC1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. Альтернативные потоки:</strong></p>
+<ul>
+<li><strong>А1: Ручная блокировка Технологом.</strong></li>
+<li>Оператор может вручную заблокировать партию через интерфейс (например, при обнаружении визуального брака). Система выполняет те же шаги (5-9), но в журнале аудита указывает инициатора-оператора.</li>
+<li><strong>А2: Партия уже заблокирована.</strong></li>
+<li>Если партия уже имеет статус "Заблокирована", система пропускает ее.</li>
+<li><strong>А3: Ошибка при блокировке.</strong></li>
+<li>Если партия находится в процессе списания или перемещения, система временно не может изменить ее статус. Процесс блокировки повторяется через короткий интервал времени.</li>
+</ul>
+<p><strong>6. Постусловия:</strong></p>
+<ul>
+<li>Партия переведена в статус "Заблокирована".</li>
+<li>Информация о блокировке актуальна во всех модулях системы.</li>
+<li>Для партии создано задание на утилизацию (UC13).</li>
+<li>Использование партии в производстве невозможно до разблокировки (которая может произойти только после проверки или ошибочного действия, что должно быть задокументировано).</li>
+<li>Заблокированные партии исключаются из расчета автозаказа (UC8)</li>
+</ul>
+<p><strong>7. Особые требования (NFR):</strong></p>
+<ul>
+<li><strong>Производительность:</strong> Процесс проверки и блокировки должен быть быстрым. Проверка тысяч партий должна выполняться за <strong>десятки секунд</strong>.</li>
+<li><strong>Надежность и атомарность:</strong> Изменение статуса и распространение этого изменения по системе должно быть <strong>транзакционным</strong>. Не допускается ситуация, когда статус изменен, но робот еще может использовать партию.</li>
+<li><strong>Аудит:</strong> <strong>Журналирование всех действий по блокировке/разблокировке является обязательным</strong>. Каждая запись должна быть неизменяемой (immutable log).</li>
+<li><strong>Настраиваемость:</strong> Параметр <code>X</code> (часы до истечения срока для блокировки) должен быть гибко настраиваемым для разных категорий полуфабрикатов через интерфейс <strong>UC5</strong>.</li>
+<li><strong>Безопасность:</strong> Процесс <strong>обратной разблокировки</strong> (снятия статуса) должен быть максимально затруднен и требовать обязательного участия Технолога с указанием веской причины в журнале аудита (журнал регистрации).</li>
+</ul>
+<h3 id="uc8"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.3.8</span> UC8. Рассчитать автозаказ</h3>
+<p><strong>1. Краткое описание:</strong> Этот Use Case описывает процесс автоматического расчета количества полуфабрикатов для заказа в Логистический Центр (ЛЦ). Система на основе текущих остатков, предварительно настроенных правил, прогноза продаж и данных о поставках определяет, что, в каком количестве и когда нужно заказать для поддержания бесперебойной работы ресторана.</p>
+<p><strong>2. Акторы:</strong></p>
+<ul>
+<li><strong>Основной:</strong> Система управления запасами.</li>
+<li><strong>Вторичный:</strong> Технолог (может получать уведомления о результате расчета).</li>
+</ul>
+<p><strong>3. Предусловия:</strong></p>
+<ul>
+<li>В системе существуют и активированы <strong>Правила автозаказа (UC10)</strong> для номенклатурных позиций.</li>
+<li>В системе есть актуальные данные об <strong>остатках</strong> на складе и в оперативном запасе.</li>
+<li>В системе есть справочные данные о <strong>номенклатуре (UC5)</strong> и <strong>поставщиках (ЛЦ)</strong>.</li>
+</ul>
+<p><strong>4. Триггер:</strong></p>
+<ul>
+<li>Наступило время запуска по расписанию</li>
+</ul>
+<p><strong>5. Основной поток событий:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Шаг</th>
+<th style="text-align: left;">Действие Актора</th>
+<th style="text-align: left;">Ответ Системы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Система по расписанию <strong>запускает процедуру расчета автозаказа</strong>.</td>
+<td style="text-align: left;">Система определяет список номенклатурных позиций, для которых настроены правила автозаказа.</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Для каждой позиции система <strong>собирает входные данные</strong>:<br/> - <strong>Текущий остаток</strong> (на складе + на линии).<br/> - <strong>Параметры правила</strong> из UC10 (Min, Max, Reorder Point, кратность и т.д.).<br/> - <strong>Прогноз продаж</strong> на период поставки (если функция активирована).<br/> - <strong>Срок поставки</strong> от ЛЦ (в днях).<br/> - <strong>Незавершенные заказы</strong> (уже отправленные, но еще не полученные).</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>применяет алгоритм расчета</strong> для каждой позиции. <strong>Формула:</strong><br/> <code>Рекомендуемый заказ = Максимальный запас (Max) - Текущий остаток - Незавершенные заказы + Прогноз продаж на срок поставки</code> (Прогноз продаж из модуля продаж через API)</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>накладывает ограничения правила</strong>:<br/> - Если <code>Рекомендуемый заказ &lt; Минимальной партии</code> -&gt; <code>Заказ = 0</code> (заказывать невыгодно/невозможно).<br/> - Если <code>Рекомендуемый заказ &gt; 0</code> -&gt; <strong>привести к кратности</strong> (округлить в большую сторону до значения, кратного параметру "Кратность").<br/> - Если <code>Текущий остаток &gt; Точки заказа (Reorder Point)</code> -&gt; <code>Заказ = 0</code> (не время заказывать).</td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>формирует черновик заказа</strong> (проект заказа), включающий все позиции с <code>Заказ &gt; 0</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>проводит финальную проверку</strong> черновика (валидация данных, отсутствие дубликатов).</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>сохраняет черновик заказа</strong> в базе данных со статусом "Рассчитан".</td>
+</tr>
+<tr>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>уведомляет Технолога</strong> в интерфейсе о готовности черновика заказа для проверки и корректировки (см. UC6).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. Альтернативные потоки:</strong></p>
+<ul>
+<li><strong>А1: Срабатывание по триггеру (вне расписания).</strong></li>
+<li>Use Case может быть запущен принудительно Технологом или по событию (например, после проведения крупной инвентаризации (UC4), выявившей значительные расхождения).</li>
+<li><strong>А2: Рассчитать для одной позиции.</strong></li>
+<li>Если остаток по конкретной позиции резко упал ниже <strong>Минимального запаса (Min)</strong>, система может немедленно рассчитать и включить ее в заказ вне общего расписания.</li>
+<li><strong>А3: Отсутствие правила.</strong></li>
+<li>Если для позиции нет активного правила, система пропускает ее и не включает в расчет.</li>
+<li><strong>А4: Ошибка расчета.</strong></li>
+<li>Если данные для расчета некорректны (например, отрицательный остаток), система помечает позицию в черновике особым статусом "Ошибка" и уведомляет Технолога.</li>
+</ul>
+<p><strong>8. Постусловия:</strong></p>
+<ul>
+<li>Сформирован черновик заказа со статусом "Рассчитан".</li>
+<li>Черновик доступен Технологу для просмотра и корректировки (UC6).</li>
+<li>Рассчитанные количества являются рекомендацией системы и могут быть изменены.</li>
+</ul>
+<p><strong>9. Особые требования (NFR):</strong></p>
+<ul>
+<li><strong>Производительность:</strong> Алгоритм расчета должен быть <strong>быстрым</strong>. Расчет заказа для нескольких сотен позиций должен выполняться не более чем за 1-2 минуты.</li>
+<li><strong>Детерминированность:</strong> Расчет должен быть <strong>полностью предсказуемым и воспроизводимым</strong>. При одинаковых входных данных результат должен быть идентичным.</li>
+<li><strong>Аудит:</strong> Система должна сохранять базовую информацию входных данных, использованных для расчета. Это необходимо для последующего анализа и отладки алгоритма.</li>
+<li><strong>Масштабируемость:</strong> Алгоритм должен работать стабильно при росте объема данных (номенклатуры, истории продаж).</li>
+<li><strong>Обоснованность:</strong> Система должна для каждой позиции в черновике заказа предоставлять детальное обоснование расчета.</li>
+</ul>
+<h2 id="use-case"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.4</span> Описание Use Case реализуемых в рамках первого релиза</h2>
+<h3 id="uc2"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.4.1</span> UC2. Утилизировать партию</h3>
+<p><strong>1. Краткое описание:</strong> Этот Use Case описывает процесс, в котором Оператор роботизированной линии физически изымает и утилизирует партию полуфабрикатов с истекшим или истекающим сроком годности на основании задания, сформированного системой. Система фиксирует факт утилизации и списывает партию с учета.</p>
+<p><strong>2. Акторы:</strong></p>
+<ul>
+<li><strong>Основной:</strong> Оператор линии.</li>
+<li><strong>Второстепенный:</strong> Система управления запасами (инициирует процесс, формируя задание).</li>
+</ul>
+<p><strong>3. Предусловия:</strong></p>
+<ul>
+<li>Система идентифицировала партию, подлежащую утилизации (срок годности истек или истекает в течение X часов).</li>
+<li>Система изменила статус партии на <strong>"Заблокирована"</strong>.</li>
+<li>Система сформировала и отправила задание на утилизацию на терминал Оператора.</li>
+<li>Оператор авторизован в системе.</li>
+<li>Мобильное устройство Оператора имеет соединение с системой.</li>
+</ul>
+<p><strong>4. Триггер:</strong></p>
+<ul>
+<li>Оператор получает <strong>задание "Утилизировать партию"</strong> на своем терминале. Задание содержит: наименование полуфабриката, штрих-код партии, локацию (складская ячейка или зона оперативного запаса), причину утилизации (например, "Срок годности истекает через 2 часа"). </li>
+</ul>
+<p><strong>5. Основной поток событий:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Шаг</th>
+<th style="text-align: left;">Действие Актора</th>
+<th style="text-align: left;">Ответ Системы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система отображает групповое задание в очереди с самым высоким приоритетом.</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">Оператор следует к указанной локации, находит партию по штрих-коду.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">Оператор сканирует штрих-код партии с помощью мобильного устройства.</td>
+<td style="text-align: left;">Система подтверждает, что штрих-код соответствует заданию, партия имеет статус "Заблокирована", и отображает детали партии (срок годности, количество).</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">Оператор физически изымает партию и перемещает ее в зону утилизации.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">Оператор в мобильном приложении нажимает кнопку <strong>"Подтвердить утилизацию"</strong>.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система запрашивает подтверждение действия (например, всплывающее окно "Вы уверены?").</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">Оператор подтверждает свое намерение.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система выполняет следующие действия:<br/> 1. <strong>Списывает</strong> остаток данной партии до нуля.<br/> 2. <strong>Меняет статус</strong> партии с "Заблокирована" на "Утилизирована".<br/> 3. <strong>Фиксирует</strong> акт списания в базе данных с указанием причины, даты, времени и ответственного оператора.<br/> 4. <strong>Обновляет</strong> остатки на складе/линии в реальном времени.<br/> 5. Обязательно уведомляет Технолога (интерфейс/Push/email).</td>
+</tr>
+<tr>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система отображает на терминале оператора сообщение об успешном завершении задания: "Партия [Штрих-код] утилизирована".</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. Альтернативные потоки:</strong></p>
+<ul>
+<li><strong>А1: Штрих-код не сканируется.</strong></li>
+<li>На шаге 3: Если штрих-код поврежден и не сканируется, Оператор может вручную ввести ID партии в приложении.</li>
+<li><strong>А2: Оператор обнаружил несоответствие.</strong></li>
+<li>На шаге 2-3: Если фактическое количество или состояние партии не соответствует данным в системе (например, партия уже частично использована), Оператор может ввести <strong>фактическое количество</strong> к утилизации перед подтверждением.</li>
+<li><strong>А3: Оператор отменяет действие.</strong></li>
+<li>На шаге 6: Оператор может отменить действие. Задание остается в его очереди с статусом "В работе".</li>
+</ul>
+<p><strong>7. Постусловия:</strong></p>
+<ul>
+<li>Партия физически утилизирована.</li>
+<li>Остатки партии в системе равны 0, статус изменен на "Утилизирована".</li>
+<li>В системе зафиксирован акт списания с указанием причины "Утилизация по сроку годности".</li>
+<li>Задание помечено как "Выполнено".</li>
+<li>Если утилизирована партия из <strong>оперативного запаса</strong>, система автоматически инициирует <strong>UC3: "Пополнить оперативный запас"</strong>.</li>
+</ul>
+<p><strong>8. Особые требования (NFR):</strong></p>
+<ul>
+<li><strong>Производительность:</strong> Подтверждение утилизации и обновление остатков в системе должно происходить менее чем за 3 секунды.</li>
+<li><strong>Удобство использования:</strong> Интерфейс мобильного приложения для утилизации должен быть простым и требовать не более 3-х касаний для завершения задания.</li>
+<li><strong>Надежность:</strong> Данные об акте списания должны быть сохранены гарантированно, даже при разрыве соединения (с последующей синхронизацией).</li>
+<li><strong>Безопасность:</strong> Подтвердить утилизацию может только авторизованный оператор. Для подтверждения достаточно логина/пароля (биометрическая аутентификация - опционально).</li>
+</ul>
+<h3 id="uc3"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.4.2</span> UC3. Пополнить оперативный запас</h3>
+<p><strong>1. Краткое описание:</strong> Этот Use Case описывает процесс пополнения расходуемого роботом оперативного запаса полуфабрикатов. Оператор по заданию системы находит на основном складе партию, отобранную по принципу FEFO, перемещает её к роботу и пополняет запас. Система фиксирует перемещение, обновляет остатки и пересчитывает "виртуальный" срок годности оперативного запаса.</p>
+<p><strong>2. Акторы:</strong></p>
+<ul>
+<li><strong>Основной:</strong> Оператор линии.</li>
+<li><strong>Второстепенный:</strong> Система управления запасами (инициирует процесс, отслеживает остатки).</li>
+<li><strong>Внешний источник данных:</strong> Роботизированная линия (расходует запас, что является триггером для системы).</li>
+</ul>
+<p><strong>3. Предусловия:</strong></p>
+<ul>
+<li>Система в реальном времени <strong>отслеживает остаток каждого полуфабриката в оперативном запасе</strong> робота (на основе получения сообщений о списании от робота).</li>
+<li>Остаток конкретного полуфабриката достиг <strong>точки пополнения</strong>. Эта точка &gt; 0 и рассчитывается так, чтобы запаса хватило на время выполнения задания пополнения.</li>
+<li>На основном складе есть доступные партии данного полуфабриката.</li>
+<li>Оператор авторизован в системе и свободен.</li>
+<li>Система рассчитывает точку пополнения на основе прогноза продаж.</li>
+</ul>
+<p><strong>4. Триггер</strong></p>
+<ul>
+<li>Оператор получает <strong>задание "Пополнить оперативный запас [Наименование]"</strong> на своем мобильном устройстве. Задание имеет высокий приоритет. Задание содержит: наименование, штрих-код исходной партии, локацию на складе, <strong>количество для перемещения (равное ёмкости контейнера на линии)</strong>.</li>
+<li>Система отследила, что остаток на линии упал ниже точки пополнения. Она автоматически сформировала задание, выбрав партию по <strong>FEFO</strong></li>
+</ul>
+<p><strong>5. Основной поток событий:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Шаг</th>
+<th style="text-align: left;">Действие Актора</th>
+<th style="text-align: left;">Ответ Системы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Оператор немедленно следует к указанной <strong>складской ячейке</strong>, находит партию по штрих-коду.</td>
+<td style="text-align: left;">Система подсвечивает ячейку на схеме склада в приложении оператора.</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">Оператор сканирует штрих-код партии на складе.</td>
+<td style="text-align: left;">Система подтверждает корректность выбора. <strong>Важно:</strong> Система проверяет: не заблокирована ли партия, соответствует ли полуфабрикат, достаточно ли количества(например, другим процессом утилизации).</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">Оператор забирает <strong>целую упаковку</strong> (или рассчитанное количество) и транспортирует ее к роботу.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">Оператор вскрывает упаковку и <strong>перекладывает полуфабрикаты в контейнер оперативного запаса</strong> на линии.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">Оператор сканирует <strong>штрих-код конкретного контейнера оперативного запаса</strong> на линии, который собирается пополнить.</td>
+<td style="text-align: left;">Система понимает, <em>куда именно</em> было добавлено сырье.</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">Оператор в приложении нажимает <strong>"Подтвердить пополнение"</strong>.</td>
+<td style="text-align: left;">Система всегда запрашивает подтверждение количества.</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система выполняет атомарные действия:<br/> 1. <strong>Списывает</strong> перемещенное количество с исходной <strong>складской партии</strong>.<br/> 2. <strong>Добавляет</strong> это количество к <strong>остатку оперативного запаса</strong> в указанном контейнере.<br/> 3. <strong>Пересчитывает "виртуальный срок годности"</strong> всего содержимого контейнера. <strong>Формула:</strong> Если в контейнере уже был остаток (Y1 с сроком T1), и добавили новую партию (Y2 с сроком T2), новый срок рассчитывается как средневзвешенное: <code>(Y1*T1 + Y2*T2) / (Y1 + Y2)</code>. Это критически важно для последующего контроля роботом.<br/> 4. Фиксирует акт перемещения.</td>
+</tr>
+<tr>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система отправляет <strong>подтверждение роботу</strong> через API, что запас пополнен и обновляет данные о сроке годности для этого контейнера.</td>
+</tr>
+<tr>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система уведомляет оператора: "Контейнер [X] пополнен. Новый срок годности: [дата]".</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. Альтернативные потоки:</strong></p>
+<ul>
+<li><strong>А1: Робот израсходовал запас до нуля до завершения пополнения.</strong></li>
+<li>На любом шаге: Робот может отправить системе аварийное сообщение "Остановка: нет ингредиента X". Система переводит приоритет в 'КРИТИЧЕСКИЙ' при времени до полного исчерпания ≤10 минут, уведомляет Технолога. Оператор должен завершить пополнение в максимально сжатые сроки.</li>
+<li>
+<p>Система уведомляет Технолога через Push/SMS.</p>
+</li>
+<li>
+<p><strong>А2: Вскрытая на линии упаковка оказалась бракованной.</strong></p>
+</li>
+<li>На шаге 4: Оператор отмечает в приложении "Брак". Система предписывает утилизировать эту партию (инициирует UC2) и немедленно сформирует новое задание на пополнение из другой партии.</li>
+</ul>
+<p><strong>7. Постусловия:</strong></p>
+<ul>
+<li>Оперативный запас робота пополнен до нормального уровня.</li>
+<li>Данные об остатках на складе и на линии корректно обновлены.</li>
+<li><strong>Рассчитан новый актуальный срок годности</strong> для содержимого контейнера оперативного запаса.</li>
+<li>Робот имеет корректные данные о наличии и сроке годности ингредиента и может продолжать работу.</li>
+<li>Задание помечено как "Выполнено".</li>
+</ul>
+<p><strong>8. Особые требования (NFR):</strong></p>
+<ul>
+<li><strong>Производительность (критично):</strong> Время от момента срабатывания триггера (низкий остаток) до появления задания у оператора — &lt; 10 секунд.</li>
+<li><strong>Real-Time:</strong> Система должна отслеживать остатки на линии в режиме, близком к реальному времени (получая сообщения от робота о каждом списании).</li>
+<li><strong>Надежность алгоритма:</strong> Алгоритм пересчета виртуального срока годности должен быть точным и консервативным. В случае добавления партии с более ранним сроком, чем текущий "виртуальный", система должна <strong>принять более ранний срок</strong>.</li>
+</ul>
+<h3 id="uc9"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.4.3</span> UC9. Подтвердить списание</h3>
+<p><strong>1. Краткое описание:</strong> Этот Use Case описывает процесс документального подтверждения и фиксации факта списания полуфабрикатов не в результате продажи или производства. Основные причины: утилизация просрочки, брак, бой, порча, хищение. Оператор подтверждает списание через мобильное приложение, а система фиксирует акт, списывает остатки и обновляет учетные данные.</p>
+<p><strong>2. Акторы:</strong></p>
+<ul>
+<li><strong>Основной:</strong> Оператор линии или Технолог.</li>
+<li><strong>Второстепенный:</strong> Система управления запасами (инициирует процесс для утилизации или предоставляет интерфейс).</li>
+</ul>
+<p><strong>3. Предусловия:</strong></p>
+<ul>
+<li>Оператор авторизован в системе и имеет права на подтверждение списания.</li>
+<li>Обнаружены полуфабрикаты, подлежащие списанию (физически изъяты из оборота).</li>
+<li>Для списания по причине "Утилизация" партия должна быть предварительно <strong>заблокирована</strong> системой.</li>
+<li>Для списания в оффлайн-режиме партия не должна быть заблокирована</li>
+</ul>
+<p><strong>4. Триггер</strong></p>
+<ul>
+<li>Оператор физически изымает партию из оборота.</li>
+<li>Оператор получает задание на утилизацию от системы (см. UC2).</li>
+</ul>
+<p><strong>5. Основной поток событий:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Шаг</th>
+<th style="text-align: left;">Действие Актора</th>
+<th style="text-align: left;">Ответ Системы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Оператор в мобильном приложении выбирает функцию <strong>"Зафиксировать списание"</strong>.</td>
+<td style="text-align: left;">Система предлагает выбрать <strong>причину списания</strong> из фиксированного системного перечня.</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">Оператор выбирает причину списания.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">Оператор сканирует <strong>штрих-код партии</strong>, подлежащей списанию.</td>
+<td style="text-align: left;">Система распознает партию, отображает ее данные: наименование, текущий остаток, срок годности. <strong>Важно:</strong> Если причина "Просрочка", система проверяет, "Если причина 'Просрочка', система проверяет статус 'Заблокирована' и предотвращает списание в оффлайн-режиме".</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">Оператор вводит <strong>фактическое количество</strong> к списанию (по умолчанию предлагается весь остаток).</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">Оператор при необходимости добавляет <strong>комментарий</strong> (например, "упаковка вскрыта", "посторонний предмет").</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">Оператор нажимает кнопку <strong>"Подтвердить списание"</strong>.</td>
+<td style="text-align: left;">Система запрашивает финальное подтверждение действия, указывая сумму списания.</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">Оператор подтверждает действие.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система выполняет атомарные действия:<br/> 1. <strong>Списывает</strong> указанное количество с остатка партии.<br/> 2. <strong>Меняет статус</strong> партии (если списан весь остаток, статус меняется на "Утилизирована").<br/> 3. <strong>Фиксирует акт списания</strong> в базе данных с обязательными реквизитами: дата, время, партия, причина, количество, ответственный, комментарий, фото.<br/> 4. <strong>Обновляет</strong> отчетные данные и остатки в реальном времени.</td>
+</tr>
+<tr>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Если списание превышает лимит, система требует последующего подтверждения Технолога.</td>
+</tr>
+<tr>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система отображает сообщение об успехе: "Списание подтверждено".</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. Альтернативные потоки:</strong></p>
+<ul>
+<li><strong>А1: Списание по акту от Технолога.</strong></li>
+<li>На шаге 1: Технолог может создать задание на списание из своей учетной записи. Оператор получает задание, в котором уже указаны номенклатура, причина и количество. Оператору остается только отсканировать партию для подтверждения и выполнить шаги 4-12.</li>
+<li><strong>А2: Списание без штрих-кода (например, рассыпанные овощи).</strong></li>
+<li>На шаге 4: Оператор может вручную выбрать номенклатуру из справочника и указать количество к списанию.</li>
+<li><strong>А3: Попытка списать не заблокированную партию с нормальным сроком.</strong></li>
+<li>На шаге 4: Если причина "Просрочка", но срок годности не истек и статус не "Заблокирована", система <strong>отклоняет запрос</strong> и требует дополнительного подтверждения от Технолога (ввод кода или push-уведомление Технологу). Это защита от ошибок и злоупотреблений. Система уведомляет Технолога через Push/email/SMS. </li>
+</ul>
+<p><strong>7. Постусловия:</strong></p>
+<ul>
+<li>Полуфабрикаты физически списаны (утилизированы).</li>
+<li>Остатки партии в системе уменьшены на указанное количество.</li>
+<li>В системе зафиксирован не редактируемый акт списания с полным аудитом (кто, что, когда, почему).</li>
+<li>Данные для финансового и управленческого учета обновлены.</li>
+<li>Если списание было инициировано заданием (UC13), задание помечается как "Выполнено".</li>
+</ul>
+<p><strong>8. Особые требования (NFR):</strong></p>
+<ul>
+<li><strong>Аудит и безопасность:</strong> Все акты списания должны храниться в неизменяемом виде. Должна быть реализована <strong>ролевая модель</strong>, запрещающая обычным операторам списывать товары без ограничений (только по заблокированным системой партиям или по утвержденным Технологом актам).Списание в оффлайн-режиме запрещено для заблокированных партий/</li>
+<li><strong>Производительность:</strong> Процесс подтверждения списания (от сканирования до фиксации) должен занимать не более 10 секунд.</li>
+<li><strong>Доступность:</strong> Полная оффлайн-функциональность с синхронизацией при появлении сети. </li>
+<li><strong>Синхронизация:</strong> При синхронизации действия Технолога имеют приоритет.</li>
+</ul>
+<h3 id="uc10"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.4.4</span> UC10. Настроить правила автозаказа</h3>
+<p><strong>1. Идентификатор и Название:</strong></p>
+<p><strong>1. Краткое описание:</strong> Этот Use Case описывает процесс определения и конфигурации бизнес-правил, по которым система будет автоматически формировать заявки на пополнение запасов полуфабрикатов с логистического центра (ЛЦ). Технолог устанавливает для каждой позиции параметры, минимизирующие риск дефицита и излишков.</p>
+<p><strong>2. Акторы:</strong></p>
+<ul>
+<li><strong>Основной:</strong> Технолог.</li>
+<li><strong>Второстепенный:</strong> Система управления запасами.</li>
+</ul>
+<p><strong>3. Предусловия:</strong></p>
+<ul>
+<li>Пользователь авторизован в системе и имеет права на изменение правил.</li>
+<li>В системе существует номенклатура полуфабрикатов (UC5), для которых настраиваются правила.</li>
+<li>Известны ключевые параметры поставок от ЛЦ: минимальная партия заказа, кратность паллеты/упаковки, дни и время поставок.</li>
+</ul>
+<p><strong>4. Триггер</strong></p>
+<ul>
+<li>Необходимо внести настройки для автоматической работы системы.</li>
+</ul>
+<p><strong>5. Основной поток событий:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Шаг</th>
+<th style="text-align: left;">Действие Актора</th>
+<th style="text-align: left;">Ответ Системы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Технолог в меню системы выбирает раздел <strong>"Закупки"</strong> -&gt; <strong>"Правила автозаказа"</strong>.</td>
+<td style="text-align: left;">Система отображает таблицу со списком всех полуфабрикатов и текущими значениями правил для каждого.</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">Технолог выбирает позицию из списка или использует поиск.</td>
+<td style="text-align: left;">Система отображает детальную карточку настройки правил для выбранной позиции.</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">Технолог настраивает параметры правила. <strong>Минимальный запас (Min Stock):</strong><br/> Стоп-уровень, при достижении которого система НЕМЕДЛЕННО создаст заказ. <br/><strong>Максимальный запас (Max Stock):</strong><br/> Целевой уровень, ДО которого система будет пытаться пополнить запасы. <br/><strong>Точка заказа (Reorder Point):</strong><br/> Уровень, при достижении которого система инициирует плановый заказ в рамках регулярного цикла.</td>
+<td style="text-align: left;">Система отображает визуальную подсказку в виде графика.</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">Технолог настраивает параметры, связанные с поставщиком (ЛЦ): <br/> - <strong>Минимальная партия заказа</strong> (например, 10 кг). <br/> - <strong>Кратность</strong> (например, можно заказывать только кратно 5 кг – 5, 10, 15...). <br/> - <strong>Срок поставки (в днях)</strong> – время от момента заказа до получения.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">Технолог настраивает <strong>коэффициенты потребления</strong>: <br/> - <strong>Сезонность</strong> (помесячные коэффициенты с выбором шаблона). <br/> - <strong>Прогноз на основе продаж</strong> (вкл/выкл) - обязательная функция с жестко прописанными формулами.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">Технолог нажимает кнопку <strong>"Сохранить правило"</strong>.</td>
+<td style="text-align: left;">Система проводит <strong>валидацию</strong> правил: проверяет, что Min &lt; Reorder Point &lt; Max, минимальная партия ≤ Max запас.</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система сохраняет правило и применяет его ко всем последующим запускам алгоритма автозаказа (UC8).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. Альтернативные потоки:</strong></p>
+<ul>
+<li><strong>А1: Массовая настройка правил для группы товаров.</strong></li>
+<li>Технолог применяет фильтр к списку номенклатуры (например, все товары в категории "Овощи") и нажимает "Настроить для группы". Система система позволяет установить относительные изменения ко всем параметрам. Система проводит валидацию для каждой позиции.</li>
+<li><strong>А2: Настройка правила по шаблону.</strong></li>
+<li>Технолог создает шаблон как копию действующего правила и может применить его к позиции, лишь скорректировав значения.</li>
+<li><strong>А3: Валидация не пройдена.</strong></li>
+<li>На шаге 6: Если система обнаружила ошибку (например, Min &gt; Max), она подсвечивает невалидные поля и не позволяет сохранить правило до исправления.</li>
+</ul>
+<p><strong>7. Постусловия:</strong></p>
+<ul>
+<li>Для номенклатурной позиции создано или обновлено правило автозаказа.</li>
+<li>Правило активно и будет использоваться алгоритмом <strong>UC8: "Рассчитать автозаказ"</strong> при следующем запуске.</li>
+<li>Система будет автоматически формировать заказы в ЛЦ, руководствуясь этим правилом и текущими остатками.</li>
+</ul>
+<p><strong>8. Особые требования (NFR):</strong></p>
+<ul>
+<li><strong>Валидация (критично):</strong> Система должна предотвращать сохранение некорректных правил, которые могут привести к переполнению склада или дефициту (например, точка заказа ниже минимального запаса).</li>
+<li><strong>Визуализация:</strong> Интерфейс настройки должен интуитивно показывать, как будут работать правила. Идеально – использовать <strong>график уровня запасов</strong> с линиями Min, Reorder Point и Max.</li>
+<li><strong>Аудит:</strong> Система ведет логирование изменений правил (кто, когда и какие значения изменил). Это критично для анализа работы системы.</li>
+<li><strong>Производительность:</strong> Алгоритм применения групповых изменений должен работать эффективно, не вызывая задержек в интерфейсе.</li>
+<li><strong>Обучение:</strong> Система может предоставлять подсказки и рекомендуемые значения на основе анализа истории потребления (например, "На основе данных за последний месяц, рекомендуемая точка заказа для этого товара – 50 кг").</li>
+</ul>
+<h3 id="uc11"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.4.5</span> UC11. Проверить срок годности</h3>
+<p><strong>1. Краткое описание:</strong> Этот Use Case описывает процесс проверки системой срока годности конкретной партии полуфабриката по запросу роботизированной линии перед его использованием в приготовлении блюда. Система возвращает роботу вердикт: разрешить или запретить использование. Это последний барьер для предотвращения использования просроченного сырья.</p>
+<p><strong>2. Акторы:</strong></p>
+<ul>
+<li><strong>Основной:</strong> Роботизированная линия (Инициатор запроса).</li>
+<li><strong>Основной:</strong> Система управления запасами (Обработчик запроса).</li>
+</ul>
+<p><strong>3. Предусловия:</strong></p>
+<ul>
+<li>Роботизированная линия интегрирована с системой управления запасами через API.</li>
+<li>Полуфабрикат в оперативном запасе линии имеет актуальный "виртуальный срок годности", рассчитанный системой.</li>
+<li>Система и линия имеют устойчивое соединение.</li>
+</ul>
+<p><strong>4. Триггер</strong></p>
+<ul>
+<li>Роботу на производственной линии нужно взять порцию полуфабриката.</li>
+</ul>
+<p><strong>5. Основной поток событий:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Шаг</th>
+<th style="text-align: left;">Действие Актора</th>
+<th style="text-align: left;">Ответ Системы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Робот формирует и отправляет системе <strong>запрос через API</strong>. Запрос содержит:<br/> - ID линии/контейнера.<br/> - ID полуфабриката.<br/> - Количество для списания.</td>
+<td style="text-align: left;">Система принимает запрос.</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>идентифицирует</strong> "виртуальную партию" оперативного запаса для указанного контейнера и полуфабриката.</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>проверяет статус</strong> партии.</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>проверяет срок годности</strong> партии.</td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>сравнивает</strong> текущее время с рассчитанным сроком годности.</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>принимает решение</strong> на основе проверки.</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>формирует и отправляет ответ</strong> роботу.</td>
+</tr>
+<tr>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">Робот <strong>получает ответ</strong> от системы.</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">Робот выполняет действие на основе ответа.</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. Альтернативные потоки:</strong></p>
+<ul>
+<li><strong>А1: Партия заблокирована.</strong></li>
+<li>На шаге 4: Если статус партии = "Заблокирована", система немедленно возвращает ответ. Робот останавливает работу и уведомляет оператора.</li>
+<li><strong>А2: Срок годности истек.</strong></li>
+<li>На шаге 7: Если текущая дата и время превышают расчетный срок годности, система возвращает ответ. Робот останавливает работу.</li>
+<li><strong>А3: Срок годности истекает в течение периода готовки.</strong></li>
+<li>На шаге 7: Система может быть настроена на проверку "с запасом". Если срок годности истекает раньше, чем истечет срок реализации готового блюда (период готовки настраивается технологом для блюда в целом), система может вернуть ответ-предупреждение. Робот может либо продолжить работу, либо также остановиться для решения оператора.</li>
+<li><strong>А4: Система недоступна.</strong>
+  Робот использует кэшированные данные за последний час</li>
+</ul>
+<p><strong>7. Постусловия:</strong></p>
+<ul>
+<li><strong>В случае Успеха:</strong> Робот использует полуфабрикат, отправляет системе подтверждение о списании, и система уменьшает остаток оперативного запаса.</li>
+<li><strong>В случае Неудачи (Блокировка/Просрочка):</strong> Использование полуфабриката предотвращено. Работа линии приостановлена. Инициируются процессы <strong>UC9</strong> и <strong>UC8</strong> (если не были запущены ранее) и уведомляется оператор (<strong>UC2</strong>).</li>
+</ul>
+<p><strong>8. Особые требования (NFR):</strong></p>
+<ul>
+<li><strong>Производительность (Критично):</strong> Время от момента отправки запроса роботом до получения ответа должно быть <strong>минимальным (&lt; 100 мс)</strong>. Любая задержка напрямую влияет на скорость работы линии.</li>
+<li><strong>Доступность (Критично):</strong> Сервис проверки должен иметь <strong>доступность 99.99%</strong>. Его простои недопустимы, так как останавливают всю линию.</li>
+<li><strong>Масштабируемость:</strong> Сервис должен выдерживать пиковые нагрузки, обрабатывая сотни запросов в минуту от множества линий одновременно. Сервис должен выдерживать нагрузку на 50-75% выше текущей.</li>
+<li><strong>Безопасность:</strong> API-endpoint должен быть защищен от несанкционированного доступа (аутентификация и авторизация запросов от робота).</li>
+<li><strong>Журналирование:</strong> Система логирует только запросы с ошибками. При остановке робота система отправляет SMS технологу и оператору.</li>
+</ul>
+<h3 id="uc12"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.4.6</span> UC12. Передать заказ в ЛЦ</h3>
+<p><strong>1. Краткое описание:</strong> Этот Use Case описывает процесс автоматической отправки утвержденного заказа на полуфабрикаты из системы управления запасами ресторана в систему Логистического Центра (ЛЦ). Цель — обеспечить безошибочную и своевременную передачу данных без ручного вмешательства.</p>
+<p><strong>2. Акторы:</strong></p>
+<ul>
+<li><strong>Основной:</strong> Система управления запасами (Инициатор отправки).</li>
+<li><strong>Основной:</strong> Логистический центр (Получатель заказа).</li>
+</ul>
+<p><strong>3. Предусловия:</strong></p>
+<ul>
+<li>Заказ находится в статусе <strong>"Утвержден"</strong> (после успешного выполнения UC7: "Скорректировать заказ" или автоматического утверждения).</li>
+<li>Настроена и активна <strong>интеграция</strong> с системой ЛЦ (API, FTP-обмен и т.д.).</li>
+<li>Известны и валидны учетные данные для доступа к API ЛЦ.</li>
+<li>Заказ содержит как минимум одну позицию с количеством &gt; 0.</li>
+</ul>
+<p><strong>4. Триггер</strong></p>
+<ul>
+<li>Есть заказ, готовый к отправке</li>
+</ul>
+<p><strong>5. Основной поток событий:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Шаг</th>
+<th style="text-align: left;">Действие Актора</th>
+<th style="text-align: left;">Ответ Системы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система помечает заказ как "В процессе отправки".</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>формирует исходящее сообщение</strong> в формате, автоматически определяемом для конкретного ЛЦ. Сообщение содержит:<br/> - ID заказа из внутренней системы.<br/> - ID ресторана-отправителя.<br/> - Желаемую дату и время поставки.<br/> - Список позиций (артикул товара в системе ЛЦ, количество, единица измерения).</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>выполняет вызов API</strong> ЛЦ (HTTP POST запрос) и передает сформированное сообщение.</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>получает ответ</strong> от API ЛЦ.</td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>анализирует ответ</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>обрабатывает успешный ответ</strong>. Если ЛЦ изменил количество, система автоматически корректирует заказ.</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>фиксирует факт успешной отправки</strong>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>5. Альтернативные потоки:</strong></p>
+<ul>
+<li><strong>А1: Ошибка интеграции (API недоступно).</strong></li>
+<li>На шаге 4: Если система не получает ответа от API ЛЦ (таймаут, ошибка сети), она выполняет <strong>повторные попытки отправки</strong>  через 1 минуту. После исчерпания попыток заказ переводится в статус "Ошибка отправки", и Технолог получает уведомление через все каналы, SMS - только при критических ошибках.</li>
+<li><strong>А2: Ошибка данных на стороне ЛЦ.</strong></li>
+<li>На шаге 5: Если ЛЦ возвращает ошибку валидации (например, "Неизвестный артикул товара", "Неверное количество"), система переводит заказ в статус "Ошибка данных". <strong>Автоматическая отправка блокируется.</strong> Требуется обязательное вмешательство Технолога для исправления артикулов в справочнике (UC5) или ручного переформирования заказа.</li>
+<li><strong>А3: Частичное подтверждение от ЛЦ.</strong></li>
+<li>ЛЦ может подтвердить заказ, но изменить количество или дату поставки. Система должна зафиксировать этот факт в истории заказа и уведомить Технолога по email.</li>
+</ul>
+<p><strong>6. Постусловия:</strong></p>
+<ul>
+<li>Заказ переведен в статус "Передан в ЛЦ" или "Подтвержден ЛЦ".</li>
+<li>В системе зафиксирован уникальный идентификатор заказа, присвоенный системой ЛЦ (если он был возвращен в ответе).</li>
+<li>ЛЦ получил заказ и приступил к его комплектации.</li>
+<li>Технолог видит актуальный статус заказа в системе.</li>
+</ul>
+<p><strong>7. Особые требования (NFR):</strong></p>
+<ul>
+<li><strong>Надежность:</strong> Процесс отправки должен быть <strong>идемпотентным</strong>. Повторная отправка одного и того же заказа не должна приводить к созданию дубликатов в системе ЛЦ. Для этого используется UUID для уникальности ID заказа из внутренней системы.</li>
+<li><strong>Безопасность:</strong> Все взаимодействие с API ЛЦ должно быть защищено с использованием современных протоколов. Единый метод аутентификации для всех ЛЦ.</li>
+<li><strong>Устойчивость к сбоям:</strong> Механизм отправки должен использовать <strong>очередь сообщений</strong> Kafka. Это гарантирует, что заказы не будут потеряны при кратковременной недоступности системы или ЛЦ.</li>
+<li><strong>Мониторинг:</strong> Получение метрик Kafka по запросу.</li>
+<li><strong>Производительность:</strong> Процесс отправки одного заказа не должен занимать более 10-15 секунд.</li>
+</ul>
+<h3 id="uc13"><span class="enumerate-headings-plugin enumerate-heading-plugin">8.4.7</span> UC13. Сформировать задание на утилизацию</h3>
+<p><strong>1. Краткое описание:</strong> Этот Use Case описывает процесс автоматического создания системой задания для оператора на утилизацию партии полуфабрикатов. Задание формируется на основе предопределенных правил контроля сроков годности и результатов сканирования остатков. Это ключевой связующий элемент между контролем системы и физическим действием оператора.</p>
+<p><strong>2. Акторы:</strong></p>
+<ul>
+<li><strong>Основной:</strong> Система управления запасами.</li>
+<li><strong>Вторичный:</strong> Оператор линии (получатель задания).</li>
+</ul>
+<p><strong>3. Предусловия:</strong></p>
+<ul>
+<li>В системе настроены параметры контроля сроков годности (например, "Уведомлять об утилизации за X часов до истечения срока").</li>
+<li>Система имеет актуальные данные о сроках годности всех партий (на складе и в оперативном запасе).</li>
+<li>Процесс <strong>UC7: "Заблокировать просроченную партию"</strong> был выполнен и партия переведена в статус "Заблокирована".</li>
+</ul>
+<p><strong>4. Триггер</strong></p>
+<ul>
+<li>Наступает время запуска по расписанию</li>
+</ul>
+<p><strong>4. Основной поток событий:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Шаг</th>
+<th style="text-align: left;">Действие Актора</th>
+<th style="text-align: left;">Ответ Системы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Система <strong>запускает процедуру контроля сроков годности</strong>.</td>
+<td style="text-align: left;">Система сканирует все партии в базе данных.</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>выявляет партии</strong>, которые подлежат утилизации по критериям:<br/> - <strong>Критерий 1:</strong> Срок годности партии истек.<br/> - <strong>Критерий 2:</strong> До истечения срока годности осталось менее X часов (где X - настраиваемый параметр).<br/> - <strong>Критерий 3:</strong> Партия имеет статус "Заблокирована" (см. UC9).</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Для каждой выявленной партии система <strong>создает задание</strong> в базе данных с приоритетом "просроченные" важнее "истекающие сегодня". Задание содержит всю необходимую информацию для оператора:<br/> - <strong>Тип задания:</strong> "Утилизировать партию"<br/> - <strong>Приоритет:</strong> Высокий (рассчитывается на основе срочности: просроченные &gt; истекающие сегодня &gt; истекающие завтра).<br/> - <strong>Локация:</strong> Точное местонахождение партии (номер стеллажа, холодильника, зоны оперативного запаса).<br/> - <strong>Данные партии:</strong> Штрихкод, наименование полуфабриката, количество к утилизации (весь остаток).<br/> - <strong>Причина:</strong> "Просрочка" или "Срок годности истекает через X часов".</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>отправляет задание на мобильное устройство оператора</strong> через отдельную очередь Kafka и FCM для Androidpush-уведомление.</td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Система <strong>логирует</strong> факт создания задания (время, партия, причина).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6. Альтернативные потоки:</strong></p>
+<ul>
+<li><strong>А1: Обнаружена уже заблокированная партия.</strong><ul>
+<li>Если система обнаруживает партию со статусом "Заблокирована", для которой уже существует активное задание на утилизацию, она <strong>не создает дубликат</strong>. Вместо этого может повысить приоритет существующего задания. Система проверяет дубликаты по ID партии.</li>
+</ul>
+</li>
+<li><strong>А2: Партия уже частично использована.</strong><ul>
+<li>При формировании задания система всегда указывает для утилизации <strong>текущий остаток</strong> партии, а не первоначальное количество.</li>
+</ul>
+</li>
+<li><strong>А3: Массовое попадание под критерии.</strong><ul>
+<li>Если в результате сканирования выявлено &gt;50% партий под утилизацию, система уведомляет Технолога по <strong>email или SMS-уведомление Технологу</strong> о критической ситуации.</li>
+</ul>
+</li>
+</ul>
+<p><strong>7. Постусловия:</strong></p>
+<ul>
+<li>В системе создано одно или несколько заданий типа "Утилизировать партию".</li>
+<li>Задания доступны оператору в его мобильном приложении. </li>
+<li>Партии, для которых созданы задания, имеют статус "Заблокирована", что предотвращает их использование в других процессах (пополнение линии, производство).</li>
+<li>Задание имеет срок действия 1 час.</li>
+<li>Задание считается доставленным после отправки в Kafka</li>
+</ul>
+<p><strong>8. Особые требования (NFR):</strong></p>
+<ul>
+<li><strong>Производительность:</strong> Процедура сканирования сроков и формирования заданий должна выполняться <strong>быстро</strong> (в течение 1-2 минут), чтобы минимизировать задержку между обнаружением проблемы и реакцией на нее.</li>
+<li><strong>Надежность:</strong> Использование отдельной очереди Kafka для заданий.</li>
+<li><strong>Масштабируемость:</strong> Алгоритм должен эффективно работать как с десятками, так и с тысячами партий.</li>
+<li><strong>Конфигурируемость:</strong> Параметр X и периодичность запуска настраиваются технологом в UC5.</li>
+</ul>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  К началу
+</button>
+</main>
+<footer class="md-footer">
+<nav aria-label="Нижний колонтитул" class="md-footer__inner md-grid">
+<a aria-label="Назад: Функциональные требования к подсистеме" class="md-footer__link md-footer__link--prev" href="../subsystem_func_requirements/">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</div>
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Назад
+              </span>
+<div class="md-ellipsis">
+                Функциональные требования к подсистеме
+              </div>
+</div>
+</a>
+<a aria-label="Вперед: Пользовательские истории (User Story) и порядок их реализации" class="md-footer__link md-footer__link--next" href="../User_story/">
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Вперед
+              </span>
+<div class="md-ellipsis">
+                Пользовательские истории (User Story) и порядок их реализации
+              </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      © 2025 <a href="https://github.com/TimIrkutsk/Otus-Project" rel="noopener" target="_blank">Тимохин Антон</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.instant", "navigation.tracking", "navigation.path", "navigation.sections", "toc.integrate", "navigation.expand", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+<script src="../js/print-site.js"></script>
+</body>
+</html>

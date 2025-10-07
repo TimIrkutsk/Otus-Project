@@ -1,0 +1,84 @@
+@startuml
+!include <C4/C4_Container>
+
+title Система управления запасами - Ядро и задания (Уровень 2)
+
+' Пользователи
+Person(operator, "Оператор линии", "Выполняет задания по утилизации и пополнению")
+Person(technologist, "Технолог", "Управляет заказами и настройками")
+
+' Граница системы
+System_Boundary(core_system, "Ядро системы управления запасами") {
+
+    ' Frontend контейнеры
+    Container(web_app, "Веб-приложение", "React, TypeScript", "Управление для технолога и администратора")
+    Container(mobile_app, "Мобильное приложение", "React Native", "Задания и инвентаризация для оператора")
+    
+    ' Backend контейнеры
+    Container(api_gateway, "API Gateway", "Spring Cloud Gateway", "Единая точка входа")
+    
+    ' Бизнес-сервисы (Bounded Contexts)
+    Container(stock_service, "Сервис остатков", "Spring Boot", "Управление партиями, остатками, FEFO")
+    Container(shelf_life_service, "Сервис контроля сроков", "Spring Boot", "Блокировка партий, расчет виртуальных сроков")
+    Container(task_service, "Сервис заданий", "Spring Boot", "Управление заданиями операторам")
+    Container(order_service, "Сервис заказов", "Spring Boot", "Автозаказ, правила пополнения")
+    
+    ' Инфраструктурные сервисы
+    Container(auth_service, "Сервис аутентификации", "Spring Boot, JWT", "Управление доступом и ролями")
+    Container(notification_service, "Сервис уведомлений", "Spring Boot", "Push, SMS, email уведомления")
+    
+    ' Базы данных
+    ContainerDb(stock_db, "База остатков", "PostgreSQL", "Партии, остатки, перемещения")
+    ContainerDb(orders_db, "База заказов", "PostgreSQL", "Заказы, правила пополнения")
+    ContainerDb(tasks_db, "База заданий", "PostgreSQL", "Задания операторам")
+    ContainerDb(cache_db, "Кэш-хранилище", "Redis", "Кэш остатков и сессий")
+    
+    ' Брокер сообщений
+    Container(message_broker, "Брокер сообщений", "Apache Kafka", "Асинхронная коммуникация")
+}
+
+' Внешние системы
+System_Ext(logistics, "Логистический центр", "Поставщик полуфабрикатов")
+System_Ext(sales, "Система продаж", "Прогнозы спроса")
+
+' Взаимодействия пользователей
+Rel(operator, mobile_app, "Выполняет задания\nПроводит инвентаризацию", "HTTPS\nОффлайн-режим")
+Rel(technologist, web_app, "Управляет заказами\nНастраивает правила", "HTTPS")
+
+' Frontend -> Backend
+Rel(web_app, api_gateway, "Вызывает API", "REST")
+Rel(mobile_app, api_gateway, "Вызывает API", "REST")
+
+' API Gateway -> Бизнес-сервисы
+Rel(api_gateway, stock_service, "Запросы остатков и партий", "REST")
+Rel(api_gateway, task_service, "Управление заданиями", "REST")
+Rel(api_gateway, order_service, "Управление заказами", "REST")
+Rel(api_gateway, auth_service, "Аутентификация", "JWT")
+
+' Бизнес-логика
+Rel(stock_service, shelf_life_service, "Запросы блокировки/разблокировки", "REST")
+Rel(shelf_life_service, task_service, "Создание заданий на утилизацию", "Kafka")
+Rel(order_service, stock_service, "Запросы текущих остатков", "REST")
+Rel(task_service, stock_service, "Подтверждение операций", "REST")
+
+' Интеграции
+Rel(order_service, logistics, "Передача заказов", "REST API")
+Rel(order_service, sales, "Получение прогнозов", "REST API")
+
+' Базы данных
+Rel(stock_service, stock_db, "Чтение/запись партий", "JDBC")
+Rel(order_service, orders_db, "Чтение/запись заказов", "JDBC")
+Rel(task_service, tasks_db, "Чтение/запись заданий", "JDBC")
+Rel(auth_service, cache_db, "Сессии и токены", "Redis Protocol")
+
+' Кэширование для производительности
+Rel(stock_service, cache_db, "Кэш остатков и статусов", "Redis Protocol")
+Rel(shelf_life_service, cache_db, "Кэш блокировок", "Redis Protocol")
+
+' Асинхронная коммуникация
+Rel(shelf_life_service, message_broker, "События блокировки", "Kafka")
+Rel(stock_service, message_broker, "События изменений остатков", "Kafka")
+Rel(message_broker, task_service, "Создание заданий", "Kafka")
+Rel(message_broker, notification_service, "Уведомления", "Kafka")
+
+@enduml

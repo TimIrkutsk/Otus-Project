@@ -1,0 +1,41 @@
+@startuml
+!include <C4/C4_Component>
+
+title Сервис контроля сроков - Компонентная диаграмма (Уровень 3)
+
+Container_Boundary(shelf_life_service, "Сервис контроля сроков") {
+    Component(expiration_scanner, "Сканер сроков", "Spring Scheduler", "Сканирование партий по расписанию")
+    Component(blocking_manager, "Менеджер блокировок", "Spring Bean", "Автоматическая блокировка партий")
+    Component(virtual_date_calculator, "Калькулятор виртуальных сроков", "Spring Bean", "Расчет виртуальных сроков годности")
+    Component(disposal_trigger, "Триггер утилизации", "Spring Bean", "Создание заданий на утилизацию")
+    
+    Component(expiration_repository, "Репозиторий сроков", "Spring Data", "Доступ к данным сроков годности")
+    Component(blocking_controller, "REST Контроллер", "Spring MVC", "API для управления блокировками")
+}
+
+' Внутренние связи
+Rel(expiration_scanner, expiration_repository, "Поиск партий", "Метод вызов")
+Rel(expiration_scanner, blocking_manager, "Блокировка просроченных", "Метод вызов")
+Rel(blocking_manager, virtual_date_calculator, "Расчет виртуальных сроков", "Метод вызов")
+Rel(blocking_manager, disposal_trigger, "Создание заданий", "Метод вызов")
+Rel(blocking_controller, blocking_manager, "API управления", "Метод вызов")
+
+' Внешние зависимости
+ContainerDb(stock_db, "База остатков", "PostgreSQL")
+Container_Ext(cache_db, "Кэш-хранилище", "Redis")
+Container_Ext(message_broker, "Брокер сообщений", "Kafka")
+Container_Ext(task_service, "Сервис заданий", "Kafka")
+
+' Внешние связи
+Rel(expiration_repository, stock_db, "Чтение данных", "JDBC")
+Rel(blocking_manager, cache_db, "Кэш блокировок", "Redis Protocol")
+Rel(disposal_trigger, message_broker, "События утилизации", "Kafka")
+Rel(message_broker, task_service, "Создание заданий", "Kafka")
+
+Note right of expiration_scanner {
+    <b>Бизнес-правила:</b>
+    • Блокировка за X часов до истечения
+    • FEFO при смешивании партий
+    • Автоматическая утилизация
+}
+@enduml

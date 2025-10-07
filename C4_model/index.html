@@ -1,0 +1,1473 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="../information_model/" rel="prev"/>
+<link href="../Seq_diagram/" rel="next"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.6.21" name="generator"/>
+<title>Компонентная архитектура - Проект "Инвентаризация, автозаказ, контроль сроков хранения"</title>
+<link href="../assets/stylesheets/main.2a3383ac.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../css/print-site.css" rel="stylesheet"/>
+<link href="../css/print-site-material.css" rel="stylesheet"/>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="purple" data-md-color-primary="teal" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#_1">
+          Перейти к содержанию
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Верхний колонтитул" class="md-header__inner md-grid">
+<a aria-label="Проект " class="md-header__button md-logo" data-md-component="logo" href=".." title='Проект "Инвентаризация, автозаказ, контроль сроков хранения"' автозаказ,="" инвентаризация,="" контроль="" сроков="" хранения""="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Проект "Инвентаризация, автозаказ, контроль сроков хранения"
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Компонентная архитектура
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="purple" data-md-color-media="" data-md-color-primary="teal" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="lime" data-md-color-media="" data-md-color-primary="teal" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Поиск" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Поиск" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Поиск" class="md-search__options">
+<button aria-label="Очистить" class="md-search__icon md-icon" tabindex="-1" title="Очистить" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Инициализация поиска
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="Вкладки" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+          
+  
+  
+  Домашняя страница
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../page_2/">
+          
+  
+  
+  Документация проекта
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../object_characteristics/">
+          
+  
+  
+  Документация подсистемы
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../api_robots/">
+          
+  
+  
+  API
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../task/">
+          
+  
+  
+  Задачи
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../test_case/">
+          
+  
+  
+  Тест-кейсы
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../print_page/">
+        
+  
+  
+    
+  
+  Print Site
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Навигация" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Проект " class="md-nav__button md-logo" data-md-component="logo" href=".." title='Проект "Инвентаризация, автозаказ, контроль сроков хранения"' автозаказ,="" инвентаризация,="" контроль="" сроков="" хранения""="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Проект "Инвентаризация, автозаказ, контроль сроков хранения"
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+<span class="md-ellipsis">
+    Домашняя страница
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_1_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_1">
+<span class="md-nav__icon md-icon"></span>
+            Домашняя страница
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    О проектной работе
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    Документация проекта
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            Документация проекта
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../page_2/">
+<span class="md-ellipsis">
+    Глоссарий
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../general_info/">
+<span class="md-ellipsis">
+    Общие сведения
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../project_goals/">
+<span class="md-ellipsis">
+    Паспорт проекта
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../goals/">
+<span class="md-ellipsis">
+    Назначение и цели создания системы
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../system_requirements/">
+<span class="md-ellipsis">
+    Нефункциональные требования
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+<span class="md-ellipsis">
+    Документация подсистемы
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            Документация подсистемы
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../object_characteristics/">
+<span class="md-ellipsis">
+    Характеристика объекта автоматизации
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../business_processes/">
+<span class="md-ellipsis">
+    Описание бизнес-процессов
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../subsystem_func_requirements/">
+<span class="md-ellipsis">
+    Функциональные требования к подсистеме
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../subsystem_requirements/">
+<span class="md-ellipsis">
+    Варианты использования и порядок их реализации
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../User_story/">
+<span class="md-ellipsis">
+    Пользовательские истории (User Story) и порядок их реализации
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../information_model/">
+<span class="md-ellipsis">
+    Информационная модель
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    Компонентная архитектура
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    Компонентная архитектура
+    
+  </span>
+</a>
+<nav aria-label="Содержание" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Содержание
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      Требования, обосновывающие выбор микросервисной архитектуры
+    </span>
+</a>
+<nav aria-label="Требования, обосновывающие выбор микросервисной архитектуры" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#100">
+<span class="md-ellipsis">
+      Масштабируемость до 100 ресторанов
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      Интеграция с разнородными внешними системами
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      Критичные требования к производительности и доступности
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      Разные модели данных и паттерны доступа
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      Независимость жизненных циклов компонентов
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+<span class="md-ellipsis">
+      Разные команды разработки
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+<span class="md-ellipsis">
+      Обоснование выбора архитектурного стиля
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+<span class="md-ellipsis">
+      Диаграмма контекста
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+<span class="md-ellipsis">
+      Диаграммы контейнеров
+    </span>
+</a>
+<nav aria-label="Диаграммы контейнеров" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_11">
+<span class="md-ellipsis">
+      Часть сервисов по автозаказу, логистике и по инвентаризации
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_12">
+<span class="md-ellipsis">
+      Часть сервисов по контролю срока годности и пополнению оперативного запаса
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_13">
+<span class="md-ellipsis">
+      Таблица контейнеров системы управления запасами
+    </span>
+</a>
+<nav aria-label="Таблица контейнеров системы управления запасами" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#frontend">
+<span class="md-ellipsis">
+      Frontend контейнеры
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backend-">
+<span class="md-ellipsis">
+      Backend бизнес-сервисы
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_14">
+<span class="md-ellipsis">
+      Инфраструктурные сервисы
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_15">
+<span class="md-ellipsis">
+      Базы данных и хранилища
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_16">
+<span class="md-ellipsis">
+      Описание контейнеров системы автозаказа и логистики
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_17">
+<span class="md-ellipsis">
+      Диаграммы компонентов
+    </span>
+</a>
+<nav aria-label="Диаграммы компонентов" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_18">
+<span class="md-ellipsis">
+      Таблица компонентов системы управления запасами
+    </span>
+</a>
+<nav aria-label="Таблица компонентов системы управления запасами" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#-">
+<span class="md-ellipsis">
+      Сервис остатков - компоненты
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#-_1">
+<span class="md-ellipsis">
+      Сервис интеграции с роботом - компоненты
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#-_2">
+<span class="md-ellipsis">
+      Сервис контроля сроков - компоненты
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#-_3">
+<span class="md-ellipsis">
+      Сервис заданий - компоненты
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#-_4">
+<span class="md-ellipsis">
+      Сервис заказов - компоненты
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#-_5">
+<span class="md-ellipsis">
+      Сервис оперативного запаса - компоненты
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../Seq_diagram/">
+<span class="md-ellipsis">
+    Интеграционное взаимодействие
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../UI/">
+<span class="md-ellipsis">
+    Демонстрация UI макета
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    API
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_robots/">
+<span class="md-ellipsis">
+    API для интеграции с роботизированной линией
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_logict/">
+<span class="md-ellipsis">
+    API для интеграции с логистическими центрами
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_mobile_task/">
+<span class="md-ellipsis">
+    API для мобильного приложения оператора линии
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_shelf_life_control/">
+<span class="md-ellipsis">
+    API для контроля сроков годности партий полуфабрикатов
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_stock_management/">
+<span class="md-ellipsis">
+    API для управления складскими запасами
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api/">
+<span class="md-ellipsis">
+    API для получения прогнозов продаж
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_auto_order/">
+<span class="md-ellipsis">
+    API для автоматического расчета и управления заказами полуфабрикатов
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_operational_stock/">
+<span class="md-ellipsis">
+    API для управления оперативным запасом роботизированных линий
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    Задачи
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            Задачи
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../task/">
+<span class="md-ellipsis">
+    Постановки на разработку по UserStory
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../task_UC/">
+<span class="md-ellipsis">
+    Постановки на разработку по Use Case
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    Тест-кейсы
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            Тест-кейсы
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case/">
+<span class="md-ellipsis">
+    Тест кейсы для UserStory MVP
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case_release/">
+<span class="md-ellipsis">
+    Тест кейсы для UserStory первого релиза
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case_UC/">
+<span class="md-ellipsis">
+    Тест кейсы для UC MVP
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case_UC_release/">
+<span class="md-ellipsis">
+    Тест кейсы для UC первого релиза
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../print_page/">
+<span class="md-ellipsis">
+    Print Site
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.</span> Компонентная архитектура</h1>
+<h2 id="_2"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.1</span> <strong>Требования, обосновывающие выбор микросервисной архитектуры</strong></h2>
+<h3 id="100"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.1.1</span> <strong>Масштабируемость до 100 ресторанов</strong></h3>
+<p><strong>Исходное требование (из контекста):</strong></p>
+<blockquote>
+<p><em>"Если проект будет успешен, мы масштабируем нашу систему на все рестораны. Всего ресторанов около 100."</em></p>
+</blockquote>
+<p><strong>Обоснование для микросервисов:</strong></p>
+<ul>
+<li><strong>Независимое масштабирование:</strong> Сервис автозаказа будет нагружен пропорционально количеству ресторанов, в то время как сервис управления справочниками - нет. Микросервисы позволяют масштабировать только нужные компоненты.</li>
+<li><strong>Географическое распределение:</strong> Для сети ресторанов может потребоваться распределенное развертывание ближе к регионам.</li>
+</ul>
+<h3 id="_3"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.1.2</span> <strong>Интеграция с разнородными внешними системами</strong></h3>
+<p><strong>Исходное требование (FR6.1, FR6.2):</strong></p>
+<blockquote>
+<p><strong>FR6.1:</strong> Система должна предоставлять API для роботизированной линии...
+<strong>FR6.2:</strong> Система должна предоставлять API для обмена данными с системой Логистического Центра...</p>
+</blockquote>
+<p><strong>Обоснование для микросервисов:</strong></p>
+<ul>
+<li><strong>Изоляция интеграций:</strong> Каждая внешняя система (робот, ЛЦ) имеет свой протокол и SLA. Микросервисы позволяют изолировать проблемы интеграции.</li>
+<li><strong>Независимое развитие:</strong> Изменения в API ЛЦ не должны затрагивать сервис работы с роботизированной линией.</li>
+</ul>
+<h3 id="_4"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.1.3</span> <strong>Критичные требования к производительности и доступности</strong></h3>
+<p><strong>Исходное требование (NFR для UC11):</strong></p>
+<blockquote>
+<p><strong>NFR:</strong> Время от момента отправки запроса роботом до получения ответа должно быть <strong>минимальным (&lt; 100 мс)</strong>... <strong>доступность 99.99%</strong>.</p>
+</blockquote>
+<p><strong>Обоснование для микросервисов:</strong></p>
+<ul>
+<li><strong>Выделение критичных компонентов:</strong> Сервис проверки сроков годности требует максимальной производительности и может быть развернут на более мощном оборудовании.</li>
+<li><strong>Изоляция сбоев:</strong> Проблемы в менее критичных сервисах (например, отчетности) не должны влиять на работу производственной линии.</li>
+</ul>
+<h3 id="_5"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.1.4</span> <strong>Разные модели данных и паттерны доступа</strong></h3>
+<p><strong>Исходное требование (из анализа процессов):</strong></p>
+<blockquote>
+<p><em>Операции с роботом требуют реального времени, формирование отчетов - пакетной обработки, работа с заказами - транзакционности.</em></p>
+</blockquote>
+<p><strong>Обоснование для микросервисов:</strong></p>
+<ul>
+<li><strong>Оптимизация БД:</strong> Сервис работы с роботом может использовать in-memory БД, сервис отчетов - колоночную БД, сервис заказов - реляционную транзакционную БД.</li>
+<li><strong>Разные архитектурные паттерны:</strong> CQRS для отчетов, Event Sourcing для аудита движений запасов.</li>
+</ul>
+<h3 id="_6"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.1.5</span> <strong>Независимость жизненных циклов компонентов</strong></h3>
+<p><strong>Исходное требование (из этапов реализации):</strong></p>
+<blockquote>
+<p><em>MVP включает базовый функционал, Релиз 1.0 добавляет интеграции и автоматизацию.</em></p>
+</blockquote>
+<p><strong>Обоснование для микросервисов:</strong></p>
+<ul>
+<li><strong>Независимые релизы:</strong> Можно развивать и выпускать новые версии сервиса автозаказа, не затрагивая работающий сервис инвентаризации.</li>
+<li><strong>Поэтапное внедрение:</strong> В MVP можно реализовать монолит, а в Релизе 1.0 выделить критические сервисы.</li>
+</ul>
+<h3 id="_7"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.1.6</span> <strong>Разные команды разработки</strong></h3>
+<p><strong>Исходное требование (подразумеваемое):</strong></p>
+<blockquote>
+<p><em>Разные экспертизы: интеграции с оборудованием, бизнес-логика заказов, аналитика и отчетность.</em></p>
+</blockquote>
+<p><strong>Обоснование для микросервисов:</strong></p>
+<ul>
+<li><strong>Независимые команды:</strong> Команда интеграций может работать с API робота, команда аналитики - с системой отчетности.</li>
+<li><strong>Технологический стек:</strong> Каждая команда может выбирать оптимальный стек технологий для своей предметной области.</li>
+</ul>
+<h2 id="_8"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.2</span> <strong>Обоснование выбора архитектурного стиля</strong></h2>
+<p>Для MVP может быть целесообразно начать с модульного монолита, заложив границы будущих сервисов, и выделять микросервисы по мере роста нагрузки и команды.</p>
+<h2 id="_9"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.3</span> Диаграмма контекста</h2>
+<p><img alt="C1_context" src="../diagrams/out/C1_context.svg"/></p>
+<h2 id="_10"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.4</span> Диаграммы контейнеров</h2>
+<p>Далее диаграмму разделил на две части, чтобы было удобнее описывать и все было хорошо видно. Некоторые сервисы повторяются на диаграммах и могут быть реализованы в одном экземпляре (на усмотрение разработчика).</p>
+<h3 id="_11"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.4.1</span> Часть сервисов по автозаказу, логистике и по инвентаризации</h3>
+<p><img alt="C2_1" src="../diagrams/out/%D0%A12_1.svg"/></p>
+<h3 id="_12"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.4.2</span> Часть сервисов по контролю срока годности и пополнению оперативного запаса</h3>
+<p><img alt="C4_2" src="../diagrams/out/C2_2.svg"/></p>
+<h3 id="_13"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.4.3</span> <strong>Таблица контейнеров системы управления запасами</strong></h3>
+<h4 id="frontend"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.4.3.1</span> <strong>Frontend контейнеры</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Контейнер</th>
+<th>Тип</th>
+<th>Назначение</th>
+<th>Технологии</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Веб-приложение</td>
+<td>Веб-приложение</td>
+<td>Управление для технолога и администратора: заказы, настройки, отчеты</td>
+<td>React, TypeScript</td>
+</tr>
+<tr>
+<td>Мобильное приложение</td>
+<td>Мобильное приложение</td>
+<td>Задания и инвентаризация для оператора: оффлайн-режим, сканирование штрих-кодов</td>
+<td>React Native</td>
+</tr>
+</tbody>
+</table>
+<h4 id="backend-"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.4.3.2</span> <strong>Backend бизнес-сервисы</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Контейнер</th>
+<th>Тип</th>
+<th>Назначение</th>
+<th>Технологии</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Сервис остатков</td>
+<td>Микросервис</td>
+<td>Управление партиями, остатками, FEFO, перемещениями</td>
+<td>Spring Boot, PostgreSQL</td>
+</tr>
+<tr>
+<td>Сервис контроля сроков</td>
+<td>Микросервис</td>
+<td>Блокировка партий, расчет виртуальных сроков, автоматическая утилизация</td>
+<td>Spring Boot, Redis</td>
+</tr>
+<tr>
+<td>Сервис заданий</td>
+<td>Микросервис</td>
+<td>Управление заданиями операторам: утилизация, пополнение, приоритизация</td>
+<td>Spring Boot, PostgreSQL</td>
+</tr>
+<tr>
+<td>Сервис заказов</td>
+<td>Микросервис</td>
+<td>Автозаказ, правила пополнения, интеграция с ЛЦ</td>
+<td>Spring Boot, PostgreSQL</td>
+</tr>
+<tr>
+<td>Сервис оперативного запаса</td>
+<td>Микросервис</td>
+<td>Управление запасом на роботизированной линии, пополнение</td>
+<td>Spring Boot, Redis</td>
+</tr>
+<tr>
+<td>Сервис интеграции с роботом</td>
+<td>Микросервис</td>
+<td>Реальное время взаимодействие с роботом, проверка сроков</td>
+<td>Spring Boot, gRPC, WebSocket</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_14"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.4.3.3</span> <strong>Инфраструктурные сервисы</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Контейнер</th>
+<th>Тип</th>
+<th>Назначение</th>
+<th>Технологии</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API Gateway</td>
+<td>Шлюз API</td>
+<td>Единая точка входа, маршрутизация, аутентификация</td>
+<td>Spring Cloud Gateway</td>
+</tr>
+<tr>
+<td>Сервис аутентификации</td>
+<td>Микросервис</td>
+<td>Управление доступом, ролями, JWT токены</td>
+<td>Spring Boot, JWT, Redis</td>
+</tr>
+<tr>
+<td>Сервис уведомлений</td>
+<td>Микросервис</td>
+<td>Push, SMS, email уведомления для пользователей</td>
+<td>Spring Boot</td>
+</tr>
+<tr>
+<td>Брокер сообщений</td>
+<td>Инфраструктура</td>
+<td>Асинхронная коммуникация между сервисами</td>
+<td>Apache Kafka</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_15"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.4.3.4</span> <strong>Базы данных и хранилища</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Контейнер</th>
+<th>Тип</th>
+<th>Назначение</th>
+<th>Технологии</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>База остатков</td>
+<td>База данных</td>
+<td>Хранение данных о партиях, остатках, перемещениях</td>
+<td>PostgreSQL</td>
+</tr>
+<tr>
+<td>База заказов</td>
+<td>База данных</td>
+<td>Хранение заказов, правил пополнения, истории</td>
+<td>PostgreSQL</td>
+</tr>
+<tr>
+<td>База заданий</td>
+<td>База данных</td>
+<td>Хранение заданий операторам, статусов выполнения</td>
+<td>PostgreSQL</td>
+</tr>
+<tr>
+<td>Кэш-хранилище</td>
+<td>Кэш</td>
+<td>Высокопроизводительный кэш остатков, сессий, блокировок</td>
+<td>Redis</td>
+</tr>
+<tr>
+<td>База аналитики</td>
+<td>База данных</td>
+<td>Метрики, мониторинг, аналитические отчеты</td>
+<td>ClickHouse</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_16"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.4.3.5</span> Описание контейнеров системы автозаказа и логистики</h4>
+<p><strong>Контейнеры системы автозаказа и логистики</strong></p>
+<table>
+<thead>
+<tr>
+<th>Контейнер</th>
+<th>Тип</th>
+<th>Назначение</th>
+<th>Технологии</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Веб-приложение</strong></td>
+<td>Фронтенд</td>
+<td>Веб-приложение для управления заказами и правилами. Интерфейс для технолога для настройки правил автозаказа, корректировки заказов, управления справочниками.</td>
+<td>React, TypeScript</td>
+</tr>
+<tr>
+<td><strong>API Gateway</strong></td>
+<td>Бэкэнд</td>
+<td>Единая точка входа в систему. Обеспечивает маршрутизацию запросов, балансировку нагрузки, централизованную аутентификацию.</td>
+<td>Spring Cloud Gateway</td>
+</tr>
+<tr>
+<td><strong>Обнаружение сервисов</strong></td>
+<td>Инфраструктура</td>
+<td>Регистрация и обнаружение сервисов. Позволяет динамически находить доступные экземпляры сервисов в распределенной системе.</td>
+<td>Netflix Eureka</td>
+</tr>
+<tr>
+<td><strong>Сервис аутентификации</strong></td>
+<td>Бэкэнд</td>
+<td>Сервис аутентификации и авторизации. Управление пользователями, проверка прав доступа, генерация JWT токенов.</td>
+<td>Spring Boot, JWT</td>
+</tr>
+<tr>
+<td><strong>Сервис заказов</strong></td>
+<td>Бэкэнд</td>
+<td>Основной бизнес-сервис для автозаказа. Управление правилами пополнения, расчет заказов, ведение справочников номенклатуры, корректировка заказов.</td>
+<td>Spring Boot</td>
+</tr>
+<tr>
+<td><strong>Сервис интеграции с ЛЦ</strong></td>
+<td>Бэкэнд</td>
+<td>Сервис интеграции с логистическим центром. Обмен данными с поставщиком: передача заказов, получение информации о поставках и статусах заказов.</td>
+<td>Spring Boot</td>
+</tr>
+<tr>
+<td><strong>База заказов</strong></td>
+<td>База данных</td>
+<td>Хранение данных заказов и правил. Содержит информацию о заказах, правилах пополнения, справочниках номенклатуры.</td>
+<td>PostgreSQL</td>
+</tr>
+<tr>
+<td><strong>Кэш-хранилище</strong></td>
+<td>База данных</td>
+<td>Кэш-хранилище для сессий и временных данных. Используется для хранения сессий пользователей, токенов, кэширования часто запрашиваемых данных.</td>
+<td>Redis</td>
+</tr>
+<tr>
+<td><strong>Брокер сообщений</strong></td>
+<td>Инфраструктура</td>
+<td>Асинхронная коммуникация между сервисами. Обеспечивает надежную доставку событий, буферизацию сообщений, отказоустойчивость.</td>
+<td>Apache Kafka</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Внешние зависимости системы</strong></p>
+<table>
+<thead>
+<tr>
+<th>Контейнер</th>
+<th>Тип</th>
+<th>Назначение</th>
+<th>Технологии</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Сервис инвентаризации</strong></td>
+<td>Бекэнд (внешний)</td>
+<td>Сервис инвентаризации из другой группы. Предоставляет данные о текущих остатках полуфабрикатов для расчета автозаказа.</td>
+<td>Spring Boot</td>
+</tr>
+<tr>
+<td><strong>Логистический центр</strong></td>
+<td>Внешняя система</td>
+<td>Логистический центр (поставщик). Внешняя система для приема заказов и предоставления информации о поставках.</td>
+<td>REST API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ключевые технологические решения:</strong></p>
+<ol>
+<li><strong>Spring Cloud Gateway</strong> - для API Gateway вместо Nginx, лучшая интеграция с экосистемой Spring</li>
+<li><strong>Netflix Eureka</strong> - стандартное решение для обнаружения сервисов в Spring Cloud</li>
+<li><strong>PostgreSQL</strong> - надежная реляционная БД для транзакционных данных заказов</li>
+<li><strong>Redis</strong> - высокопроизводительный кэш для сессий и временных данных</li>
+<li><strong>Apache Kafka</strong> - брокер сообщений для асинхронной коммуникации</li>
+<li><strong>React + TypeScript</strong> - современный Фронтэнд стек для веб-приложения</li>
+</ol>
+<h2 id="_17"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.5</span> Диаграммы компонентов</h2>
+<p>На диаграммах компонентов описаны основные сервисы, предоставляющие функционал системы.</p>
+<p><img alt="С3_Order_service" src="../diagrams/out/%D0%A13_1_2.svg"/></p>
+<p><img alt="C3_2_1_Intergation_Rodot" src="../diagrams/out/C3_2_1.svg"/></p>
+<p><img alt="" src="../diagrams/out/C3_2_2.svg"/></p>
+<p><img alt="" src="../diagrams/out/C3_2_3.svg"/></p>
+<p><img alt="" src="../diagrams/out/C3_2_4.svg"/></p>
+<p><img alt="" src="../diagrams/out/C3_1_1.svg"/></p>
+<h3 id="_18"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.5.1</span> <strong>Таблица компонентов системы управления запасами</strong></h3>
+<h4 id="-"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.5.1.1</span> <strong>Сервис остатков - компоненты</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Компонент</th>
+<th>Тип</th>
+<th>Назначение</th>
+<th>Технологии</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Менеджер партий</td>
+<td>Бизнес-компонент</td>
+<td>Управление жизненным циклом партий, статусами</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Калькулятор остатков</td>
+<td>Бизнес-компонент</td>
+<td>Расчет текущих остатков, FEFO логика при списаниях</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Процессор перемещений</td>
+<td>Бизнес-компонент</td>
+<td>Обработка перемещений между складскими зонами</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Обработчик инвентаризации</td>
+<td>Бизнес-компонент</td>
+<td>Поддержка процессов инвентаризации, сверка остатков</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>REST Контроллер</td>
+<td>API компонент</td>
+<td>REST API для управления остатками и партиями</td>
+<td>Spring MVC</td>
+</tr>
+<tr>
+<td>Репозиторий остатков</td>
+<td>Компонент доступа к данным</td>
+<td>Доступ к данным партий и остатков в БД</td>
+<td>Spring Data JPA</td>
+</tr>
+</tbody>
+</table>
+<h4 id="-_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.5.1.2</span> <strong>Сервис интеграции с роботом - компоненты</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Компонент</th>
+<th>Тип</th>
+<th>Назначение</th>
+<th>Технологии</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Обработчик протокола</td>
+<td>Бизнес-компонент</td>
+<td>Обработка gRPC/WebSocket соединений с роботом</td>
+<td>gRPC Service</td>
+</tr>
+<tr>
+<td>Проверка сроков</td>
+<td>Бизнес-компонент</td>
+<td>Проверка сроков годности в реальном времени (&lt;100 мс)</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Менеджер кэша</td>
+<td>Бизнес-компонент</td>
+<td>Управление кэшем остатков в Redis для быстрого доступа</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Обработчик аварий</td>
+<td>Бизнес-компонент</td>
+<td>Обработка аварийных ситуаций и остановок робота</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>gRPC Сервис</td>
+<td>API компонент</td>
+<td>gRPC endpoint для взаимодействия с роботом</td>
+<td>gRPC</td>
+</tr>
+<tr>
+<td>Сервис синхронизации</td>
+<td>Бизнес-компонент</td>
+<td>Синхронизация кэша с основными данными из других сервисов</td>
+<td>Spring Bean</td>
+</tr>
+</tbody>
+</table>
+<h4 id="-_2"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.5.1.3</span> <strong>Сервис контроля сроков - компоненты</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Компонент</th>
+<th>Тип</th>
+<th>Назначение</th>
+<th>Технологии</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Сканер сроков</td>
+<td>Бизнес-компонент</td>
+<td>Сканирование партий по расписанию на предмет истечения сроков</td>
+<td>Spring Scheduler</td>
+</tr>
+<tr>
+<td>Менеджер блокировок</td>
+<td>Бизнес-компонент</td>
+<td>Автоматическая блокировка партий по истечении сроков</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Калькулятор виртуальных сроков</td>
+<td>Бизнес-компонент</td>
+<td>Расчет виртуальных сроков годности при смешивании партий</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Триггер утилизации</td>
+<td>Бизнес-компонент</td>
+<td>Создание заданий на утилизацию просроченных партий</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Репозиторий сроков</td>
+<td>Компонент доступа к данным</td>
+<td>Доступ к данным сроков годности партий</td>
+<td>Spring Data JPA</td>
+</tr>
+<tr>
+<td>REST Контроллер</td>
+<td>API компонент</td>
+<td>API для управления блокировками и проверки статусов</td>
+<td>Spring MVC</td>
+</tr>
+</tbody>
+</table>
+<h4 id="-_3"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.5.1.4</span> <strong>Сервис заданий - компоненты</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Компонент</th>
+<th>Тип</th>
+<th>Назначение</th>
+<th>Технологии</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Диспетчер заданий</td>
+<td>Бизнес-компонент</td>
+<td>Распределение заданий операторам, балансировка нагрузки</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Калькулятор приоритетов</td>
+<td>Бизнес-компонент</td>
+<td>Расчет приоритетов заданий (утилизация &gt; пополнение)</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Менеджер синхронизации</td>
+<td>Бизнес-компонент</td>
+<td>Синхронизация с мобильным приложением, push-уведомления</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Обработчик завершения</td>
+<td>Бизнес-компонент</td>
+<td>Подтверждение выполнения заданий, обновление статусов</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>REST Контроллер</td>
+<td>API компонент</td>
+<td>API для управления заданиями операторов</td>
+<td>Spring MVC</td>
+</tr>
+<tr>
+<td>Репозиторий заданий</td>
+<td>Компонент доступа к данным</td>
+<td>Доступ к данным заданий в БД</td>
+<td>Spring Data JPA</td>
+</tr>
+<tr>
+<td>Очередь оффлайн-работы</td>
+<td>Бизнес-компонент</td>
+<td>Управление оффлайн-операциями мобильного приложения</td>
+<td>Spring Bean</td>
+</tr>
+</tbody>
+</table>
+<h4 id="-_4"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.5.1.5</span> <strong>Сервис заказов - компоненты</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Компонент</th>
+<th>Тип</th>
+<th>Назначение</th>
+<th>Технологии</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Движок автозаказа</td>
+<td>Бизнес-компонент</td>
+<td>Автоматический расчет заказов по правилам пополнения</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Валидатор правил</td>
+<td>Бизнес-компонент</td>
+<td>Проверка корректности правил (Min &lt; Reorder &lt; Max)</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Менеджер утверждения</td>
+<td>Бизнес-компонент</td>
+<td>Управление процессом утверждения заказов технологом</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Калькулятор сезонности</td>
+<td>Бизнес-компонент</td>
+<td>Учет сезонных коэффициентов в расчетах автозаказа</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>REST Контроллер</td>
+<td>API компонент</td>
+<td>API для управления заказами и правилами</td>
+<td>Spring MVC</td>
+</tr>
+<tr>
+<td>Репозиторий заказов</td>
+<td>Компонент доступа к данным</td>
+<td>Доступ к данным заказов и правил в БД</td>
+<td>Spring Data JPA</td>
+</tr>
+<tr>
+<td>Интеграция с поставщиками</td>
+<td>Бизнес-компонент</td>
+<td>Управление подключениями к логистическим центрам</td>
+<td>Spring Bean</td>
+</tr>
+</tbody>
+</table>
+<h4 id="-_5"><span class="enumerate-headings-plugin enumerate-heading-plugin">11.5.1.6</span> <strong>Сервис оперативного запаса - компоненты</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Компонент</th>
+<th>Тип</th>
+<th>Назначение</th>
+<th>Технологии</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Калькулятор пополнения</td>
+<td>Бизнес-компонент</td>
+<td>Расчет необходимости пополнения роботизированной линии</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Монитор линии</td>
+<td>Бизнес-компонент</td>
+<td>Мониторинг остатков на роботизированных линиях в реальном времени</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Менеджер виртуального запаса</td>
+<td>Бизнес-компонент</td>
+<td>Управление виртуальными партиями на линии, расчет сроков</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>Экстренное пополнение</td>
+<td>Бизнес-компонент</td>
+<td>Обработка критического уровня запаса (&lt;10 мин до исчерпания)</td>
+<td>Spring Bean</td>
+</tr>
+<tr>
+<td>REST Контроллер</td>
+<td>API компонент</td>
+<td>API для управления оперативным запасом</td>
+<td>Spring MVC</td>
+</tr>
+<tr>
+<td>Репозиторий линий</td>
+<td>Компонент доступа к данных</td>
+<td>Доступ к данным роботизированных линий</td>
+<td>Spring Data JPA</td>
+</tr>
+<tr>
+<td>Селектор FEFO</td>
+<td>Бизнес-компонент</td>
+<td>Выбор партий для пополнения по принципу FEFO</td>
+<td>Spring Bean</td>
+</tr>
+</tbody>
+</table>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  К началу
+</button>
+</main>
+<footer class="md-footer">
+<nav aria-label="Нижний колонтитул" class="md-footer__inner md-grid">
+<a aria-label="Назад: Информационная модель" class="md-footer__link md-footer__link--prev" href="../information_model/">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</div>
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Назад
+              </span>
+<div class="md-ellipsis">
+                Информационная модель
+              </div>
+</div>
+</a>
+<a aria-label="Вперед: Интеграционное взаимодействие" class="md-footer__link md-footer__link--next" href="../Seq_diagram/">
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Вперед
+              </span>
+<div class="md-ellipsis">
+                Интеграционное взаимодействие
+              </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      © 2025 <a href="https://github.com/TimIrkutsk/Otus-Project" rel="noopener" target="_blank">Тимохин Антон</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.instant", "navigation.tracking", "navigation.path", "navigation.sections", "toc.integrate", "navigation.expand", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+<script src="../js/print-site.js"></script>
+</body>
+</html>

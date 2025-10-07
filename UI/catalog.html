@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Справочники - Система управления запасами</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .ui-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #34495e;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+        }
+
+        .nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: #e74c3c;
+            transform: translateY(-2px);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 2rem;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-input {
+            padding: 0.7rem 1rem;
+            border: 2px solid #ecf0f1;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            width: 250px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .search-btn {
+            padding: 0.7rem 1.2rem;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        /* Catalog Navigation */
+        .catalog-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 1rem;
+        }
+
+        .catalog-tab {
+            padding: 0.8rem 1.5rem;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .catalog-tab:hover {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .catalog-tab.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        /* Catalog Content */
+        .catalog-content {
+            display: none;
+        }
+
+        .catalog-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Table */
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background: #34495e;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Status badges */
+        .status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-active {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .status-inactive {
+            background: #ffeaa7;
+            color: #e67e22;
+        }
+
+        .status-critical {
+            background: #ffcccc;
+            color: #e74c3c;
+        }
+
+        /* Product card for grid view */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: white;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            border-color: #3498db;
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .product-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .product-category {
+            color: #7f8c8d;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .product-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+
+        .detail-label {
+            color: #7f8c8d;
+        }
+
+        .detail-value {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        /* View Toggle */
+        .view-toggle {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            justify-content: flex-end;
+        }
+
+        .view-btn {
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: #bdc3c7;
+            padding: 1rem 2rem;
+            text-align: center;
+            border-top: 3px solid #34495e;
+            font-size: 0.8rem;
+        }
+
+        /* Feedback */
+        .feedback {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .search-input {
+                width: 100%;
+            }
+            
+            .catalog-nav {
+                flex-wrap: wrap;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .table {
+                font-size: 0.8rem;
+            }
+            
+            .table th,
+            .table td {
+                padding: 0.7rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ui-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🏭</span>
+                <span>Умный Склад</span>
+            </div>
+            
+            <nav class="nav">
+                <a href="operator-main-menu.html" class="nav-link">Главная</a>
+                <a href="dashboard.html" class="nav-link">Дашборд</a>
+                <a href="tasks.html" class="nav-link">Задания</a>
+                <a href="catalog.html" class="nav-link active">Справочники</a>
+            </nav>
+            
+            <div class="user-menu">
+                <div class="user-avatar" onclick="showFeedback('Профиль оператора')">ОП</div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="content-header">
+                <h1 class="page-title">Справочники</h1>
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="Поиск по справочникам..." id="searchInput">
+                    <button class="search-btn" onclick="performSearch()">🔍</button>
+                </div>
+            </div>
+
+            <!-- Catalog Navigation -->
+            <div class="catalog-nav">
+                <div class="catalog-tab active" onclick="showCatalog('products')">📦 Полуфабрикаты</div>
+                <div class="catalog-tab" onclick="showCatalog('locations')">🏢 Складские зоны</div>
+                <div class="catalog-tab" onclick="showCatalog('categories')">📑 Категории</div>
+                <div class="catalog-tab" onclick="showCatalog('suppliers')">🚚 Поставщики</div>
+            </div>
+
+            <!-- View Toggle -->
+            <div class="view-toggle">
+                <button class="view-btn active" onclick="setView('table')">📋 Таблица</button>
+                <button class="view-btn" onclick="setView('grid')">🟰 Сетка</button>
+            </div>
+
+            <!-- Products Catalog -->
+            <div id="products-catalog" class="catalog-content active">
+                <div class="table-container" id="products-table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Категория</th>
+                                <th>Ед. изм.</th>
+                                <th>Срок хранения</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr onclick="showProductDetails('Булочки для бургеров')">
+                                <td>🍞 Булочки для бургеров</td>
+                                <td>Хлебобулочные</td>
+                                <td>шт</td>
+                                <td>48 часов</td>
+                                <td><span class="status status-active">Активен</span></td>
+                            </tr>
+                            <tr onclick="showProductDetails('Котлеты говяжьи')">
+                                <td>🥩 Котлеты говяжьи</td>
+                                <td>Мясные</td>
+                                <td>шт</td>
+                                <td>72 часа</td>
+                                <td><span class="status status-active">Активен</span></td>
+                            </tr>
+                            <tr onclick="showProductDetails('Сыр Чеддер')">
+                                <td>🧀 Сыр Чеддер</td>
+                                <td>Молочные</td>
+                                <td>кг</td>
+                                <td>120 часов</td>
+                                <td><span class="status status-active">Активен</span></td>
+                            </tr>
+                            <tr onclick="showProductDetails('Листья салата')">
+                                <td>🥬 Листья салата</td>
+                                <td>Овощи</td>
+                                <td>кг</td>
+                                <td>24 часа</td>
+                                <td><span class="status status-critical">Критический</span></td>
+                            </tr>
+                            <tr onclick="showProductDetails('Соус бургерный')">
+                                <td>🥫 Соус бургерный</td>
+                                <td>Соусы</td>
+                                <td>л</td>
+                                <td>168 часов</td>
+                                <td><span class="status status-active">Активен</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="products-grid" id="products-grid" style="display: none;">
+                    <div class="product-card" onclick="showProductDetails('Булочки для бургеров')">
+                        <div class="product-header">
+                            <div>
+                                <div class="product-icon">🍞</div>
+                                <div class="product-name">Булочки для бургеров</div>
+                            </div>
+                            <span class="status status-active">Активен</span>
+                        </div>
+                        <div class="product-category">Хлебобулочные</div>
+                        <div class="product-details">
+                            <div class="product-detail">
+                                <span class="detail-label">Ед. изм.:</span>
+                                <span class="detail-value">шт</span>
+                            </div>
+                            <div class="product-detail">
+                                <span class="detail-label">Срок хранения:</span>
+                                <span class="detail-value">48 часов</span>
+                            </div>
+                            <div class="product-detail">
+                                <span class="detail-label">Открытая упаковка:</span>
+                                <span class="detail-value">12 часов</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" onclick="showProductDetails('Котлеты говяжьи')">
+                        <div class="product-header">
+                            <div>
+                                <div class="product-icon">🥩</div>
+                                <div class="product-name">Котлеты говяжьи</div>
+                            </div>
+                            <span class="status status-active">Активен</span>
+                        </div>
+                        <div class="product-category">Мясные</div>
+                        <div class="product-details">
+                            <div class="product-detail">
+                                <span class="detail-label">Ед. изм.:</span>
+                                <span class="detail-value">шт</span>
+                            </div>
+                            <div class="product-detail">
+                                <span class="detail-label">Срок хранения:</span>
+                                <span class="detail-value">72 часа</span>
+                            </div>
+                            <div class="product-detail">
+                                <span class="detail-label">Открытая упаковка:</span>
+                                <span class="detail-value">24 часа</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" onclick="showProductDetails('Сыр Чеддер')">
+                        <div class="product-header">
+                            <div>
+                                <div class="product-icon">🧀</div>
+                                <div class="product-name">Сыр Чеддер</div>
+                            </div>
+                            <span class="status status-active">Активен</span>
+                        </div>
+                        <div class="product-category">Молочные</div>
+                        <div class="product-details">
+                            <div class="product-detail">
+                                <span class="detail-label">Ед. изм.:</span>
+                                <span class="detail-value">кг</span>
+                            </div>
+                            <div class="product-detail">
+                                <span class="detail-label">Срок хранения:</span>
+                                <span class="detail-value">120 часов</span>
+                            </div>
+                            <div class="product-detail">
+                                <span class="detail-label">Открытая упаковка:</span>
+                                <span class="detail-value">48 часов</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Locations Catalog -->
+            <div id="locations-catalog" class="catalog-content">
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Название зоны</th>
+                                <th>Тип</th>
+                                <th>Родительская зона</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr onclick="showLocationDetails('Холодильник А1')">
+                                <td>❄️ Холодильник А1</td>
+                                <td>Холодильник</td>
+                                <td>Основной склад</td>
+                                <td><span class="status status-active">Активна</span></td>
+                            </tr>
+                            <tr onclick="showLocationDetails('Морозильник Б2')">
+                                <td>🧊 Морозильник Б2</td>
+                                <td>Морозильник</td>
+                                <td>Основной склад</td>
+                                <td><span class="status status-active">Активна</span></td>
+                            </tr>
+                            <tr onclick="showLocationDetails('Оперативный запас Робот-1')">
+                                <td>🤖 Оперативный запас Робот-1</td>
+                                <td>Оперативный запас</td>
+                                <td>Производственная зона</td>
+                                <td><span class="status status-active">Активна</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Categories Catalog -->
+            <div id="categories-catalog" class="catalog-content">
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Название категории</th>
+                                <th>Количество позиций</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr onclick="showCategoryDetails('Мясные')">
+                                <td>🥩 Мясные</td>
+                                <td>8 позиций</td>
+                                <td><span class="status status-active">Активна</span></td>
+                            </tr>
+                            <tr onclick="showCategoryDetails('Хлебобулочные')">
+                                <td>🍞 Хлебобулочные</td>
+                                <td>12 позиций</td>
+                                <td><span class="status status-active">Активна</span></td>
+                            </tr>
+                            <tr onclick="showCategoryDetails('Овощи')">
+                                <td>🥬 Овощи</td>
+                                <td>15 позиций</td>
+                                <td><span class="status status-active">Активна</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Suppliers Catalog -->
+            <div id="suppliers-catalog" class="catalog-content">
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Поставщик</th>
+                                <th>Контакт</th>
+                                <th>Специализация</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr onclick="showSupplierDetails('Мясной Комбинат №1')">
+                                <td>🏭 Мясной Комбинат №1</td>
+                                <td>+7 (495) 123-45-67</td>
+                                <td>Мясные полуфабрикаты</td>
+                                <td><span class="status status-active">Активен</span></td>
+                            </tr>
+                            <tr onclick="showSupplierDetails('Хлебозавод "Свежий"')">
+                                <td>🍞 Хлебозавод "Свежий"</td>
+                                <td>+7 (495) 234-56-78</td>
+                                <td>Хлебобулочные изделия</td>
+                                <td><span class="status status-active">Активен</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 Умный Склад • Справочники • Только для просмотра</p>
+        </footer>
+    </div>
+
+    <!-- Feedback Message -->
+    <div class="feedback" id="feedback"></div>
+
+    <script>
+        let currentView = 'table';
+
+        function showCatalog(catalogType) {
+            // Hide all catalogs
+            document.querySelectorAll('.catalog-content').forEach(catalog => {
+                catalog.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.catalog-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected catalog
+            document.getElementById(`${catalogType}-catalog`).classList.add('active');
+            
+            // Activate selected tab
+            event.target.classList.add('active');
+            
+            showFeedback(`Открыт справочник: ${event.target.textContent.trim()}`);
+        }
+
+        function setView(viewType) {
+            currentView = viewType;
+            
+            // Update view buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Toggle between table and grid views for products
+            if (document.getElementById('products-catalog').classList.contains('active')) {
+                const tableView = document.getElementById('products-table');
+                const gridView = document.getElementById('products-grid');
+                
+                if (viewType === 'table') {
+                    tableView.style.display = 'block';
+                    gridView.style.display = 'none';
+                } else {
+                    tableView.style.display = 'none';
+                    gridView.style.display = 'grid';
+                }
+            }
+            
+            showFeedback(`Режим просмотра: ${viewType === 'table' ? 'Таблица' : 'Сетка'}`);
+        }
+
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm) {
+                showFeedback(`Поиск: "${searchTerm}"`);
+            } else {
+                showFeedback('Введите поисковый запрос');
+            }
+        }
+
+        function showProductDetails(productName) {
+            showFeedback(`Детали продукта: ${productName}`);
+        }
+
+        function showLocationDetails(locationName) {
+            showFeedback(`Детали зоны: ${locationName}`);
+        }
+
+        function showCategoryDetails(categoryName) {
+            showFeedback(`Детали категории: ${categoryName}`);
+        }
+
+        function showSupplierDetails(supplierName) {
+            showFeedback(`Детали поставщика: ${supplierName}`);
+        }
+
+        function showFeedback(message) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.classList.add('show');
+            
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 3000);
+            
+            event.preventDefault();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Справочники загружены');
+            
+            // Add enter key support for search
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

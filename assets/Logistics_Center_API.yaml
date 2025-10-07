@@ -1,0 +1,710 @@
+openapi: 3.0.3
+info:
+  title: Logistics Center API
+  description: |
+    API для интеграции с логистическим центром (ЛЦ) компании.
+    **Особенности:**
+    - Асинхронная обработка через Kafka
+    - Механизм повторных попыток (15 попыток, интервал 1 мин)
+    - Таймаут ожидания ответа 24 часа
+    - Поддержка callback для статусов заказов
+  version: 1.0.0
+  contact:
+    name: Logistics Integration Team
+    email: logistics-integration@automated-restaurant.ru
+
+servers:
+  - url: https://api.automated-restaurant.ru/logistics/v1
+    description: Production server
+  - url: https://api-staging.automated-restaurant.ru/logistics/v1
+    description: Staging server
+
+tags:
+  - name: Orders
+    description: Управление заказами на полуфабрикаты
+  - name: Callbacks
+    description: Callback endpoints для получения статусов от ЛЦ
+  - name: Batches
+    description: Получение информации о партиях при приемке
+  - name: Inventory
+    description: Синхронизация данных об остатках
+
+paths:
+  /orders:
+    post:
+      tags: [Orders]
+      summary: Создание нового заказа в ЛЦ
+      description: |
+        Отправка утвержденного заказа в логистический центр.
+        **Процесс обработки:**
+        1. Заказ сохраняется в статусе "Передается в ЛЦ"
+        2. Отправляется асинхронно через Kafka
+        3. Ожидается callback с подтверждением в течение 24 часов
+      operationId: createOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+            examples:
+              StandardOrder:
+                summary: Стандартный заказ
+                value:
+                  internal_order_id: "ORD-2024-001-001"
+                  restaurant_id: "rest_001"
+                  requested_delivery_date: "2024-01-16"
+                  delivery_time_slot: "09:00-12:00"
+                  items:
+                    - product_code: "PF-1001"
+                      product_name: "Котлета куриная"
+                      quantity: 50
+                      unit: "кг"
+                      supplier_article: "CHICKEN_PATTY_100G"
+                      batch_size: 10
+                    - product_code: "PF-1002"
+                      product_name: "Булочка для бургера"
+                      quantity: 200
+                      unit: "шт"
+                      supplier_article: "BUN_SESAME"
+                      batch_size: 50
+                  special_instructions: "Доставить к заднему входу"
+      responses:
+        '202':
+          description: Заказ принят в обработку
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderAcceptance'
+              examples:
+                Accepted:
+                  summary: Заказ принят
+                  value:
+                    internal_order_id: "ORD-2024-001-001"
+                    status: "ACCEPTED"
+                    message: "Заказ передан в ЛЦ для обработки"
+                    accepted_at: "2024-01-15T10:30:00Z"
+                    estimated_confirmation_time: "2024-01-15T16:00:00Z"
+        '400':
+          description: Ошибка валидации заказа
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Превышен лимит запросов
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /orders/{orderId}:
+    get:
+      tags: [Orders]
+      summary: Получение статуса заказа
+      description: Запрос текущего статуса заказа в ЛЦ
+      operationId: getOrderStatus
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Внутренний ID заказа
+      responses:
+        '200':
+          description: Информация о статусе заказа
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderStatus'
+        '404':
+          description: Заказ не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /callbacks/order-status:
+    post:
+      tags: [Callbacks]
+      summary: Callback для получения статусов заказов от ЛЦ
+      description: |
+        Endpoint для получения асинхронных уведомлений от ЛЦ об изменении статусов заказов.
+        **ЛЦ должен вызывать этот endpoint в течение 24 часов после получения заказа.**
+      operationId: orderStatusCallback
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderStatusCallback'
+            examples:
+              Confirmed:
+                summary: Заказ подтвержден
+                value:
+                  external_order_id: "LC-2024-001-5001"
+                  internal_order_id: "ORD-2024-001-001"
+                  status: "CONFIRMED"
+                  confirmed_delivery_date: "2024-01-16"
+                  items:
+                    - product_code: "PF-1001"
+                      confirmed_quantity: 50
+                      unit_price: 450.50
+                      total_price: 22525.00
+                    - product_code: "PF-1002"
+                      confirmed_quantity: 200
+                      unit_price: 25.00
+                      total_price: 5000.00
+                  total_order_amount: 27525.00
+                  callback_timestamp: "2024-01-15T15:45:00Z"
+              Modified:
+                summary: Заказ изменен ЛЦ
+                value:
+                  external_order_id: "LC-2024-001-5002"
+                  internal_order_id: "ORD-2024-001-002"
+                  status: "MODIFIED"
+                  changes:
+                    - product_code: "PF-1003"
+                      requested_quantity: 100
+                      confirmed_quantity: 80
+                      reason: "Недостаточно на складе"
+                  confirmed_delivery_date: "2024-01-17"
+                  callback_timestamp: "2024-01-15T16:30:00Z"
+              Rejected:
+                summary: Заказ отклонен
+                value:
+                  external_order_id: "LC-2024-001-5003"
+                  internal_order_id: "ORD-2024-001-003"
+                  status: "REJECTED"
+                  rejection_reason: "Некорректный артикул товара"
+                  suggested_corrections:
+                    - incorrect_article: "PF-9999"
+                      correct_article: "PF-1001"
+                  callback_timestamp: "2024-01-15T17:00:00Z"
+      responses:
+        '200':
+          description: Callback успешно обработан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallbackAck'
+        '400':
+          description: Неверный формат callback
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /batches/receive:
+    post:
+      tags: [Batches]
+      summary: Получение данных о партиях при приемке
+      description: |
+        Получение информации о партиях при их приемке от ЛЦ.
+        Используется для автоматического создания партий в системе.
+      operationId: receiveBatches
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchReceipt'
+            examples:
+              StandardReceipt:
+                summary: Стандартная приемка
+                value:
+                  delivery_note_number: "DN-2024-001-5001"
+                  internal_order_id: "ORD-2024-001-001"
+                  delivery_date: "2024-01-16T10:30:00Z"
+                  batches:
+                    - batch_barcode: "BC-001-20240116-001"
+                      product_code: "PF-1001"
+                      supplier_article: "CHICKEN_PATTY_100G"
+                      production_date: "2024-01-15"
+                      expiration_date: "2024-01-22"
+                      quantity: 50
+                      unit: "кг"
+                      storage_condition: "FROZEN"
+                      supplier_batch_id: "SUPP-BATCH-001"
+                    - batch_barcode: "BC-001-20240116-002"
+                      product_code: "PF-1002"
+                      supplier_article: "BUN_SESAME"
+                      production_date: "2024-01-16"
+                      expiration_date: "2024-01-19"
+                      quantity: 200
+                      unit: "шт"
+                      storage_condition: "AMBIENT"
+                      supplier_batch_id: "SUPP-BATCH-002"
+      responses:
+        '200':
+          description: Данные о партиях успешно приняты
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchReceiptResponse'
+
+  /inventory/sync:
+    post:
+      tags: [Inventory]
+      summary: Синхронизация остатков с ЛЦ
+      description: Получение актуальных данных об остатках на центральном складе ЛЦ
+      operationId: syncInventory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventorySyncRequest'
+      responses:
+        '200':
+          description: Данные об остатках синхронизированы
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventorySyncResponse'
+
+components:
+  schemas:
+    OrderRequest:
+      type: object
+      required:
+        - internal_order_id
+        - restaurant_id
+        - requested_delivery_date
+        - items
+      properties:
+        internal_order_id:
+          type: string
+          description: Внутренний уникальный идентификатор заказа
+          example: "ORD-2024-001-001"
+        restaurant_id:
+          type: string
+          description: ID ресторана-получателя
+          example: "rest_001"
+        requested_delivery_date:
+          type: string
+          format: date
+          description: Желаемая дата доставки
+          example: "2024-01-16"
+        delivery_time_slot:
+          type: string
+          description: Временной интервал доставки
+          enum: [08:00-10:00, 10:00-12:00, 12:00-14:00, 14:00-16:00, 16:00-18:00]
+          example: "10:00-12:00"
+        items:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        special_instructions:
+          type: string
+          description: Особые инструкции по доставке
+          example: "Доставить к заднему входу"
+        urgency_level:
+          type: string
+          enum: [STANDARD, URGENT, CRITICAL]
+          default: "STANDARD"
+          example: "STANDARD"
+
+    OrderItem:
+      type: object
+      required:
+        - product_code
+        - product_name
+        - quantity
+        - unit
+        - supplier_article
+      properties:
+        product_code:
+          type: string
+          description: Внутренний код продукта
+          example: "PF-1001"
+        product_name:
+          type: string
+          description: Наименование продукта
+          example: "Котлета куриная"
+        quantity:
+          type: number
+          format: float
+          minimum: 0.001
+          description: Запрашиваемое количество
+          example: 50
+        unit:
+          type: string
+          enum: [кг, шт, л, упак]
+          example: "кг"
+        supplier_article:
+          type: string
+          description: Артикул поставщика (ЛЦ)
+          example: "CHICKEN_PATTY_100G"
+        batch_size:
+          type: number
+          format: float
+          description: Кратность партии
+          example: 10
+        min_order_quantity:
+          type: number
+          format: float
+          description: Минимальное количество для заказа
+          example: 5
+
+    OrderAcceptance:
+      type: object
+      properties:
+        internal_order_id:
+          type: string
+          example: "ORD-2024-001-001"
+        status:
+          type: string
+          enum: [ACCEPTED, QUEUED, PROCESSING]
+          example: "ACCEPTED"
+        message:
+          type: string
+          example: "Заказ передан в ЛЦ для обработки"
+        accepted_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+        estimated_confirmation_time:
+          type: string
+          format: date-time
+          description: Ожидаемое время подтверждения заказа ЛЦ
+          example: "2024-01-15T16:00:00Z"
+
+    OrderStatusCallback:
+      type: object
+      required:
+        - external_order_id
+        - internal_order_id
+        - status
+        - callback_timestamp
+      properties:
+        external_order_id:
+          type: string
+          description: ID заказа в системе ЛЦ
+          example: "LC-2024-001-5001"
+        internal_order_id:
+          type: string
+          description: Внутренний ID заказа
+          example: "ORD-2024-001-001"
+        status:
+          type: string
+          enum: [CONFIRMED, MODIFIED, REJECTED, IN_TRANSIT, DELIVERED]
+          example: "CONFIRMED"
+        confirmed_delivery_date:
+          type: string
+          format: date
+          description: Подтвержденная дата доставки
+          example: "2024-01-16"
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfirmedOrderItem'
+        changes:
+          type: array
+          description: Изменения в заказе (только для статуса MODIFIED)
+          items:
+            $ref: '#/components/schemas/OrderChange'
+        rejection_reason:
+          type: string
+          description: Причина отклонения (только для статуса REJECTED)
+          example: "Некорректный артикул товара"
+        suggested_corrections:
+          type: array
+          description: Предлагаемые исправления (только для статуса REJECTED)
+          items:
+            $ref: '#/components/schemas/CorrectionSuggestion'
+        total_order_amount:
+          type: number
+          format: float
+          description: Общая сумма заказа
+          example: 27525.00
+        callback_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T15:45:00Z"
+
+    ConfirmedOrderItem:
+      type: object
+      required:
+        - product_code
+        - confirmed_quantity
+      properties:
+        product_code:
+          type: string
+          example: "PF-1001"
+        confirmed_quantity:
+          type: number
+          format: float
+          example: 50
+        unit_price:
+          type: number
+          format: float
+          example: 450.50
+        total_price:
+          type: number
+          format: float
+          example: 22525.00
+
+    OrderChange:
+      type: object
+      properties:
+        product_code:
+          type: string
+          example: "PF-1003"
+        requested_quantity:
+          type: number
+          format: float
+          example: 100
+        confirmed_quantity:
+          type: number
+          format: float
+          example: 80
+        reason:
+          type: string
+          example: "Недостаточно на складе"
+
+    CorrectionSuggestion:
+      type: object
+      properties:
+        incorrect_article:
+          type: string
+          example: "PF-9999"
+        correct_article:
+          type: string
+          example: "PF-1001"
+
+    CallbackAck:
+      type: object
+      properties:
+        callback_id:
+          type: string
+          example: "cb_123456789"
+        received_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T15:45:00.100Z"
+        status:
+          type: string
+          enum: [PROCESSED, APPLIED, NOTIFIED]
+          example: "PROCESSED"
+        message:
+          type: string
+          example: "Статус заказа успешно обновлен"
+
+    BatchReceipt:
+      type: object
+      required:
+        - delivery_note_number
+        - internal_order_id
+        - delivery_date
+        - batches
+      properties:
+        delivery_note_number:
+          type: string
+          description: Номер товарной накладной
+          example: "DN-2024-001-5001"
+        internal_order_id:
+          type: string
+          example: "ORD-2024-001-001"
+        delivery_date:
+          type: string
+          format: date-time
+          example: "2024-01-16T10:30:00Z"
+        batches:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/BatchInfo'
+
+    BatchInfo:
+      type: object
+      required:
+        - batch_barcode
+        - product_code
+        - supplier_article
+        - production_date
+        - expiration_date
+        - quantity
+        - unit
+      properties:
+        batch_barcode:
+          type: string
+          description: Штрих-код партии
+          example: "BC-001-20240116-001"
+        product_code:
+          type: string
+          example: "PF-1001"
+        supplier_article:
+          type: string
+          example: "CHICKEN_PATTY_100G"
+        production_date:
+          type: string
+          format: date
+          example: "2024-01-15"
+        expiration_date:
+          type: string
+          format: date
+          example: "2024-01-22"
+        quantity:
+          type: number
+          format: float
+          example: 50
+        unit:
+          type: string
+          enum: [кг, шт, л, упак]
+          example: "кг"
+        storage_condition:
+          type: string
+          enum: [FROZEN, REFRIGERATED, AMBIENT]
+          example: "FROZEN"
+        supplier_batch_id:
+          type: string
+          example: "SUPP-BATCH-001"
+        quality_certificate:
+          type: string
+          description: Номер сертификата качества
+          example: "QC-2024-001"
+
+    BatchReceiptResponse:
+      type: object
+      properties:
+        receipt_id:
+          type: string
+          example: "rec_987654321"
+        total_batches_received:
+          type: integer
+          example: 2
+        status:
+          type: string
+          enum: [SUCCESS, PARTIAL_SUCCESS, VALIDATION_ERROR]
+          example: "SUCCESS"
+        processed_batches:
+          type: array
+          items:
+            type: object
+            properties:
+              batch_barcode:
+                type: string
+              status:
+                type: string
+              system_batch_id:
+                type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              batch_barcode:
+                type: string
+              error:
+                type: string
+
+    OrderStatus:
+      type: object
+      properties:
+        internal_order_id:
+          type: string
+          example: "ORD-2024-001-001"
+        external_order_id:
+          type: string
+          example: "LC-2024-001-5001"
+        status:
+          type: string
+          enum: [CREATED, SENT_TO_LC, CONFIRMED, MODIFIED, REJECTED, IN_TRANSIT, DELIVERED]
+          example: "CONFIRMED"
+        last_update:
+          type: string
+          format: date-time
+          example: "2024-01-15T15:45:00Z"
+        estimated_delivery:
+          type: string
+          format: date
+          example: "2024-01-16"
+        items_summary:
+          type: object
+          properties:
+            requested_items:
+              type: integer
+            confirmed_items:
+              type: integer
+
+    InventorySyncRequest:
+      type: object
+      properties:
+        product_codes:
+          type: array
+          items:
+            type: string
+          description: Список кодов продуктов для синхронизации
+        sync_timestamp:
+          type: string
+          format: date-time
+          description: Метка времени последней синхронизации
+
+    InventorySyncResponse:
+      type: object
+      properties:
+        sync_id:
+          type: string
+        sync_timestamp:
+          type: string
+          format: date-time
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryItem'
+
+    InventoryItem:
+      type: object
+      properties:
+        product_code:
+          type: string
+        supplier_article:
+          type: string
+        available_quantity:
+          type: number
+          format: float
+        unit:
+          type: string
+        next_delivery_date:
+          type: string
+          format: date
+
+    Error:
+      type: object
+      properties:
+        error_id:
+          type: string
+          example: "err_log_789123"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00.200Z"
+        code:
+          type: string
+          enum: [VALIDATION_ERROR, ORDER_NOT_FOUND, PRODUCT_NOT_FOUND, SUPPLIER_UNAVAILABLE]
+          example: "VALIDATION_ERROR"
+        message:
+          type: string
+          example: "Неверный формат даты доставки"
+        details:
+          type: string
+          example: "Дата доставки не может быть в прошлом"
+
+securitySchemes:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: X-LC-API-Key
+    description: API ключ для аутентификации с ЛЦ
+  SignatureAuth:
+    type: apiKey
+    in: header
+    name: X-LC-Signature
+    description: HMAC подпись запроса
+
+security:
+  - ApiKeyAuth: []
+  - SignatureAuth: []

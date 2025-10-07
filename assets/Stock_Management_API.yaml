@@ -1,0 +1,929 @@
+openapi: 3.0.3
+info:
+  title: Stock Management API
+  description: |
+    API для управления остатками, партиями и перемещениями полуфабрикатов.
+    **Особенности:**
+    - Управление жизненным циклом партий (FEFO)
+    - Обработка перемещений между зонами хранения
+    - Корректировки остатков при инвентаризации
+    - Контроль виртуальных сроков годности
+  version: 1.0.0
+  contact:
+    name: Stock Management Team
+    email: stock-management@automated-restaurant.ru
+
+servers:
+  - url: https://api.automated-restaurant.ru/stock/v1
+    description: Production server
+  - url: https://api-staging.automated-restaurant.ru/stock/v1
+    description: Staging server
+
+tags:
+  - name: Batches
+    description: Управление партиями полуфабрикатов
+  - name: Movements
+    description: Перемещения между зонами хранения
+  - name: Inventory
+    description: Корректировки остатков при инвентаризации
+  - name: FEFO
+    description: Выбор партий по принципу FEFO
+
+paths:
+  /batches:
+    get:
+      tags: [Batches]
+      summary: Получение списка партий
+      description: |
+        Получение партий с фильтрацией по статусу, зоне и продукту.
+        Используется для отчетов и выбора партий по FEFO.
+      operationId: getBatches
+      parameters:
+        - name: product_id
+          in: query
+          schema:
+            type: string
+          description: Фильтр по ID продукта
+          example: "PF-1001"
+        - name: location_id
+          in: query
+          schema:
+            type: string
+          description: Фильтр по зоне хранения
+          example: "zone_cold_001"
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [ACTIVE, BLOCKED, EXPIRED, UTILIZED]
+          description: Фильтр по статусу партии
+          example: "ACTIVE"
+        - name: expiration_date_from
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Фильтр по сроку годности (от)
+          example: "2024-01-16"
+        - name: expiration_date_to
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Фильтр по сроку годности (до)
+          example: "2024-01-20"
+      responses:
+        '200':
+          description: Список партий
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchListResponse'
+              examples:
+                ActiveBatches:
+                  summary: Активные партии
+                  value:
+                    batches:
+                      - batch_id: "BATCH_001"
+                        batch_barcode: "BC-001-20240116-001"
+                        product_id: "PF-1001"
+                        product_name: "Котлета куриная"
+                        location_id: "zone_cold_001"
+                        location_name: "Холодильник А"
+                        production_date: "2024-01-15"
+                        expiration_date: "2024-01-22"
+                        current_quantity: 50.0
+                        unit: "кг"
+                        status: "ACTIVE"
+                        virtual_expiration_date: "2024-01-22"
+                      - batch_id: "BATCH_002"
+                        batch_barcode: "BC-001-20240116-002"
+                        product_id: "PF-1001"
+                        product_name: "Котлета куриная"
+                        location_id: "zone_cold_001"
+                        location_name: "Холодильник А"
+                        production_date: "2024-01-14"
+                        expiration_date: "2024-01-21"
+                        current_quantity: 25.5
+                        unit: "кг"
+                        status: "ACTIVE"
+                        virtual_expiration_date: "2024-01-21"
+
+  /batches/{batch_barcode}:
+    get:
+      tags: [Batches]
+      summary: Получение информации о конкретной партии
+      description: Получение детальной информации о партии по штрих-коду
+      operationId: getBatchByBarcode
+      parameters:
+        - name: batch_barcode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Штрих-код партии
+          example: "BC-001-20240116-001"
+      responses:
+        '200':
+          description: Информация о партии
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchDetail'
+        '404':
+          description: Партия не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /batches/status:
+    put:
+      tags: [Batches]
+      summary: Изменение статуса партии
+      description: |
+        Изменение статуса партии (активна, заблокирована, утилизирована).
+        Используется сервисом контроля сроков для блокировки просроченных партий.
+      operationId: updateBatchStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchStatusUpdate'
+            examples:
+              BlockBatch:
+                summary: Блокировка партии
+                value:
+                  batch_barcode: "BC-001-20240116-001"
+                  new_status: "BLOCKED"
+                  reason: "Срок годности истек"
+                  changed_by: "shelf_life_service"
+                  changed_at: "2024-01-15T10:00:00Z"
+      responses:
+        '200':
+          description: Статус партии изменен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchStatusResponse'
+
+  /movements:
+    post:
+      tags: [Movements]
+      summary: Регистрация перемещения полуфабрикатов
+      description: |
+        Регистрация перемещения между зонами хранения.
+        Используется при пополнении оперативного запаса и других внутренних перемещениях.
+      operationId: registerMovement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockMovement'
+            examples:
+              ReplenishmentMovement:
+                summary: Перемещение при пополнении
+                value:
+                  movement_type: "REPLENISHMENT"
+                  batch_barcode: "BC-001-20240116-001"
+                  from_location_id: "zone_cold_001"
+                  to_location_id: "op_stock_line_001"
+                  product_id: "PF-1001"
+                  quantity: 10.0
+                  unit: "кг"
+                  operator_id: "operator_001"
+                  movement_date: "2024-01-15T09:20:00Z"
+                  task_id: "task_repl_001"
+      responses:
+        '200':
+          description: Перемещение зарегистрировано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovementResponse'
+
+  /inventory/corrections:
+    post:
+      tags: [Inventory]
+      summary: Корректировка остатков при инвентаризации (UC4)
+      description: |
+        Автоматическая корректировка остатков после инвентаризации.
+        Для расхождений ≤ 4000 ед. - автоматически, для больших расхождений - после утверждения технологом.
+      operationId: applyInventoryCorrection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryCorrection'
+            examples:
+              AutoCorrection:
+                summary: Автоматическая коррекция
+                value:
+                  inventory_session_id: "inv_sess_20240115_001"
+                  batch_barcode: "BC-001-20240116-001"
+                  actual_quantity: 48.5
+                  system_quantity: 50.0
+                  discrepancy: -1.5
+                  operator_id: "operator_001"
+                  correction_date: "2024-01-15T11:30:00Z"
+                  requires_approval: false
+              ManualCorrection:
+                summary: Коррекция требующая утверждения
+                value:
+                  inventory_session_id: "inv_sess_20240115_001"
+                  batch_barcode: "BC-002-20240116-001"
+                  actual_quantity: 30.0
+                  system_quantity: 80.0
+                  discrepancy: -50.0
+                  operator_id: "operator_001"
+                  correction_date: "2024-01-15T11:30:00Z"
+                  requires_approval: true
+                  technologist_approval: null
+      responses:
+        '200':
+          description: Коррекция применена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrectionResponse'
+        '202':
+          description: Коррекция требует утверждения технолога
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrectionPendingResponse'
+
+  /inventory/corrections/approve:
+    post:
+      tags: [Inventory]
+      summary: Утверждение коррекции технологом (UC4)
+      description: |
+        Утверждение коррекции остатков для расхождений > 4000 ед.
+      operationId: approveInventoryCorrection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CorrectionApproval'
+            examples:
+              TechnologistApprove:
+                summary: Утверждение технологом
+                value:
+                  correction_id: "corr_20240115_001"
+                  batch_barcode: "BC-002-20240116-001"
+                  approved: true
+                  technologist_id: "technologist_001"
+                  approved_at: "2024-01-15T12:00:00Z"
+                  comment: "Списание подтверждено, обнаружена порча"
+      responses:
+        '200':
+          description: Коррекция утверждена и применена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrectionResponse'
+
+  /fefo/selection:
+    post:
+      tags: [FEFO]
+      summary: Выбор партии по принципу FEFO (UC3)
+      description: |
+        Выбор партии для использования по принципу First Expired, First Out.
+        Используется при пополнении оперативного запаса и других операциях списания.
+      operationId: selectBatchByFEFO
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FEFOSelectionRequest'
+            examples:
+              ReplenishmentSelection:
+                summary: Выбор для пополнения
+                value:
+                  product_id: "PF-1001"
+                  location_id: "zone_cold_001"
+                  required_quantity: 10.0
+                  unit: "кг"
+                  purpose: "REPLENISHMENT"
+                  line_id: "line_001"
+      responses:
+        '200':
+          description: Партия выбрана по FEFO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FEFOSelectionResponse'
+        '404':
+          description: Подходящие партии не найдены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /operational-stock/update:
+    post:
+      tags: [Batches]
+      summary: Обновление виртуального срока годности оперативного запаса (UC3)
+      description: |
+        Пересчет виртуального срока годности после пополнения оперативного запаса.
+        Формула: (Y1*T1 + Y2*T2) / (Y1 + Y2)
+      operationId: updateOperationalStockExpiration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperationalStockUpdate'
+            examples:
+              VirtualExpirationUpdate:
+                summary: Обновление виртуального срока
+                value:
+                  line_id: "line_001"
+                  container_id: "container_A12"
+                  product_id: "PF-1001"
+                  added_batch_barcode: "BC-001-20240116-001"
+                  added_quantity: 10.0
+                  added_expiration_date: "2024-01-22"
+                  current_virtual_expiration: "2024-01-20"
+                  current_quantity: 40.0
+                  updated_by: "operator_001"
+                  updated_at: "2024-01-15T09:20:00Z"
+      responses:
+        '200':
+          description: Виртуальный срок годности обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationalStockResponse'
+
+components:
+  schemas:
+    BatchListResponse:
+      type: object
+      required:
+        - batches
+      properties:
+        batches:
+          type: array
+          items:
+            $ref: '#/components/schemas/Batch'
+
+    Batch:
+      type: object
+      required:
+        - batch_id
+        - batch_barcode
+        - product_id
+        - product_name
+        - location_id
+        - location_name
+        - current_quantity
+        - unit
+        - status
+      properties:
+        batch_id:
+          type: string
+          example: "BATCH_001"
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        product_id:
+          type: string
+          example: "PF-1001"
+        product_name:
+          type: string
+          example: "Котлета куриная"
+        location_id:
+          type: string
+          example: "zone_cold_001"
+        location_name:
+          type: string
+          example: "Холодильник А"
+        production_date:
+          type: string
+          format: date
+          example: "2024-01-15"
+        expiration_date:
+          type: string
+          format: date
+          example: "2024-01-22"
+        current_quantity:
+          type: number
+          format: float
+          example: 50.0
+        unit:
+          type: string
+          enum: [кг, шт, л, упак]
+          example: "кг"
+        status:
+          type: string
+          enum: [ACTIVE, BLOCKED, EXPIRED, UTILIZED]
+          example: "ACTIVE"
+        virtual_expiration_date:
+          type: string
+          format: date-time
+          description: Виртуальный срок годности (для смешанных партий)
+          example: "2024-01-22"
+        supplier_batch_id:
+          type: string
+          example: "SUPP-BATCH-001"
+
+    BatchDetail:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Batch'
+        - type: object
+          properties:
+            initial_quantity:
+              type: number
+              format: float
+              example: 50.0
+            receipt_date:
+              type: string
+              format: date-time
+              example: "2024-01-15T08:00:00Z"
+            supplier_name:
+              type: string
+              example: "Логистический центр 001"
+            storage_condition:
+              type: string
+              enum: [FROZEN, REFRIGERATED, AMBIENT]
+              example: "FROZEN"
+            movement_history:
+              type: array
+              items:
+                $ref: '#/components/schemas/MovementHistoryItem'
+
+    MovementHistoryItem:
+      type: object
+      properties:
+        movement_date:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:20:00Z"
+        movement_type:
+          type: string
+          example: "REPLENISHMENT"
+        quantity:
+          type: number
+          format: float
+          example: 10.0
+        from_location:
+          type: string
+          example: "zone_cold_001"
+        to_location:
+          type: string
+          example: "op_stock_line_001"
+        operator_id:
+          type: string
+          example: "operator_001"
+
+    BatchStatusUpdate:
+      type: object
+      required:
+        - batch_barcode
+        - new_status
+        - reason
+        - changed_by
+        - changed_at
+      properties:
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        new_status:
+          type: string
+          enum: [ACTIVE, BLOCKED, EXPIRED, UTILIZED]
+          example: "BLOCKED"
+        reason:
+          type: string
+          example: "Срок годности истек"
+        changed_by:
+          type: string
+          example: "shelf_life_service"
+        changed_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00Z"
+
+    BatchStatusResponse:
+      type: object
+      properties:
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        previous_status:
+          type: string
+          example: "ACTIVE"
+        new_status:
+          type: string
+          example: "BLOCKED"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00Z"
+        message:
+          type: string
+          example: "Статус партии изменен"
+
+    StockMovement:
+      type: object
+      required:
+        - movement_type
+        - batch_barcode
+        - product_id
+        - quantity
+        - unit
+        - operator_id
+        - movement_date
+      properties:
+        movement_type:
+          type: string
+          enum: [REPLENISHMENT, INTERNAL_TRANSFER, WRITE_OFF, RECEIPT]
+          example: "REPLENISHMENT"
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        from_location_id:
+          type: string
+          description: Исходная зона (опционально для поступлений)
+          example: "zone_cold_001"
+        to_location_id:
+          type: string
+          description: Целевая зона (опционально для списаний)
+          example: "op_stock_line_001"
+        product_id:
+          type: string
+          example: "PF-1001"
+        quantity:
+          type: number
+          format: float
+          example: 10.0
+        unit:
+          type: string
+          example: "кг"
+        operator_id:
+          type: string
+          example: "operator_001"
+        movement_date:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:20:00Z"
+        task_id:
+          type: string
+          example: "task_repl_001"
+        virtual_expiration_update:
+          type: boolean
+          description: Требуется ли пересчет виртуального срока годности
+          default: false
+
+    MovementResponse:
+      type: object
+      properties:
+        movement_id:
+          type: string
+          example: "mov_20240115_001"
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        from_quantity_before:
+          type: number
+          format: float
+          example: 50.0
+        from_quantity_after:
+          type: number
+          format: float
+          example: 40.0
+        to_quantity_before:
+          type: number
+          format: float
+          example: 0.0
+        to_quantity_after:
+          type: number
+          format: float
+          example: 10.0
+        movement_date:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:20:00Z"
+
+    InventoryCorrection:
+      type: object
+      required:
+        - inventory_session_id
+        - batch_barcode
+        - actual_quantity
+        - system_quantity
+        - discrepancy
+        - operator_id
+        - correction_date
+      properties:
+        inventory_session_id:
+          type: string
+          example: "inv_sess_20240115_001"
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        actual_quantity:
+          type: number
+          format: float
+          example: 48.5
+        system_quantity:
+          type: number
+          format: float
+          example: 50.0
+        discrepancy:
+          type: number
+          format: float
+          example: -1.5
+        operator_id:
+          type: string
+          example: "operator_001"
+        correction_date:
+          type: string
+          format: date-time
+          example: "2024-01-15T11:30:00Z"
+        requires_approval:
+          type: boolean
+          description: Требуется ли утверждение технолога (расхождение > 4000 ед.)
+          example: false
+        technologist_approval:
+          type: string
+          enum: [PENDING, APPROVED, REJECTED]
+          description: Статус утверждения технологом
+          example: "PENDING"
+
+    CorrectionResponse:
+      type: object
+      properties:
+        correction_id:
+          type: string
+          example: "corr_20240115_001"
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        status:
+          type: string
+          example: "APPLIED"
+        previous_quantity:
+          type: number
+          format: float
+          example: 50.0
+        new_quantity:
+          type: number
+          format: float
+          example: 48.5
+        correction_date:
+          type: string
+          format: date-time
+          example: "2024-01-15T11:30:00Z"
+        message:
+          type: string
+          example: "Коррекция остатков применена"
+
+    CorrectionPendingResponse:
+      type: object
+      properties:
+        correction_id:
+          type: string
+          example: "corr_20240115_002"
+        batch_barcode:
+          type: string
+          example: "BC-002-20240116-001"
+        status:
+          type: string
+          example: "PENDING_APPROVAL"
+        discrepancy:
+          type: number
+          format: float
+          example: -50.0
+        message:
+          type: string
+          example: "Коррекция требует утверждения технологом (расхождение > 4000 ед.)"
+
+    CorrectionApproval:
+      type: object
+      required:
+        - correction_id
+        - batch_barcode
+        - approved
+        - technologist_id
+        - approved_at
+      properties:
+        correction_id:
+          type: string
+          example: "corr_20240115_002"
+        batch_barcode:
+          type: string
+          example: "BC-002-20240116-001"
+        approved:
+          type: boolean
+          example: true
+        technologist_id:
+          type: string
+          example: "technologist_001"
+        approved_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T12:00:00Z"
+        comment:
+          type: string
+          example: "Списание подтверждено, обнаружена порча"
+
+    FEFOSelectionRequest:
+      type: object
+      required:
+        - product_id
+        - required_quantity
+        - unit
+        - purpose
+      properties:
+        product_id:
+          type: string
+          example: "PF-1001"
+        location_id:
+          type: string
+          description: Ограничение по зоне хранения
+          example: "zone_cold_001"
+        required_quantity:
+          type: number
+          format: float
+          example: 10.0
+        unit:
+          type: string
+          example: "кг"
+        purpose:
+          type: string
+          enum: [REPLENISHMENT, PRODUCTION, TRANSFER]
+          example: "REPLENISHMENT"
+        line_id:
+          type: string
+          description: ID линии (для пополнения оперативного запаса)
+          example: "line_001"
+
+    FEFOSelectionResponse:
+      type: object
+      properties:
+        selected_batches:
+          type: array
+          items:
+            $ref: '#/components/schemas/SelectedBatch'
+        total_available:
+          type: number
+          format: float
+          example: 75.5
+        selection_strategy:
+          type: string
+          example: "FEFO"
+        message:
+          type: string
+          example: "Партии выбраны по принципу FEFO"
+
+    SelectedBatch:
+      type: object
+      required:
+        - batch_barcode
+        - expiration_date
+        - available_quantity
+        - selected_quantity
+      properties:
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        expiration_date:
+          type: string
+          format: date
+          example: "2024-01-21"
+        available_quantity:
+          type: number
+          format: float
+          example: 25.5
+        selected_quantity:
+          type: number
+          format: float
+          example: 10.0
+        location:
+          type: string
+          example: "Холодильник А, полка 2"
+
+    OperationalStockUpdate:
+      type: object
+      required:
+        - line_id
+        - container_id
+        - product_id
+        - added_batch_barcode
+        - added_quantity
+        - added_expiration_date
+        - current_quantity
+        - updated_by
+        - updated_at
+      properties:
+        line_id:
+          type: string
+          example: "line_001"
+        container_id:
+          type: string
+          example: "container_A12"
+        product_id:
+          type: string
+          example: "PF-1001"
+        added_batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        added_quantity:
+          type: number
+          format: float
+          example: 10.0
+        added_expiration_date:
+          type: string
+          format: date-time
+          example: "2024-01-22"
+        current_virtual_expiration:
+          type: string
+          format: date-time
+          description: Текущий виртуальный срок годности
+          example: "2024-01-20"
+        current_quantity:
+          type: number
+          format: float
+          example: 40.0
+        updated_by:
+          type: string
+          example: "operator_001"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:20:00Z"
+
+    OperationalStockResponse:
+      type: object
+      properties:
+        line_id:
+          type: string
+          example: "line_001"
+        container_id:
+          type: string
+          example: "container_A12"
+        product_id:
+          type: string
+          example: "PF-1001"
+        previous_virtual_expiration:
+          type: string
+          format: date-time
+          example: "2024-01-20"
+        new_virtual_expiration:
+          type: string
+          format: date-time
+          example: "2024-01-21"
+        total_quantity:
+          type: number
+          format: float
+          example: 50.0
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:20:00Z"
+        message:
+          type: string
+          example: "Виртуальный срок годности обновлен"
+
+    Error:
+      type: object
+      properties:
+        error_id:
+          type: string
+          example: "err_stock_001"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:00:00.200Z"
+        code:
+          type: string
+          enum: [BATCH_NOT_FOUND, INSUFFICIENT_QUANTITY, LOCATION_NOT_FOUND, CORRECTION_APPROVAL_REQUIRED]
+          example: "INSUFFICIENT_QUANTITY"
+        message:
+          type: string
+          example: "Недостаточное количество в выбранной партии"
+        details:
+          type: string
+          example: "Запрошено 10.0 кг, доступно 8.5 кг в партии BC-001-20240116-001"
+
+securitySchemes:
+  BearerAuth:
+    type: http
+    scheme: bearer
+    description: JWT токен для аутентификации
+  ServiceAuth:
+    type: apiKey
+    in: header
+    name: X-Service-API-Key
+    description: API ключ для сервисной аутентификации
+
+security:
+  - BearerAuth: []
+  - ServiceAuth: []

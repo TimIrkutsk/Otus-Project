@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator Main Menu - Система управления запасами</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .ui-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            border-bottom: 3px solid #34495e;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
+        }
+
+        .app-subtitle {
+            font-size: 0.9rem;
+            color: #bdc3c7;
+            margin-top: 0.5rem;
+        }
+
+        /* Main Menu */
+        .main-menu {
+            padding: 2rem;
+        }
+
+        .menu-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 1.2rem;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #2c3e50;
+        }
+
+        .menu-item:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            border-color: #3498db;
+        }
+
+        .menu-item:active {
+            transform: translateY(0);
+        }
+
+        .menu-icon {
+            font-size: 1.5rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        .menu-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .menu-badge {
+            margin-left: auto;
+            background: #e74c3c;
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            min-width: 25px;
+            text-align: center;
+        }
+
+        /* User Info */
+        .user-info {
+            background: #ecf0f1;
+            padding: 1rem 2rem;
+            border-top: 1px solid #bdc3c7;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: #bdc3c7;
+            padding: 1rem 2rem;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        /* Feedback */
+        .feedback {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .ui-container {
+                max-width: 100%;
+                margin: 10px;
+            }
+            
+            .main-menu {
+                padding: 1.5rem;
+            }
+            
+            .menu-item {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ui-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🏭</span>
+                <span>Умный Склад</span>
+            </div>
+            <div class="app-subtitle">Система управления запасами</div>
+        </header>
+
+        <!-- Main Menu -->
+        <div class="main-menu">
+            <h2 class="menu-title">Главное меню оператора</h2>
+            
+            <div class="menu-items">
+                <a href="dashboard.html" class="menu-item" >
+                    <span class="menu-icon">📊</span>
+                    <span class="menu-text">Дашборд</span>
+                    <span class="menu-badge">3</span>
+                </a>
+                
+                <a href="tasks.html" class="menu-item" >
+                    <span class="menu-icon">📋</span>
+                    <span class="menu-text">Мои задания</span>
+                    <span class="menu-badge">5</span>
+                </a>
+                
+                <a href="inventory.html" class="menu-item" >
+                    <span class="menu-icon">📦</span>
+                    <span class="menu-text">Инвентаризация</span>
+                    <span class="menu-badge">1</span>
+                </a>
+                
+                <a href="catalog.html" class="menu-item" >
+                    <span class="menu-icon">📚</span>
+                    <span class="menu-text">Справочники</span>
+                </a>
+                
+                <a href="settings.html" class="menu-item" onclick="showFeedback('Переход в Настройки')">
+                    <span class="menu-icon">⚙️</span>
+                    <span class="menu-text">Настройки</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- User Info -->
+        <div class="user-info">
+            <div class="user-avatar">ОП</div>
+            <div class="user-details">
+                <div class="user-name">Оператор Производства</div>
+                <div class="user-role">Ресторан #1 • Смена утренняя</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 Умный Склад • Версия 1.0</p>
+        </footer>
+    </div>
+
+    <!-- Feedback Message -->
+    <div class="feedback" id="feedback"></div>
+
+    <script>
+        function showFeedback(message) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.classList.add('show');
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 3000);
+            
+            // Prevent default for demo (in real app remove this)
+            event.preventDefault();
+            
+            // Simulate page load delay
+            setTimeout(() => {
+                alert(`В реальном приложении здесь будет переход на: ${event.target.closest('a').getAttribute('href')}`);
+            }, 500);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Главное меню оператора загружено');
+            
+            // Add random badge counts for demo
+            const badges = document.querySelectorAll('.menu-badge');
+            badges.forEach(badge => {
+                if (!badge.textContent) {
+                    const randomCount = Math.floor(Math.random() * 5) + 1;
+                    badge.textContent = randomCount;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

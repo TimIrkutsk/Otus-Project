@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление заказами - Технолог</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .ui-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #34495e;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
+        }
+
+        .nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: #e74c3c;
+            transform: translateY(-2px);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            min-height: 700px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: #34495e;
+            color: white;
+            padding: 1.5rem 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            padding: 0 1.5rem 0.5rem;
+            font-size: 0.9rem;
+            color: #bdc3c7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-item {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .sidebar-item:hover {
+            background: #3c556d;
+            text-decoration: none;
+            color: white;
+        }
+
+        .sidebar-item.active {
+            background: #2c3e50;
+            border-left-color: #e74c3c;
+        }
+
+        .sidebar-icon {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            background: #ecf0f1;
+            padding: 2rem;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+        }
+
+        .page-subtitle {
+            color: #7f8c8d;
+            margin-top: 0.5rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #219653;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        /* Order Status Tabs */
+        .status-tabs {
+            display: flex;
+            background: white;
+            border-radius: 8px;
+            padding: 0.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .status-tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-align: center;
+            flex: 1;
+        }
+
+        .status-tab.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .status-tab:hover:not(.active) {
+            background: #ecf0f1;
+        }
+
+        /* Orders Table */
+        .orders-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+            cursor: pointer;
+        }
+
+        .table th:hover {
+            background: #e9ecef;
+        }
+
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .status-draft {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-pending {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-sent {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #2980b9;
+        }
+
+        .btn-approve {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-approve:hover {
+            background: #219653;
+        }
+
+        .btn-reject {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-reject:hover {
+            background: #c0392b;
+        }
+
+        .btn-view {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: #7f8c8d;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .summary-item {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+        }
+
+        .summary-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: #bdc3c7;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            border-top: 3px solid #34495e;
+        }
+
+        /* Feedback */
+        .feedback {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+            
+            .content-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .status-tabs {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .table {
+                font-size: 0.9rem;
+            }
+            
+            .table th,
+            .table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ui-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🏭</span>
+                <span>Управление запасами</span>
+            </div>
+            
+            <nav class="nav">
+                <a href="technologist_dashboard.html" class="nav-link">Главная</a>
+                <a href="orders.html" class="nav-link active">Заказы</a>
+                <a href="shelf-life-report.html" class="nav-link">Отчеты</a>
+                <a href="products.html" class="nav-link" onclick="showFeedback('Открыты справочники')">Справочники </a>
+            </nav>
+            
+            <div class="user-menu">
+                <div class="user-avatar" onclick="showFeedback('Профиль технолога')">ТХ</div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Управление заказами</div>
+                    <a href="orders.html" class="sidebar-item active">
+                        <span class="sidebar-icon">📦</span>
+                        <span>Текущие заказы</span>
+                    </a>
+                    <a href="auto-order.html" class="sidebar-item">
+                        <span class="sidebar-icon">🤖</span>
+                        <span>Автозаказ</span>
+                    </a>
+                    <a href="order-history.html" class="sidebar-item" onclick="showFeedback('Открыта история заказов')">
+                        <span class="sidebar-icon">📚</span>
+                        <span>История заказов</span>
+                    </a>
+                </div>
+                
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Действия</div>
+                    <a href="new-order.html" class="sidebar-item" onclick="showFeedback('открыта форма нового заказа')">
+                        <span class="sidebar-icon">➕</span>
+                        <span>Создать заказ</span>
+                    </a>
+                    <a href="order-templates.html" class="sidebar-item" onclick="showFeedback('открыты шаблоны')">
+                        <span class="sidebar-icon">📋</span>
+                        <span>Шаблоны заказов</span>
+                    </a>
+                </div>
+            </aside>
+
+            <!-- Content -->
+            <main class="content">
+                <div class="content-header">
+                    <div>
+                        <h1 class="page-title">Управление заказами</h1>
+                        <p class="page-subtitle">Черновики, утверждение и отслеживание заказов полуфабрикатов</p>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-secondary" onclick="showFeedback('Экспорт данных заказов')">
+                            <span>📥</span> Экспорт
+                        </button>
+                        <button class="btn btn-primary" onclick="showFeedback('Создание нового заказа')">
+                            <span>➕</span> Новый заказ
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Order Status Tabs -->
+                <div class="status-tabs">
+                    <div class="status-tab active" onclick="switchTab('draft')">Черновики (3)</div>
+                    <div class="status-tab" onclick="switchTab('pending')">На утверждении (2)</div>
+                    <div class="status-tab" onclick="switchTab('sent')">Отправленные (5)</div>
+                    <div class="status-tab" onclick="switchTab('confirmed')">Подтвержденные (8)</div>
+                    <div class="status-tab" onclick="switchTab('all')">Все заказы</div>
+                </div>
+
+                <!-- Orders Table -->
+                <div class="orders-section">
+                    <h2 class="section-title">Черновики заказов</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>№ Заказа</th>
+                                <th>Дата создания</th>
+                                <th>Поставщик</th>
+                                <th>Позиций</th>
+                                <th>Сумма</th>
+                                <th>Статус</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#ORD-001</td>
+                                <td>15.08.2025 10:30</td>
+                                <td>ЛЦ Центральный</td>
+                                <td>12</td>
+                                <td>45,200 ₽</td>
+                                <td><span class="status status-draft">Черновик</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-small btn-edit" onclick="editOrder('ORD-001')">Редактировать</button>
+                                        <button class="btn-small btn-approve" onclick="approveOrder('ORD-001')">Утвердить</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-002</td>
+                                <td>15.08.2025 09:15</td>
+                                <td>ЛЦ Северный</td>
+                                <td>8</td>
+                                <td>28,500 ₽</td>
+                                <td><span class="status status-draft">Черновик</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-small btn-edit" onclick="editOrder('ORD-002')">Редактировать</button>
+                                        <button class="btn-small btn-approve" onclick="approveOrder('ORD-002')">Утвердить</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-003</td>
+                                <td>14.08.2025 16:45</td>
+                                <td>ЛЦ Центральный</td>
+                                <td>15</td>
+                                <td>62,800 ₽</td>
+                                <td><span class="status status-draft">Черновик</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-small btn-edit" onclick="editOrder('ORD-003')">Редактировать</button>
+                                        <button class="btn-small btn-approve" onclick="approveOrder('ORD-003')">Утвердить</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="order-summary">
+                    <h2 class="section-title">Статистика заказов</h2>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <span class="summary-value">3</span>
+                            <span class="summary-label">Черновики</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-value">2</span>
+                            <span class="summary-label">На утверждении</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-value">5</span>
+                            <span class="summary-label">Отправленные</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-value">8</span>
+                            <span class="summary-label">Подтвержденные</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-value">136,500 ₽</span>
+                            <span class="summary-label">Общая сумма</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 Система управления запасами. Ресторан "Рога и копыта"</p>
+        </footer>
+    </div>
+
+    <!-- Feedback Message -->
+    <div class="feedback" id="feedback"></div>
+
+    <script>
+        function showFeedback(message) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.classList.add('show');
+            
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 3000);
+            
+            event.preventDefault();
+            return false;
+        }
+
+        function switchTab(tabName) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.status-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            showFeedback(`Переключено на вкладку: ${event.target.textContent}`);
+        }
+
+        function editOrder(orderId) {
+            showFeedback(`Редактирование заказа ${orderId}`);
+            // Here would be navigation to order edit page
+        }
+
+        function approveOrder(orderId) {
+            showFeedback(`Заказ ${orderId} утвержден и отправлен в ЛЦ`);
+            // Here would be API call to approve order
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Страница управления заказами загружена');
+        });
+    </script>
+</body>
+</html>

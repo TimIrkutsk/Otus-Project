@@ -1,0 +1,3369 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="../api_operational_stock/" rel="prev"/>
+<link href="../task_UC/" rel="next"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.6.21" name="generator"/>
+<title>Постановки на разработку по UserStory - Проект "Инвентаризация, автозаказ, контроль сроков хранения"</title>
+<link href="../assets/stylesheets/main.2a3383ac.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../css/print-site.css" rel="stylesheet"/>
+<link href="../css/print-site-material.css" rel="stylesheet"/>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="purple" data-md-color-primary="teal" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#userstory">
+          Перейти к содержанию
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Верхний колонтитул" class="md-header__inner md-grid">
+<a aria-label="Проект " class="md-header__button md-logo" data-md-component="logo" href=".." title='Проект "Инвентаризация, автозаказ, контроль сроков хранения"' автозаказ,="" инвентаризация,="" контроль="" сроков="" хранения""="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Проект "Инвентаризация, автозаказ, контроль сроков хранения"
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Постановки на разработку по UserStory
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="purple" data-md-color-media="" data-md-color-primary="teal" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="lime" data-md-color-media="" data-md-color-primary="teal" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Поиск" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Поиск" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Поиск" class="md-search__options">
+<button aria-label="Очистить" class="md-search__icon md-icon" tabindex="-1" title="Очистить" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Инициализация поиска
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="Вкладки" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+          
+  
+  
+  Домашняя страница
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../page_2/">
+          
+  
+  
+  Документация проекта
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../object_characteristics/">
+          
+  
+  
+  Документация подсистемы
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../api_robots/">
+          
+  
+  
+  API
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="./">
+          
+  
+  
+  Задачи
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../test_case/">
+          
+  
+  
+  Тест-кейсы
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../print_page/">
+        
+  
+  
+    
+  
+  Print Site
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Навигация" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Проект " class="md-nav__button md-logo" data-md-component="logo" href=".." title='Проект "Инвентаризация, автозаказ, контроль сроков хранения"' автозаказ,="" инвентаризация,="" контроль="" сроков="" хранения""="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Проект "Инвентаризация, автозаказ, контроль сроков хранения"
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+<span class="md-ellipsis">
+    Домашняя страница
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_1_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_1">
+<span class="md-nav__icon md-icon"></span>
+            Домашняя страница
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    О проектной работе
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    Документация проекта
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            Документация проекта
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../page_2/">
+<span class="md-ellipsis">
+    Глоссарий
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../general_info/">
+<span class="md-ellipsis">
+    Общие сведения
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../project_goals/">
+<span class="md-ellipsis">
+    Паспорт проекта
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../goals/">
+<span class="md-ellipsis">
+    Назначение и цели создания системы
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../system_requirements/">
+<span class="md-ellipsis">
+    Нефункциональные требования
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    Документация подсистемы
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            Документация подсистемы
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../object_characteristics/">
+<span class="md-ellipsis">
+    Характеристика объекта автоматизации
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../business_processes/">
+<span class="md-ellipsis">
+    Описание бизнес-процессов
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../subsystem_func_requirements/">
+<span class="md-ellipsis">
+    Функциональные требования к подсистеме
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../subsystem_requirements/">
+<span class="md-ellipsis">
+    Варианты использования и порядок их реализации
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../User_story/">
+<span class="md-ellipsis">
+    Пользовательские истории (User Story) и порядок их реализации
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../information_model/">
+<span class="md-ellipsis">
+    Информационная модель
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../C4_model/">
+<span class="md-ellipsis">
+    Компонентная архитектура
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../Seq_diagram/">
+<span class="md-ellipsis">
+    Интеграционное взаимодействие
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../UI/">
+<span class="md-ellipsis">
+    Демонстрация UI макета
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    API
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_robots/">
+<span class="md-ellipsis">
+    API для интеграции с роботизированной линией
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_logict/">
+<span class="md-ellipsis">
+    API для интеграции с логистическими центрами
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_mobile_task/">
+<span class="md-ellipsis">
+    API для мобильного приложения оператора линии
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_shelf_life_control/">
+<span class="md-ellipsis">
+    API для контроля сроков годности партий полуфабрикатов
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_stock_management/">
+<span class="md-ellipsis">
+    API для управления складскими запасами
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api/">
+<span class="md-ellipsis">
+    API для получения прогнозов продаж
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_auto_order/">
+<span class="md-ellipsis">
+    API для автоматического расчета и управления заказами полуфабрикатов
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_operational_stock/">
+<span class="md-ellipsis">
+    API для управления оперативным запасом роботизированных линий
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+<span class="md-ellipsis">
+    Задачи
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            Задачи
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    Постановки на разработку по UserStory
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    Постановки на разработку по UserStory
+    
+  </span>
+</a>
+<nav aria-label="Содержание" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Содержание
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#mvp">
+<span class="md-ellipsis">
+      Постановки на разработку функционала, реализуемого в рамках MVP
+    </span>
+</a>
+<nav aria-label="Постановки на разработку функционала, реализуемого в рамках MVP" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us11">
+<span class="md-ellipsis">
+      US1.1: Внесение и редактирование номенклатуры
+    </span>
+</a>
+<nav aria-label="US1.1: Внесение и редактирование номенклатуры" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor-">
+<span class="md-ellipsis">
+      Definition of Ready (DoR) - Критерии готовности к началу работы:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod-">
+<span class="md-ellipsis">
+      Definition of Done (DoD) - Критерии завершенности:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#acceptance-criteria">
+<span class="md-ellipsis">
+      Критерии приемки (Acceptance Criteria):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us12">
+<span class="md-ellipsis">
+      US1.2: Указание сроков хранения
+    </span>
+</a>
+<nav aria-label="US1.2: Указание сроков хранения" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us13">
+<span class="md-ellipsis">
+      US1.3: Управление складскими зонами
+    </span>
+</a>
+<nav aria-label="US1.3: Управление складскими зонами" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_1">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_1">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us21">
+<span class="md-ellipsis">
+      US2.1: Проведение инвентаризации через мобильное приложение
+    </span>
+</a>
+<nav aria-label="US2.1: Проведение инвентаризации через мобильное приложение" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor-_1">
+<span class="md-ellipsis">
+      Definition of Ready (DoR) - Критерии готовности к началу работы:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod-_1">
+<span class="md-ellipsis">
+      Definition of Done (DoD) - Критерии завершенности:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#acceptance-criteria_1">
+<span class="md-ellipsis">
+      Критерии приемки (Acceptance Criteria):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us22">
+<span class="md-ellipsis">
+      US2.2: Автоматическая сверка данных и отчет о расхождениях
+    </span>
+</a>
+<nav aria-label="US2.2: Автоматическая сверка данных и отчет о расхождениях" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_2">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_2">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us23">
+<span class="md-ellipsis">
+      US2.3: Автоматическая коррекция остатков после подтверждения
+    </span>
+</a>
+<nav aria-label="US2.3: Автоматическая коррекция остатков после подтверждения" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_3">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_3">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us31">
+<span class="md-ellipsis">
+      US3.1: Ежедневный расчет рекомендуемого заказа
+    </span>
+</a>
+<nav aria-label="US3.1: Ежедневный расчет рекомендуемого заказа" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor-_2">
+<span class="md-ellipsis">
+      Definition of Ready (DoR) - Критерии готовности к началу работы:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod-_2">
+<span class="md-ellipsis">
+      Definition of Done (DoD) - Критерии завершенности:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#acceptance-criteria_2">
+<span class="md-ellipsis">
+      Критерии приемки (Acceptance Criteria):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_11">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us32">
+<span class="md-ellipsis">
+      US3.2: Просмотр черновика заказа с обоснованием
+    </span>
+</a>
+<nav aria-label="US3.2: Просмотр черновика заказа с обоснованием" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_4">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_4">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_12">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_13">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us33">
+<span class="md-ellipsis">
+      US3.3: Ручная корректировка черновика заказа
+    </span>
+</a>
+<nav aria-label="US3.3: Ручная корректировка черновика заказа" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_5">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_5">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_14">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_15">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us34">
+<span class="md-ellipsis">
+      US3.4: Отклонение заказа с указанием причины
+    </span>
+</a>
+<nav aria-label="US3.4: Отклонение заказа с указанием причины" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_6">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_6">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_16">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_17">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us41">
+<span class="md-ellipsis">
+      US4.1: Формирование отчета по сроку годности
+    </span>
+</a>
+<nav aria-label="US4.1: Формирование отчета по сроку годности" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor-_3">
+<span class="md-ellipsis">
+      Definition of Ready (DoR) - Критерии готовности к началу работы:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod-_3">
+<span class="md-ellipsis">
+      Definition of Done (DoD) - Критерии завершенности:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#acceptance-criteria_3">
+<span class="md-ellipsis">
+      Критерии приемки (Acceptance Criteria):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_18">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us42">
+<span class="md-ellipsis">
+      US4.2: Цветовая индикация в отчете
+    </span>
+</a>
+<nav aria-label="US4.2: Цветовая индикация в отчете" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_7">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_7">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_19">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_20">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us43">
+<span class="md-ellipsis">
+      US4.3: Сканирование и подтверждение утилизации по отчету
+    </span>
+</a>
+<nav aria-label="US4.3: Сканирование и подтверждение утилизации по отчету" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_8">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_8">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_21">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_22">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us44">
+<span class="md-ellipsis">
+      US4.4: Формирование отчета по пополнению
+    </span>
+</a>
+<nav aria-label="US4.4: Формирование отчета по пополнению" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_9">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_9">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_23">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_24">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us45-fefo">
+<span class="md-ellipsis">
+      US4.5: Отчет с сортировкой по FEFO
+    </span>
+</a>
+<nav aria-label="US4.5: Отчет с сортировкой по FEFO" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_10">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_10">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_25">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_26">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us46">
+<span class="md-ellipsis">
+      US4.6: Ручная фиксация перемещения на линию
+    </span>
+</a>
+<nav aria-label="US4.6: Ручная фиксация перемещения на линию" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_11">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_11">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_27">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_28">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us51-">
+<span class="md-ellipsis">
+      US5.1: Мобильное приложение с оффлайн-режимом для инвентаризации и утилизации
+    </span>
+</a>
+<nav aria-label="US5.1: Мобильное приложение с оффлайн-режимом для инвентаризации и утилизации" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor-_4">
+<span class="md-ellipsis">
+      Definition of Ready (DoR) - Критерии готовности к началу работы:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod-_4">
+<span class="md-ellipsis">
+      Definition of Done (DoD) - Критерии завершенности:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#acceptance-criteria_4">
+<span class="md-ellipsis">
+      Критерии приемки (Acceptance Criteria):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_29">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us52-">
+<span class="md-ellipsis">
+      US5.2: Веб-интерфейс для работы с отчетами, справочниками и заказами
+    </span>
+</a>
+<nav aria-label="US5.2: Веб-интерфейс для работы с отчетами, справочниками и заказами" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_12">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_12">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_30">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_31">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us53">
+<span class="md-ellipsis">
+      US5.3: Простые отчеты на мобильном устройстве с минимальными действиями
+    </span>
+</a>
+<nav aria-label="US5.3: Простые отчеты на мобильном устройстве с минимальными действиями" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_13">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_13">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_32">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_33">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_34">
+<span class="md-ellipsis">
+      Постановки на разработку функционала, реализуемого в рамках первого релиза
+    </span>
+</a>
+<nav aria-label="Постановки на разработку функционала, реализуемого в рамках первого релиза" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us61">
+<span class="md-ellipsis">
+      US6.1: Автоматическое сканирование и блокировка партий
+    </span>
+</a>
+<nav aria-label="US6.1: Автоматическое сканирование и блокировка партий" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor-_5">
+<span class="md-ellipsis">
+      Definition of Ready (DoR) - Критерии готовности к началу работы:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod-_5">
+<span class="md-ellipsis">
+      Definition of Done (DoD) - Критерии завершенности:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#acceptance-criteria_5">
+<span class="md-ellipsis">
+      Критерии приемки (Acceptance Criteria):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_35">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us62">
+<span class="md-ellipsis">
+      US6.2: Автоматическое создание заданий на утилизацию
+    </span>
+</a>
+<nav aria-label="US6.2: Автоматическое создание заданий на утилизацию" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_14">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_14">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_36">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_37">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us63-">
+<span class="md-ellipsis">
+      US6.3: Четкие задания на утилизацию со штрих-кодом и локацией
+    </span>
+</a>
+<nav aria-label="US6.3: Четкие задания на утилизацию со штрих-кодом и локацией" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_15">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_15">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_38">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_39">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us71">
+<span class="md-ellipsis">
+      US7.1: Запрос разрешения на использование полуфабриката
+    </span>
+</a>
+<nav aria-label="US7.1: Запрос разрешения на использование полуфабриката" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor-_6">
+<span class="md-ellipsis">
+      Definition of Ready (DoR) - Критерии готовности к началу работы:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod-_6">
+<span class="md-ellipsis">
+      Definition of Done (DoD) - Критерии завершенности:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#acceptance-criteria_6">
+<span class="md-ellipsis">
+      Критерии приемки (Acceptance Criteria):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_40">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us72">
+<span class="md-ellipsis">
+      US7.2: Реальное время ответа на запрос робота
+    </span>
+</a>
+<nav aria-label="US7.2: Реальное время ответа на запрос робота" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_16">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_16">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_41">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_42">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us73">
+<span class="md-ellipsis">
+      US7.3: Автоматическое уведомление о блокировке партии
+    </span>
+</a>
+<nav aria-label="US7.3: Автоматическое уведомление о блокировке партии" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_17">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_17">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_43">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_44">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us81">
+<span class="md-ellipsis">
+      US8.1: Отслеживание остатков в оперативном запасе в реальном времени
+    </span>
+</a>
+<nav aria-label="US8.1: Отслеживание остатков в оперативном запасе в реальном времени" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_18">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_18">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_45">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_46">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us82">
+<span class="md-ellipsis">
+      US8.2: Автоматическое формирование задания на пополнение
+    </span>
+</a>
+<nav aria-label="US8.2: Автоматическое формирование задания на пополнение" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_19">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_19">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_47">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_48">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us83">
+<span class="md-ellipsis">
+      US8.3: Упрощенный процесс пополнения через сканирование
+    </span>
+</a>
+<nav aria-label="US8.3: Упрощенный процесс пополнения через сканирование" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_20">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_20">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_49">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_50">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us91">
+<span class="md-ellipsis">
+      US9.1: Интерфейс настройки параметров автозаказа
+    </span>
+</a>
+<nav aria-label="US9.1: Интерфейс настройки параметров автозаказа" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_21">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_21">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_51">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_52">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us92">
+<span class="md-ellipsis">
+      US9.2: Настройка коэффициентов сезонности
+    </span>
+</a>
+<nav aria-label="US9.2: Настройка коэффициентов сезонности" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_22">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_22">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_53">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_54">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us93">
+<span class="md-ellipsis">
+      US9.3: Групповая настройка правил
+    </span>
+</a>
+<nav aria-label="US9.3: Групповая настройка правил" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_23">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_23">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_55">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_56">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us101">
+<span class="md-ellipsis">
+      US10.1: Автоматическая отправка заказов в ЛЦ
+    </span>
+</a>
+<nav aria-label="US10.1: Автоматическая отправка заказов в ЛЦ" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_24">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_24">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_57">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_58">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us102">
+<span class="md-ellipsis">
+      US10.2: Обработка ответов от ЛЦ
+    </span>
+</a>
+<nav aria-label="US10.2: Обработка ответов от ЛЦ" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_25">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_25">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_59">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_60">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us103">
+<span class="md-ellipsis">
+      US10.3: Отслеживание статусов заказов
+    </span>
+</a>
+<nav aria-label="US10.3: Отслеживание статусов заказов" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_26">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_26">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_61">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_62">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us111">
+<span class="md-ellipsis">
+      US11.1: Фиксация списаний по разным причинам
+    </span>
+</a>
+<nav aria-label="US11.1: Фиксация списаний по разным причинам" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_27">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_27">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_63">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_64">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us112">
+<span class="md-ellipsis">
+      US11.2: Журнал аудита действий системы и пользователей
+    </span>
+</a>
+<nav aria-label="US11.2: Журнал аудита действий системы и пользователей" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_28">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_28">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_65">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_66">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us121">
+<span class="md-ellipsis">
+      US12.1: Асинхронные очереди для интеграций
+    </span>
+</a>
+<nav aria-label="US12.1: Асинхронные очереди для интеграций" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_29">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_29">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_67">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_68">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us122">
+<span class="md-ellipsis">
+      US12.2: Производительность критических запросов
+    </span>
+</a>
+<nav aria-label="US12.2: Производительность критических запросов" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_30">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_30">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_69">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_70">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#us123">
+<span class="md-ellipsis">
+      US12.3: Ролевая модель и разграничение прав
+    </span>
+</a>
+<nav aria-label="US12.3: Ролевая модель и разграничение прав" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-ready-dor_31">
+<span class="md-ellipsis">
+      Definition of Ready (DoR):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#definition-of-done-dod_31">
+<span class="md-ellipsis">
+      Definition of Done (DoD):
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_71">
+<span class="md-ellipsis">
+      Критерии приемки:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_72">
+<span class="md-ellipsis">
+      Задачи:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../task_UC/">
+<span class="md-ellipsis">
+    Постановки на разработку по Use Case
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    Тест-кейсы
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            Тест-кейсы
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case/">
+<span class="md-ellipsis">
+    Тест кейсы для UserStory MVP
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case_release/">
+<span class="md-ellipsis">
+    Тест кейсы для UserStory первого релиза
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case_UC/">
+<span class="md-ellipsis">
+    Тест кейсы для UC MVP
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case_UC_release/">
+<span class="md-ellipsis">
+    Тест кейсы для UC первого релиза
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../print_page/">
+<span class="md-ellipsis">
+    Print Site
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="userstory"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.</span> Постановки на разработку по UserStory</h1>
+<h2 id="mvp"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1</span> Постановки на разработку функционала, реализуемого в рамках MVP</h2>
+<h3 id="us11"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.1</span> US1.1: Внесение и редактирование номенклатуры</h3>
+<h4 id="definition-of-ready-dor-"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.1.1</span> Definition of Ready (DoR) - Критерии готовности к началу работы:</h4>
+<ul>
+<li>Требования понятны и согласованы с технологом</li>
+<li>Дизайн интерфейса ведения справочника утвержден</li>
+<li>Определен полный набор атрибутов полуфабриката</li>
+<li>Готовы API endpoints для работы с номенклатурой</li>
+<li>Определены валидации данных (уникальность наименования и т.д.)</li>
+</ul>
+<h4 id="definition-of-done-dod-"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.1.2</span> Definition of Done (DoD) - Критерии завершенности:</h4>
+<ul>
+<li>Реализован интерфейс создания/редактирования полуфабрикатов</li>
+<li>Реализована валидация вводимых данных</li>
+<li>Данные сохраняются в базу и доступны для других процессов</li>
+<li>Написаны и проходят unit-тесты</li>
+<li>Код прошел code review</li>
+<li>Функциональность протестирована на тестовом стенде</li>
+</ul>
+<h4 id="acceptance-criteria"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.1.3</span> Критерии приемки (Acceptance Criteria):</h4>
+<ul>
+<li>Технолог может добавить новый полуфабрикат с обязательными полями: название, единица измерения, категория</li>
+<li>Система проверяет уникальность наименования</li>
+<li>При редактировании существующей позиции изменения сохраняются</li>
+<li>Новый полуфабрикат сразу доступен для использования в заказах и инвентаризации</li>
+</ul>
+<h4 id="_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.1.4</span> Задачи:</h4>
+<ul>
+<li>Создать таблицу <code>products</code> в БД</li>
+<li>Реализовать REST API для CRUD операций</li>
+<li>Разработать UI форму ввода/редактирования</li>
+<li>Реализовать валидацию данных</li>
+<li>Написать тесты</li>
+</ul>
+<hr/>
+<h3 id="us12"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.2</span> US1.2: Указание сроков хранения</h3>
+<h4 id="definition-of-ready-dor"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.2.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US1.1 завершена и протестирована</li>
+<li>Определен формат хранения сроков (часы/дни)</li>
+<li>Согласованы бизнес-правила валидации сроков</li>
+<li>Готовы требования к интерфейсу ввода сроков</li>
+</ul>
+<h4 id="definition-of-done-dod"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.2.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Добавлено поле "Срок хранения" в форму полуфабриката</li>
+<li>Реализована валидация срока (положительное число)</li>
+<li>Срок хранения учитывается при расчете даты истечения срока годности</li>
+<li>Протестирована корректность расчетов на основе введенных сроков</li>
+</ul>
+<h4 id="_2"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.2.3</span> Критерии приемки:</h4>
+<ul>
+<li>Технолог может указать срок хранения в часах для каждого полуфабриката</li>
+<li>Система не позволяет сохранить отрицательный или нулевой срок</li>
+<li>Указанный срок используется для автоматического расчета даты истечения срока годности партий</li>
+<li>При создании партии система рассчитывает expiration_date на основе production_date + срок хранения</li>
+</ul>
+<h4 id="_3"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.2.4</span> Задачи:</h4>
+<ul>
+<li>Добавить поле <code>shelf_life_hours</code> в таблицу products</li>
+<li>Обновить UI форму</li>
+<li>Реализовать валидацию срока хранения</li>
+<li>Интегрировать с логикой расчета сроков годности</li>
+<li>Протестировать расчеты</li>
+</ul>
+<hr/>
+<h3 id="us13"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.3</span> US1.3: Управление складскими зонами</h3>
+<h4 id="definition-of-ready-dor_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.3.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>Определена иерархическая структура зон хранения</li>
+<li>Утверждены типы зон (холодильник, морозильник, оперативный запас)</li>
+<li>Согласованы атрибуты зоны (название, тип, родительская зона)</li>
+<li>Готовы требования к интерфейсу управления зонами</li>
+</ul>
+<h4 id="definition-of-done-dod_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.3.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализован интерфейс создания/редактирования складских зон</li>
+<li>Поддержана иерархическая структура зон</li>
+<li>Реализована валидация данных зоны</li>
+<li>Зоны доступны для выбора при проведении инвентаризации</li>
+<li>Данные зон интегрированы с системой учета остатков</li>
+</ul>
+<h4 id="_4"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.3.3</span> Критерии приемки:</h4>
+<ul>
+<li>Технолог может создать новую складскую зону с указанием названия и типа</li>
+<li>Можно создать иерархию зон (например: Склад → Холодильная камера → Стеллаж 1)</li>
+<li>Система не позволяет удалить зону, если в ней есть остатки партий</li>
+<li>При инвентаризации оператор может выбрать конкретную зону для подсчета</li>
+</ul>
+<h4 id="_5"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.3.4</span> Задачи:</h4>
+<ul>
+<li>Создать таблицы <code>storage_locations</code> и <code>location_types</code></li>
+<li>Реализовать API для управления зонами</li>
+<li>Разработать UI для иерархического отображения зон</li>
+<li>Интегрировать с модулем инвентаризации</li>
+<li>Реализовать проверки при удалении зон</li>
+</ul>
+<hr/>
+<h3 id="us21"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.4</span> US2.1: Проведение инвентаризации через мобильное приложение</h3>
+<h4 id="definition-of-ready-dor-_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.4.1</span> Definition of Ready (DoR) - Критерии готовности к началу работы:</h4>
+<ul>
+<li>Завершены US1.1, US1.2, US1.3 (справочники номенклатуры и зон)</li>
+<li>Готовы API endpoints для мобильного приложения</li>
+<li>Определен формат данных для оффлайн-работы</li>
+<li>Утвержден дизайн мобильного интерфейса сканирования</li>
+<li>Определены типы инвентаризации (сплошная/выборочная)</li>
+</ul>
+<h4 id="definition-of-done-dod-_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.4.2</span> Definition of Done (DoD) - Критерии завершенности:</h4>
+<ul>
+<li>Реализован интерфейс сканирования штрих-кодов в мобильном приложении</li>
+<li>Поддержан оффлайн-режим с кэшированием данных</li>
+<li>Реализована валидация штрих-кодов партий</li>
+<li>Данные инвентаризации корректно синхронизируются при появлении сети</li>
+<li>Написаны и проходят автотесты для мобильного приложения</li>
+</ul>
+<h4 id="acceptance-criteria_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.4.3</span> Критерии приемки (Acceptance Criteria):</h4>
+<ul>
+<li>Оператор может сканировать штрих-код партии и видеть автоматическое заполнение данных</li>
+<li>При повреждении штрих-кода возможен ручной ввод ID партии</li>
+<li>Система работает оффлайн и синхронизирует данные при восстановлении связи</li>
+<li>Время сканирования и ввода одной партии не превышает 3-5 секунд</li>
+<li>Интерфейс оптимизирован для последовательного сканирования</li>
+</ul>
+<h4 id="_6"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.4.4</span> Задачи:</h4>
+<ul>
+<li>Разработать мобильный интерфейс сканирования</li>
+<li>Реализовать оффлайн-кэширование данных партий</li>
+<li>Интегрировать сканер штрих-кодов</li>
+<li>Реализовать валидацию штрих-кодов</li>
+<li>Настроить синхронизацию оффлайн-данных</li>
+</ul>
+<hr/>
+<h3 id="us22"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.5</span> US2.2: Автоматическая сверка данных и отчет о расхождениях</h3>
+<h4 id="definition-of-ready-dor_2"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.5.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US2.1 завершена и протестирована</li>
+<li>Определен алгоритм сверки фактических и системных данных</li>
+<li>Утвержден формат отчета о расхождениях</li>
+<li>Определены пороги для автоматической коррекции (≤ 4000 ед.) и ручного утверждения (&gt; 4000 ед.)</li>
+</ul>
+<h4 id="definition-of-done-dod_2"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.5.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализован алгоритм автоматической сверки данных инвентаризации</li>
+<li>Система формирует отчет о расхождениях с цветовой индикацией</li>
+<li>Реализована автоматическая коррекция для малых расхождений</li>
+<li>Для больших расхождений создаются задания на утверждение технологу</li>
+<li>Отчет доступен для просмотра в веб-интерфейсе</li>
+</ul>
+<h4 id="_7"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.5.3</span> Критерии приемки:</h4>
+<ul>
+<li>После синхронизации система автоматически сверяет фактические данные с системными остатками</li>
+<li>Формируется отчет с расхождениями (излишки/недостачи) по каждой позиции</li>
+<li>При расхождениях ≤ 4000 ед. система автоматически корректирует остатки</li>
+<li>При расхождениях &gt; 4000 ед. система уведомляет технолога и ожидает утверждения</li>
+<li>Отчет включает дату, время, зону, ответственного и все позиции с расхождениями</li>
+</ul>
+<h4 id="_8"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.5.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать алгоритм сверки остатков</li>
+<li>Разработать генератор отчетов о расхождениях</li>
+<li>Реализовать автоматическую коррекцию для малых расхождений</li>
+<li>Интегрировать с системой уведомлений технолога</li>
+<li>Создать веб-интерфейс для просмотра отчетов</li>
+</ul>
+<hr/>
+<h3 id="us23"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.6</span> US2.3: Автоматическая коррекция остатков после подтверждения</h3>
+<h4 id="definition-of-ready-dor_3"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.6.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US2.2 завершена и протестирована</li>
+<li>Определены бизнес-правила коррекции остатков</li>
+<li>Готовы API endpoints для подтверждения инвентаризации</li>
+<li>Утвержден процесс утверждения больших расхождений технологом</li>
+</ul>
+<h4 id="definition-of-done-dod_3"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.6.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализована атомарная коррекция остатков в базе данных</li>
+<li>Система фиксирует акт инвентаризации с полным аудитом</li>
+<li>Коррекция остатков оперативного запаса не влияет на виртуальный срок годности</li>
+<li>Данные для автозаказа актуализируются после коррекции</li>
+<li>Гарантирована консистентность данных даже при сбоях</li>
+</ul>
+<h4 id="_9"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.6.3</span> Критерии приемки:</h4>
+<ul>
+<li>После подтверждения инвентаризации система автоматически корректирует остатки в базе данных</li>
+<li>При коррекции оперативного запаса меняется только количество, виртуальный срок годности сохраняется</li>
+<li>Система не позволяет корректировать остатки по заблокированным партиям</li>
+<li>Все коррекции фиксируются в акте инвентаризации с указанием ответственного</li>
+<li>После коррекции данные для автозаказа и контроля сроков годности актуализируются</li>
+</ul>
+<h4 id="_10"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.6.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать транзакционную коррекцию остатков</li>
+<li>Создать систему фиксации актов инвентаризации</li>
+<li>Интегрировать с модулем оперативного запаса</li>
+<li>Реализовать проверки блокировок партий</li>
+<li>Обновить данные для автозаказа после коррекции</li>
+</ul>
+<hr/>
+<h3 id="us31"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.7</span> US3.1: Ежедневный расчет рекомендуемого заказа</h3>
+<h4 id="definition-of-ready-dor-_2"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.7.1</span> Definition of Ready (DoR) - Критерии готовности к началу работы:</h4>
+<ul>
+<li>Завершены US1.1, US1.2, US1.3 (справочники номенклатуры)</li>
+<li>Завершены US2.1, US2.2, US2.3 (инвентаризация и остатки)</li>
+<li>Готовы API endpoints для расчета автозаказа</li>
+<li>Определен алгоритм расчета на основе правил (Min/Max)</li>
+<li>Утвержден формат черновика заказа</li>
+<li>Настроено расписание ежедневного расчета</li>
+</ul>
+<h4 id="definition-of-done-dod-_2"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.7.2</span> Definition of Done (DoD) - Критерии завершенности:</h4>
+<ul>
+<li>Реализован алгоритм расчета заказа по правилам Min/Max</li>
+<li>Система автоматически запускает расчет по расписанию</li>
+<li>Расчет учитывает текущие остатки и незавершенные заказы</li>
+<li>Сформированный черновик заказа сохраняется в базе данных</li>
+<li>Технолог получает уведомление о готовности черновика</li>
+</ul>
+<h4 id="acceptance-criteria_2"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.7.3</span> Критерии приемки (Acceptance Criteria):</h4>
+<ul>
+<li>Система ежедневно рассчитывает рекомендуемый заказ на основе текущих остатков и правил Min/Max</li>
+<li>Расчет выполняется автоматически по установленному расписанию</li>
+<li>В расчете учитываются только активные правила автозаказа</li>
+<li>Сформированный черновик заказа включает позиции с количеством &gt; 0</li>
+<li>Технолог получает уведомление в интерфейсе системы о готовности черновика</li>
+</ul>
+<h4 id="_11"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.7.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать алгоритм расчета по правилам Min/Max</li>
+<li>Настроить scheduled job для ежедневного расчета</li>
+<li>Разработать генератор черновиков заказов</li>
+<li>Интегрировать с системой уведомлений</li>
+<li>Реализовать хранение черновиков в БД</li>
+</ul>
+<hr/>
+<h3 id="us32"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.8</span> US3.2: Просмотр черновика заказа с обоснованием</h3>
+<h4 id="definition-of-ready-dor_4"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.8.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US3.1 завершена и протестирована</li>
+<li>Утвержден формат отображения обоснования расчета</li>
+<li>Готовы API endpoints для получения деталей заказа</li>
+<li>Определены данные для обоснования (остаток, точка заказа и т.д.)</li>
+</ul>
+<h4 id="definition-of-done-dod_4"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.8.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализован интерфейс просмотра черновика заказа</li>
+<li>По каждой позиции отображается детальное обоснование расчета</li>
+<li>Интерфейс поддерживает сортировку и фильтрацию позиций</li>
+<li>Данные загружаются быстро даже при большом количестве позиций</li>
+</ul>
+<h4 id="_12"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.8.3</span> Критерии приемки:</h4>
+<ul>
+<li>Технолог может просмотреть сформированный черновик заказа</li>
+<li>По каждой позиции отображается обоснование расчета ("остаток X, точка заказа Y")</li>
+<li>Технолог видит детализацию: текущий остаток, точку заказа, максимальный запас</li>
+<li>Интерфейс загружается не более чем за 5-7 секунд даже для заказов с сотнями позиций</li>
+<li>Поддерживается пагинация и поиск по позициям заказа</li>
+</ul>
+<h4 id="_13"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.8.4</span> Задачи:</h4>
+<ul>
+<li>Разработать веб-интерфейс просмотра заказов</li>
+<li>Реализовать отображение обоснования по позициям</li>
+<li>Оптимизировать загрузку данных (пагинация, lazy loading)</li>
+<li>Реализовать сортировку и фильтрацию</li>
+<li>Добавить поиск по наименованиям продуктов</li>
+</ul>
+<hr/>
+<h3 id="us33"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.9</span> US3.3: Ручная корректировка черновика заказа</h3>
+<h4 id="definition-of-ready-dor_5"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.9.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US3.2 завершена и протестирована</li>
+<li>Определены бизнес-правила редактирования заказа</li>
+<li>Утвержден интерфейс редактирования количеств и состава</li>
+<li>Готовы API endpoints для корректировки заказа</li>
+</ul>
+<h4 id="definition-of-done-dod_5"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.9.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализован интерфейс редактирования количеств в заказе</li>
+<li>Поддержано добавление новых позиций в заказ</li>
+<li>Реализовано удаление позиций из заказа</li>
+<li>Изменения сохраняются в черновике заказа</li>
+<li>Валидация вводимых количеств (положительные числа)</li>
+</ul>
+<h4 id="_14"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.9.3</span> Критерии приемки:</h4>
+<ul>
+<li>Технолог может вручную откорректировать количество для любой позиции в черновике заказа</li>
+<li>Можно удалить позицию из заказа (например, зная о отсутствии товара у поставщика)</li>
+<li>Можно добавить новую позицию в заказ (например, новый товар для теста)</li>
+<li>Система проверяет, что вводимые количества являются положительными числами</li>
+<li>После корректировки заказ сохраняется как черновик для последующего утверждения</li>
+</ul>
+<h4 id="_15"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.9.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать UI для редактирования количеств</li>
+<li>Добавить функциональность добавления/удаления позиций</li>
+<li>Реализовать валидацию вводимых данных</li>
+<li>Обновить механизм сохранения черновиков</li>
+<li>Протестировать сценарии корректировки</li>
+</ul>
+<hr/>
+<h3 id="us34"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.10</span> US3.4: Отклонение заказа с указанием причины</h3>
+<h4 id="definition-of-ready-dor_6"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.10.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US3.3 завершена и протестирована</li>
+<li>Определен перечень причин отклонения заказа</li>
+<li>Утвержден процесс архивации отклоненных заказов</li>
+<li>Готовы API endpoints для отклонения заказов</li>
+</ul>
+<h4 id="definition-of-done-dod_6"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.10.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализована функция отклонения заказа с выбором причины</li>
+<li>Поддержан произвольный комментарий при отклонении</li>
+<li>Отклоненные заказы архивируются с сохранением истории</li>
+<li>Система не отправляет отклоненные заказы в ЛЦ</li>
+<li>Ведутся логи всех действий по отклонению заказов</li>
+</ul>
+<h4 id="_16"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.10.3</span> Критерии приемки:</h4>
+<ul>
+<li>Технолог может отклонить заказ с указанием причины (например, "закрыто на мойку")</li>
+<li>При отклонении требуется обязательное указание причины</li>
+<li>Отклоненный заказ переходит в статус "Отклонен" и архивируется</li>
+<li>Система ведет учет причин отсутствия заказов для анализа</li>
+<li>Отклоненный заказ не передается в логистический центр</li>
+</ul>
+<h4 id="_17"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.10.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать UI для отклонения заказов</li>
+<li>Создать справочник причин отклонения</li>
+<li>Реализовать архивацию отклоненных заказов</li>
+<li>Интегрировать с системой логирования</li>
+<li>Настроить валидацию обязательного указания причины</li>
+</ul>
+<h3 id="us41"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.11</span> US4.1: Формирование отчета по сроку годности</h3>
+<h4 id="definition-of-ready-dor-_3"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.11.1</span> Definition of Ready (DoR) - Критерии готовности к началу работы:</h4>
+<ul>
+<li>Завершены US1.1, US1.2, US1.3 (справочники номенклатуры и зон)</li>
+<li>Завершены US2.1, US2.2, US2.3 (учет остатков)</li>
+<li>Готовы API endpoints для формирования отчетов</li>
+<li>Определены параметры отчета (зоны, статусы, форматы)</li>
+<li>Утвержден дизайн отчета с цветовой индикацией</li>
+</ul>
+<h4 id="definition-of-done-dod-_3"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.11.2</span> Definition of Done (DoD) - Критерии завершенности:</h4>
+<ul>
+<li>Реализован интерфейс формирования отчета по срокам годности</li>
+<li>Отчет включает все необходимые колонки: штрих-код, наименование, партия, срок годности, остаток, локация, статус</li>
+<li>Реализована цветовая индикация статусов партий</li>
+<li>Отчет формируется не более чем за 5-7 секунд</li>
+<li>Поддержана фильтрация и сортировка данных</li>
+</ul>
+<h4 id="acceptance-criteria_3"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.11.3</span> Критерии приемки (Acceptance Criteria):</h4>
+<ul>
+<li>Оператор или технолог может сформировать отчет по срокам годности</li>
+<li>Отчет отображает актуальные остатки полуфабрикатов с детализацией по партиям</li>
+<li>Цветовая индикация: красный - просроченные, желтый - истекают сегодня, оранжевый - истекают завтра</li>
+<li>Отчет автоматически сортируется по сроку годности (самые проблемные вверху)</li>
+<li>Данные в отчете соответствуют данным на момент формирования (консистентность)</li>
+</ul>
+<h4 id="_18"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.11.4</span> Задачи:</h4>
+<ul>
+<li>Разработать UI формирования отчетов</li>
+<li>Реализовать генератор отчетов с фильтрацией</li>
+<li>Добавить цветовую индикацию статусов</li>
+<li>Оптимизировать производительность формирования отчета</li>
+<li>Реализовать сортировку по сроку годности</li>
+</ul>
+<hr/>
+<h3 id="us42"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.12</span> US4.2: Цветовая индикация в отчете</h3>
+<h4 id="definition-of-ready-dor_7"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.12.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US4.1 завершена и протестирована</li>
+<li>Утверждена цветовая схема индикации статусов</li>
+<li>Определены правила определения статусов партий</li>
+<li>Готовы алгоритмы расчета цветов для разных статусов</li>
+</ul>
+<h4 id="definition-of-done-dod_7"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.12.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализована цветовая подсветка строк в отчете</li>
+<li>Цвета соответствуют утвержденной схеме: красный/желтый/оранжевый/зеленый</li>
+<li>Индикация работает корректно при фильтрации и сортировке</li>
+<li>Цвета понятны и различимы для пользователей</li>
+</ul>
+<h4 id="_19"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.12.3</span> Критерии приемки:</h4>
+<ul>
+<li>Просроченные партии подсвечиваются красным цветом</li>
+<li>Партии, истекающие сегодня, подсвечиваются желтым цветом</li>
+<li>Партии, истекающие завтра, подсвечиваются оранжевым цветом</li>
+<li>Партии с нормальным сроком годности отображаются белым/зеленым цветом</li>
+<li>Заблокированные партии отображаются серым цветом</li>
+<li>Цветовая индикация помогает быстро идентифицировать проблемные партии</li>
+</ul>
+<h4 id="_20"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.12.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать алгоритм определения цветов статусов</li>
+<li>Настроить CSS стили для цветовой индикации</li>
+<li>Протестировать отображение на разных устройствах</li>
+<li>Интегрировать с механизмом формирования отчетов</li>
+<li>Проверить доступность цветов для пользователей с нарушением цветовосприятия</li>
+</ul>
+<hr/>
+<h3 id="us43"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.13</span> US4.3: Сканирование и подтверждение утилизации по отчету</h3>
+<h4 id="definition-of-ready-dor_8"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.13.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US4.1, US4.2 завершены и протестированы</li>
+<li>Готовы API endpoints для подтверждения утилизации</li>
+<li>Интегрирован сканер штрих-кодов в мобильное приложение</li>
+<li>Определен процесс подтверждения утилизации</li>
+</ul>
+<h4 id="definition-of-done-dod_8"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.13.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализована функция сканирования партий из отчета в мобильном приложении</li>
+<li>Система проверяет, что сканируемая партия есть в отчете "к утилизации"</li>
+<li>Реализовано подтверждение утилизации с списанием остатков</li>
+<li>Поддержан ручной ввод при повреждении штрих-кода</li>
+<li>Ведутся логи всех операций утилизации</li>
+</ul>
+<h4 id="_21"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.13.3</span> Критерии приемки:</h4>
+<ul>
+<li>Оператор может сканировать штрих-код партии из отчета в мобильном приложении</li>
+<li>Система подтверждает, что партия находится в отчете "к утилизации"</li>
+<li>При сканировании партии, которой нет в отчете, система показывает предупреждение</li>
+<li>После подтверждения утилизации остатки партии списываются до нуля</li>
+<li>Статус партии изменяется на "Утилизирована"</li>
+</ul>
+<h4 id="_22"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.13.4</span> Задачи:</h4>
+<ul>
+<li>Интегрировать сканирование с мобильным приложением</li>
+<li>Реализовать проверку партий в отчете</li>
+<li>Разработать процесс подтверждения утилизации</li>
+<li>Реализовать списание остатков при утилизации</li>
+<li>Добавить логирование операций утилизации</li>
+</ul>
+<hr/>
+<h3 id="us44"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.14</span> US4.4: Формирование отчета по пополнению</h3>
+<h4 id="definition-of-ready-dor_9"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.14.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>Завершены US4.1, US4.2 (формирование отчетов)</li>
+<li>Определены критерии для отчета по пополнению</li>
+<li>Утвержден формат и содержание отчета</li>
+<li>Готовы API endpoints для отчетов по пополнению</li>
+</ul>
+<h4 id="definition-of-done-dod_9"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.14.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализован отчет, показывающий полуфабрикаты, нуждающиеся в пополнении</li>
+<li>Отчет включает текущие остатки и рекомендуемое количество для пополнения</li>
+<li>Данные актуальны на момент формирования отчета</li>
+<li>Отчет доступен в веб-интерфейсе для оператора</li>
+</ul>
+<h4 id="_23"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.14.3</span> Критерии приемки:</h4>
+<ul>
+<li>Оператор может сформировать отчет, показывающий какие полуфабрикаты нуждаются в пополнении</li>
+<li>Отчет отображает текущие остатки на складе и на линии</li>
+<li>Показываются полуфабрикаты с остатком ниже минимального порога</li>
+<li>Отчет помогает оператору принять решение о необходимости пополнения</li>
+<li>Данные в отчете обновляются в реальном времени</li>
+</ul>
+<h4 id="_24"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.14.4</span> Задачи:</h4>
+<ul>
+<li>Разработать алгоритм определения потребности в пополнении</li>
+<li>Создать генератор отчета по пополнению</li>
+<li>Интегрировать с данными остатков со склада и линии</li>
+<li>Реализовать веб-интерфейс отчета</li>
+<li>Настроить автоматическое обновление данных</li>
+</ul>
+<hr/>
+<h3 id="us45-fefo"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.15</span> US4.5: Отчет с сортировкой по FEFO</h3>
+<h4 id="definition-of-ready-dor_10"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.15.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US4.4 завершена и протестирована</li>
+<li>Определен алгоритм сортировки по принципу FEFO</li>
+<li>Утвержден формат отчета с FEFO сортировкой</li>
+<li>Готовы API endpoints для FEFO выборки</li>
+</ul>
+<h4 id="definition-of-done-dod_10"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.15.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализован отчет с сортировкой партий по сроку годности (FEFO)</li>
+<li>В отчете партии отсортированы от самых старых к самым новым</li>
+<li>Отчет помогает выбрать правильную партию для пополнения линии</li>
+<li>Данные актуальны и соответствуют фактическим остаткам</li>
+</ul>
+<h4 id="_25"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.15.3</span> Критерии приемки:</h4>
+<ul>
+<li>Оператор может сформировать отчет, отсортированный по сроку годности (FEFO)</li>
+<li>В отчете партии отсортированы от самых близких к истечению срока к самым дальним</li>
+<li>Отчет помогает выбрать партию с самым близким сроком годности для пополнения линии</li>
+<li>При пополнении оператор использует данные из этого отчета для выбора партии</li>
+<li>Сортировка корректно работает для всех типов полуфабрикатов</li>
+</ul>
+<h4 id="_26"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.15.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать алгоритм FEFO сортировки</li>
+<li>Интегрировать FEFO сортировку в генератор отчетов</li>
+<li>Протестировать корректность сортировки</li>
+<li>Обновить UI отчетов с поддержкой FEFO</li>
+<li>Документировать процесс использования FEFO отчета</li>
+</ul>
+<hr/>
+<h3 id="us46"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.16</span> US4.6: Ручная фиксация перемещения на линию</h3>
+<h4 id="definition-of-ready-dor_11"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.16.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US4.5 завершена и протестирована</li>
+<li>Готовы API endpoints для фиксации перемещений</li>
+<li>Интегрирован сканер штрих-кодов в мобильное приложение</li>
+<li>Определен процесс ручной фиксации перемещений</li>
+</ul>
+<h4 id="definition-of-done-dod_11"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.16.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализована функция ручной фиксации перемещения в мобильном приложении</li>
+<li>Поддержано сканирование штрих-кода партии и зоны оперативного запаса</li>
+<li>Реализовано списание со склада и пополнение линии при подтверждении</li>
+<li>Валидация вводимых количеств и проверка доступности партии</li>
+<li>Ведутся логи всех операций перемещения</li>
+</ul>
+<h4 id="_27"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.16.3</span> Критерии приемки:</h4>
+<ul>
+<li>Оператор может вручную зафиксировать перемещение полуфабриката со склада на линию</li>
+<li>При фиксации указывается количество и сканируется штрих-код партии</li>
+<li>Система проверяет, что указанное количество доступно в партии</li>
+<li>После подтверждения остатки автоматически обновляются на складе и на линии</li>
+<li>Процесс фиксации перемещения занимает не более 15-20 секунд</li>
+</ul>
+<h4 id="_28"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.16.4</span> Задачи:</h4>
+<ul>
+<li>Разработать UI для фиксации перемещений в мобильном приложении</li>
+<li>Реализовать сканирование партий и зон</li>
+<li>Интегрировать с системой учета остатков</li>
+<li>Реализовать валидацию доступности количеств</li>
+<li>Добавить логирование операций перемещения</li>
+</ul>
+<h3 id="us51-"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.17</span> US5.1: Мобильное приложение с оффлайн-режимом для инвентаризации и утилизации</h3>
+<h4 id="definition-of-ready-dor-_4"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.17.1</span> Definition of Ready (DoR) - Критерии готовности к началу работы:</h4>
+<ul>
+<li>Завершены US2.1, US2.2, US2.3 (процессы инвентаризации)</li>
+<li>Завершены US4.1, US4.2, US4.3 (процессы утилизации)</li>
+<li>Определена архитектура оффлайн-синхронизации</li>
+<li>Утвержден дизайн мобильного интерфейса для оффлайн-работы</li>
+<li>Готовы API endpoints для оффлайн-синхронизации</li>
+</ul>
+<h4 id="definition-of-done-dod-_4"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.17.2</span> Definition of Done (DoD) - Критерии завершенности:</h4>
+<ul>
+<li>Реализовано полное кэширование данных партий на мобильном устройстве</li>
+<li>Поддержана работа всех функций инвентаризации и утилизации без сети</li>
+<li>Реализована автоматическая синхронизация при появлении сети</li>
+<li>Обработаны сценарии конфликтующих изменений при синхронизации</li>
+<li>Приложение стабильно работает в условиях плохого покрытия сети</li>
+</ul>
+<h4 id="acceptance-criteria_4"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.17.3</span> Критерии приемки (Acceptance Criteria):</h4>
+<ul>
+<li>Оператор может проводить инвентаризацию в зонах с полным отсутствием сети</li>
+<li>Все данные о партиях кэшируются на устройстве перед началом инвентаризации</li>
+<li>Сканирование штрих-кодов и ввод количеств работают оффлайн</li>
+<li>При появлении сети данные автоматически синхронизируются с сервером</li>
+<li>При конфликтах данных оператор может выбрать приоритет (оффлайн/система)</li>
+</ul>
+<h4 id="_29"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.17.4</span> Задачи:</h4>
+<ul>
+<li>Разработать архитектуру оффлайн-кэширования</li>
+<li>Реализовать локальную базу данных на мобильном устройстве</li>
+<li>Настроить механизм синхронизации при восстановлении связи</li>
+<li>Реализовать разрешение конфликтов данных</li>
+<li>Протестировать работу в условиях нестабильной сети</li>
+</ul>
+<hr/>
+<h3 id="us52-"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.18</span> US5.2: Веб-интерфейс для работы с отчетами, справочниками и заказами</h3>
+<h4 id="definition-of-ready-dor_12"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.18.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>Завершены US1.1, US1.2, US1.3 (справочники)</li>
+<li>Завершены US3.1, US3.2, US3.3, US3.4 (заказы)</li>
+<li>Завершены US4.1, US4.2, US4.3, US4.4, US4.5, US4.6 (отчеты)</li>
+<li>Утвержден дизайн веб-интерфейса для технолога</li>
+<li>Определены требования к производительности веб-интерфейса</li>
+</ul>
+<h4 id="definition-of-done-dod_12"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.18.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализован веб-интерфейс для управления справочниками номенклатуры и зон</li>
+<li>Поддержаны все функции работы с отчетами (формирование, просмотр, фильтрация)</li>
+<li>Реализован интерфейс управления заказами (просмотр, корректировка, утверждение)</li>
+<li>Интерфейс оптимизирован для работы на больших экранах</li>
+<li>Производительность интерфейса соответствует требованиям (загрузка &lt; 5 сек)</li>
+</ul>
+<h4 id="_30"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.18.3</span> Критерии приемки:</h4>
+<ul>
+<li>Технолог может управлять справочниками номенклатуры и зон через веб-интерфейс</li>
+<li>Доступны все типы отчетов: по срокам годности, пополнению, инвентаризации</li>
+<li>Технолог может просматривать, корректировать и утверждать заказы в веб-интерфейсе</li>
+<li>Интерфейс удобен для анализа данных на большом экране</li>
+<li>Все операции выполняются без задержек, интерфейс отзывчив</li>
+</ul>
+<h4 id="_31"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.18.4</span> Задачи:</h4>
+<ul>
+<li>Разработать веб-интерфейс для технолога</li>
+<li>Реализовать модуль управления справочниками</li>
+<li>Интегрировать генераторы отчетов</li>
+<li>Реализовать интерфейс управления заказами</li>
+<li>Оптимизировать производительность веб-приложения</li>
+</ul>
+<hr/>
+<h3 id="us53"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.19</span> US5.3: Простые отчеты на мобильном устройстве с минимальными действиями</h3>
+<h4 id="definition-of-ready-dor_13"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.19.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>Завершены US4.1, US4.2, US4.4, US4.5 (отчеты)</li>
+<li>Утвержден дизайн упрощенного мобильного интерфейса отчетов</li>
+<li>Определены ключевые метрики и данные для мобильных отчетов</li>
+<li>Готовы API endpoints для мобильных отчетов</li>
+</ul>
+<h4 id="definition-of-done-dod_13"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.19.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализованы упрощенные версии отчетов для мобильного приложения</li>
+<li>Интерфейс использует крупный шрифт и минимальное количество элементов</li>
+<li>Навигация оптимизирована для быстрого доступа к ключевым данным</li>
+<li>Отчеты загружаются быстро даже при медленном соединении</li>
+<li>Интерфейс интуитивно понятен для оператора в условиях цеха</li>
+</ul>
+<h4 id="_32"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.19.3</span> Критерии приемки:</h4>
+<ul>
+<li>Все отчеты на мобильном устройстве имеют простой и понятный интерфейс</li>
+<li>Используется крупный шрифт, удобный для чтения в условиях цеха</li>
+<li>Для достижения цели требуется минимальное количество действий (тапов)</li>
+<li>Оператор может быстро найти нужную информацию без сложной навигации</li>
+<li>Интерфейс оптимизирован для работы в условиях производственного цеха</li>
+</ul>
+<h4 id="_33"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1.19.4</span> Задачи:</h4>
+<ul>
+<li>Разработать упрощенный дизайн мобильных отчетов</li>
+<li>Реализовать адаптивные версии отчетов для мобильных устройств</li>
+<li>Оптимизировать навигацию и уменьшить количество действий</li>
+<li>Настроить крупные шрифты и контрастные элементы</li>
+<li>Протестировать удобство использования в условиях цеха</li>
+</ul>
+<hr/>
+<h2 id="_34"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2</span> Постановки на разработку функционала, реализуемого в рамках первого релиза</h2>
+<h3 id="us61"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.1</span> US6.1: Автоматическое сканирование и блокировка партий</h3>
+<h4 id="definition-of-ready-dor-_5"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.1.1</span> Definition of Ready (DoR) - Критерии готовности к началу работы:</h4>
+<ul>
+<li>Завершены US1.1, US1.2 (справочники номенклатуры со сроками хранения)</li>
+<li>Завершены US4.1, US4.2 (отчеты по срокам годности)</li>
+<li>Определены алгоритмы сканирования и критерии блокировки</li>
+<li>Настроено расписание автоматического сканирования (каждые N минут)</li>
+<li>Готовы API endpoints для блокировки партий и создания заданий</li>
+</ul>
+<h4 id="definition-of-done-dod-_5"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.1.2</span> Definition of Done (DoD) - Критерии завершенности:</h4>
+<ul>
+<li>Реализован сервис автоматического сканирования сроков годности</li>
+<li>Система блокирует партии с истекшим сроком и скоро истекающие (за X часов)</li>
+<li>Сканирование выполняется по расписанию без ручного вмешательства</li>
+<li>Заблокированные партии исключаются из использования в производстве</li>
+<li>Ведутся логи всех операций блокировки</li>
+</ul>
+<h4 id="acceptance-criteria_5"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.1.3</span> Критерии приемки (Acceptance Criteria):</h4>
+<ul>
+<li>Система автоматически сканирует все партии каждые N минут</li>
+<li>Партии блокируются при истечении срока годности</li>
+<li>Партии блокируются за X часов до истечения срока (настраиваемый параметр)</li>
+<li>Блокировка предотвращает использование партии в любых операциях</li>
+<li>Исключен человеческий фактор в контроле сроков годности</li>
+</ul>
+<h4 id="_35"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.1.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать сервис сканирования сроков годности</li>
+<li>Настроить scheduled job для автоматического сканирования</li>
+<li>Разработать алгоритмы блокировки по критериям</li>
+<li>Интегрировать с системой управления остатками</li>
+<li>Реализовать логирование операций блокировки</li>
+</ul>
+<hr/>
+<h3 id="us62"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.2</span> US6.2: Автоматическое создание заданий на утилизацию</h3>
+<h4 id="definition-of-ready-dor_14"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.2.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US6.1 завершена и протестирована</li>
+<li>Завершены US4.3 (процесс утилизации)</li>
+<li>Определены правила создания заданий на утилизацию</li>
+<li>Готовы API endpoints для создания заданий операторам</li>
+<li>Интегрирована система уведомлений операторов</li>
+</ul>
+<h4 id="definition-of-done-dod_14"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.2.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализовано автоматическое создание заданий при блокировке партий</li>
+<li>Задания отправляются на терминал оператора через систему уведомлений</li>
+<li>В задании указаны точные данные: штрих-код, локация, причина</li>
+<li>Поддержаны приоритеты заданий (просроченные &gt; истекающие сегодня)</li>
+<li>Система отслеживает выполнение заданий</li>
+</ul>
+<h4 id="_36"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.2.3</span> Критерии приемки:</h4>
+<ul>
+<li>При блокировке партии система автоматически создает задание на утилизацию</li>
+<li>Задание отправляется на мобильное устройство оператора</li>
+<li>В задании четко указаны: штрих-код партии, локация, причина утилизации</li>
+<li>Оператор не ищет данные в отчете, а получает готовое задание</li>
+<li>Задания на утилизацию просроченных партий имеют высший приоритет</li>
+</ul>
+<h4 id="_37"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.2.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать генератор заданий на утилизацию</li>
+<li>Интегрировать с системой push-уведомлений</li>
+<li>Настроить приоритеты заданий</li>
+<li>Разработать шаблоны заданий с необходимой информацией</li>
+<li>Реализовать отслеживание статусов заданий</li>
+</ul>
+<hr/>
+<h3 id="us63-"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.3</span> US6.3: Четкие задания на утилизацию со штрих-кодом и локацией</h3>
+<h4 id="definition-of-ready-dor_15"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.3.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US6.2 завершена и протестирована</li>
+<li>Утвержден формат задания с полной информацией для оператора</li>
+<li>Определены обязательные атрибуты задания</li>
+<li>Готовы API endpoints для передачи детализированных заданий</li>
+</ul>
+<h4 id="definition-of-done-dod_15"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.3.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Задания содержат всю необходимую информацию для быстрого выполнения</li>
+<li>Реализована передача штрих-кода партии в задании</li>
+<li>Указана точная локация партии на складе или линии</li>
+<li>Включена причина утилизации и приоритет выполнения</li>
+<li>Интерфейс задания оптимизирован для быстрого выполнения</li>
+</ul>
+<h4 id="_38"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.3.3</span> Критерии приемки:</h4>
+<ul>
+<li>Оператор получает четкие задания на утилизацию со штрих-кодом и локацией</li>
+<li>Не требуется поиск данных в отчетах - вся информация в задании</li>
+<li>Задание содержит: штрих-код партии, точное местонахождение, причину утилизации</li>
+<li>Оператор может выполнить работу быстрее и без ошибок</li>
+<li>Интерфейс задания прост и интуитивно понятен</li>
+</ul>
+<h4 id="_39"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.3.4</span> Задачи:</h4>
+<ul>
+<li>Разработать детализированный формат заданий</li>
+<li>Реализовать передачу штрих-кодов и локаций в заданиях</li>
+<li>Оптимизировать UI мобильного приложения для отображения заданий</li>
+<li>Протестировать скорость выполнения заданий</li>
+<li>Собрать метрики эффективности автоматизированного процесса</li>
+</ul>
+<hr/>
+<h3 id="us71"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.4</span> US7.1: Запрос разрешения на использование полуфабриката</h3>
+<h4 id="definition-of-ready-dor-_6"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.4.1</span> Definition of Ready (DoR) - Критерии готовности к началу работы:</h4>
+<ul>
+<li>Завершены US6.1, US6.2, US6.3 (автоматический контроль сроков)</li>
+<li>Интегрированы роботизированные линии через API</li>
+<li>Определен протокол взаимодействия с роботами (gRPC/WebSocket)</li>
+<li>Утвержден формат запроса разрешения от робота</li>
+<li>Готовы высокопроизводительные endpoints для проверки разрешений</li>
+</ul>
+<h4 id="definition-of-done-dod-_6"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.4.2</span> Definition of Done (DoD) - Критерии завершенности:</h4>
+<ul>
+<li>Реализован endpoint для запросов разрешения от роботов</li>
+<li>Система проверяет статус и срок годности партии в оперативном запасе</li>
+<li>Ответ предоставляется в формате, понятном роботизированной системе</li>
+<li>Интеграция стабильно работает в production-среде</li>
+<li>Обеспечена отказоустойчивость при недоступности системы</li>
+</ul>
+<h4 id="acceptance-criteria_6"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.4.3</span> Критерии приемки (Acceptance Criteria):</h4>
+<ul>
+<li>Роботизированная линия запрашивает разрешение на использование полуфабриката из оперативного запаса</li>
+<li>Запрос содержит: ID линии, ID контейнера, ID полуфабриката, количество</li>
+<li>Система проверяет возможность использования (статус, срок годности)</li>
+<li>Робот получает четкий ответ: разрешено/запрещено с причиной</li>
+<li>Робот уверен в безопасности используемого полуфабриката</li>
+</ul>
+<h4 id="_40"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.4.4</span> Задачи:</h4>
+<ul>
+<li>Разработать API для запросов разрешений от роботов</li>
+<li>Реализовать высокопроизводительную проверку статусов партий</li>
+<li>Интегрировать с системой контроля сроков годности</li>
+<li>Настроить протоколы связи (gRPC/WebSocket + REST fallback)</li>
+<li>Реализовать механизмы отказоустойчивости</li>
+</ul>
+<hr/>
+<h3 id="us72"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.5</span> US7.2: Реальное время ответа на запрос робота</h3>
+<h4 id="definition-of-ready-dor_16"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.5.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US7.1 завершена и протестирована</li>
+<li>Определены требования к производительности (&lt; 100 мс)</li>
+<li>Настроено высокопроизводительное кэширование (Redis)</li>
+<li>Проведено нагрузочное тестирование инфраструктуры</li>
+<li>Готовы мониторинги времени ответа</li>
+</ul>
+<h4 id="definition-of-done-dod_16"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.5.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Время ответа на запрос разрешения не превышает 100 мс (95-й процентиль)</li>
+<li>Система использует кэш для быстрого доступа к данным о блокировках</li>
+<li>Реализована изоляция от медленных сервисов при проверке</li>
+<li>Мониторинг времени ответа работает в реальном времени</li>
+<li>Система масштабируется под пиковые нагрузки</li>
+</ul>
+<h4 id="_41"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.5.3</span> Критерии приемки:</h4>
+<ul>
+<li>Система отвечает роботу на запрос в режиме реального времени (&lt; 100 мс)</li>
+<li>Время ответа гарантировано даже в часы пиковой нагрузки</li>
+<li>Отсутствие задержек в производственном процессе</li>
+<li>Робот не простаивает из-за ожидания ответа от системы</li>
+<li>Производительность системы соответствует требованиям роботизированной линии</li>
+</ul>
+<h4 id="_42"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.5.4</span> Задачи:</h4>
+<ul>
+<li>Оптимизировать производительность проверки разрешений</li>
+<li>Настроить Redis кэш для быстрого доступа к данным</li>
+<li>Реализовать circuit breaker для изоляции от медленных сервисов</li>
+<li>Настроить мониторинг и алертинг по времени ответа</li>
+<li>Провести нагрузочное тестирование</li>
+</ul>
+<hr/>
+<h3 id="us73"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.6</span> US7.3: Автоматическое уведомление о блокировке партии</h3>
+<h4 id="definition-of-ready-dor_17"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.6.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US7.1, US7.2 завершены и протестированы</li>
+<li>US6.1 завершена (автоматическая блокировка партий)</li>
+<li>Определен механизм уведомления роботов о блокировках</li>
+<li>Готовы API для push-уведомлений роботам</li>
+<li>Утверждены сценарии реакции робота на блокировку</li>
+</ul>
+<h4 id="definition-of-done-dod_17"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.6.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализована система мгновенных уведомлений роботов о блокировках</li>
+<li>Робот немедленно прекращает использование заблокированной партии</li>
+<li>Система уведомляет оператора о остановке линии</li>
+<li>Обеспечена надежная доставка уведомлений даже при временной недоступности</li>
+<li>Отработаны сценарии восстановления после блокировки</li>
+</ul>
+<h4 id="_43"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.6.3</span> Критерии приемки:</h4>
+<ul>
+<li>Система автоматически сообщает роботу о блокировке партии в оперативном запасе</li>
+<li>Робот немедленно прекращает использование заблокированной партии</li>
+<li>При остановке робот уведомляет оператора о причине</li>
+<li>Предотвращено использование просроченных полуфабрикатов в производстве</li>
+<li>Обеспечена безопасность пищевых продуктов</li>
+</ul>
+<h4 id="_44"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.6.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать систему push-уведомлений для роботов</li>
+<li>Разработать протокол экстренных уведомлений о блокировках</li>
+<li>Интегрировать с системой автоматической блокировки партий</li>
+<li>Реализовать сценарии реакции робота на блокировки</li>
+<li>Настроить уведомления оператора об остановках линии</li>
+</ul>
+<hr/>
+<h3 id="us81"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.7</span> US8.1: Отслеживание остатков в оперативном запасе в реальном времени</h3>
+<h4 id="definition-of-ready-dor_18"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.7.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>Завершены US7.1, US7.2, US7.3 (интеграция с роботами)</li>
+<li>Определен механизм получения данных о списаниях от роботов</li>
+<li>Утверждены пороги пополнения для каждого полуфабриката</li>
+<li>Готовы API для мониторинга остатков</li>
+</ul>
+<h4 id="definition-of-done-dod_18"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.7.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализован мониторинг остатков в оперативном запасе в реальном времени</li>
+<li>Система получает уведомления о каждом списании от роботов</li>
+<li>Рассчитывается точка пополнения с учетом скорости расхода</li>
+<li>Данные об остатках актуальны в любой момент времени</li>
+</ul>
+<h4 id="_45"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.7.3</span> Критерии приемки:</h4>
+<ul>
+<li>Система отслеживает остатки в оперативном запасе каждой линии в реальном времени</li>
+<li>На основе получаемых сообщений о списаниях от роботов</li>
+<li>Определяется момент необходимости пополнения (точка пополнения &gt; 0)</li>
+<li>Расчет точки пополнения учитывает скорость расхода и время выполнения задания</li>
+</ul>
+<h4 id="_46"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.7.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать получение данных о списаниях от роботов</li>
+<li>Настроить расчет точки пополнения</li>
+<li>Разработать мониторинг остатков в реальном времени</li>
+</ul>
+<hr/>
+<h3 id="us82"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.8</span> US8.2: Автоматическое формирование задания на пополнение</h3>
+<h4 id="definition-of-ready-dor_19"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.8.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US8.1 завершена и протестирована</li>
+<li>Завершены US4.5 (FEFO отчеты)</li>
+<li>Определен алгоритм выбора партии по FEFO</li>
+<li>Готовы API для создания заданий операторам</li>
+</ul>
+<h4 id="definition-of-done-dod_19"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.8.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализовано автоматическое создание заданий при достижении точки пополнения</li>
+<li>Система выбирает партию по FEFO для пополнения</li>
+<li>В задании указывается точное количество для перемещения</li>
+<li>Задание имеет высокий приоритет</li>
+</ul>
+<h4 id="_47"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.8.3</span> Критерии приемки:</h4>
+<ul>
+<li>Система автоматически формирует задание для оператора на пополнение конкретной линии</li>
+<li>В задании указывается точная партия со склада по FEFO и необходимое количество</li>
+<li>Исключен ручной выбор партии и ошибки оператора</li>
+<li>Количество равно ёмкости контейнера на линии</li>
+</ul>
+<h4 id="_48"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.8.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать генератор заданий на пополнение</li>
+<li>Интегрировать с FEFO алгоритмом выбора партий</li>
+<li>Настроить расчет количества для пополнения</li>
+</ul>
+<hr/>
+<h3 id="us83"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.9</span> US8.3: Упрощенный процесс пополнения через сканирование</h3>
+<h4 id="definition-of-ready-dor_20"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.9.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US8.2 завершена и протестирована</li>
+<li>Интегрированы сканеры штрих-кодов</li>
+<li>Определен процесс подтверждения перемещения</li>
+</ul>
+<h4 id="definition-of-done-dod_20"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.9.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализован упрощенный интерфейс пополнения в мобильном приложении</li>
+<li>Поддержано сканирование штрих-кодов партии и зоны линии</li>
+<li>Перемещение фиксируется автоматически после сканирования</li>
+</ul>
+<h4 id="_49"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.9.3</span> Критерии приемки:</h4>
+<ul>
+<li>Оператор получает задания на пополнение линии</li>
+<li>Сканирует только штрих-коды (складской партии и зоны линии)</li>
+<li>Система автоматически фиксирует перемещение</li>
+<li>Процесс максимально упрощен для оператора</li>
+</ul>
+<h4 id="_50"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.9.4</span> Задачи:</h4>
+<ul>
+<li>Разработать упрощенный UI для пополнения</li>
+<li>Интегрировать сканирование штрих-кодов</li>
+<li>Реализовать автоматическую фиксацию перемещений</li>
+</ul>
+<hr/>
+<h3 id="us91"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.10</span> US9.1: Интерфейс настройки параметров автозаказа</h3>
+<h4 id="definition-of-ready-dor_21"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.10.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>Завершены US3.1, US3.2 (расчет автозаказа)</li>
+<li>Определены все параметры правил (Min, Max, точка заказа)</li>
+<li>Утвержден интерфейс настройки правил</li>
+</ul>
+<h4 id="definition-of-done-dod_21"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.10.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализован веб-интерфейс для настройки параметров автозаказа</li>
+<li>Технолог может самостоятельно настраивать правила без разработчиков</li>
+<li>Поддержана валидация вводимых параметров</li>
+</ul>
+<h4 id="_51"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.10.3</span> Критерии приемки:</h4>
+<ul>
+<li>Технолог имеет интерфейс для самостоятельной настройки параметров автозаказа</li>
+<li>Настраиваются: Min, Max, точка заказа, кратность для каждого полуфабриката</li>
+<li>Гибкое управление запасами без участия разработчиков</li>
+</ul>
+<h4 id="_52"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.10.4</span> Задачи:</h4>
+<ul>
+<li>Разработать UI для настройки правил</li>
+<li>Реализовать валидацию параметров</li>
+<li>Интегрировать с системой расчета автозаказа</li>
+</ul>
+<hr/>
+<h3 id="us92"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.11</span> US9.2: Настройка коэффициентов сезонности</h3>
+<h4 id="definition-of-ready-dor_22"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.11.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US9.1 завершена и протестирована</li>
+<li>Определены алгоритмы учета сезонности</li>
+<li>Утверждены форматы коэффициентов</li>
+</ul>
+<h4 id="definition-of-done-dod_22"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.11.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализована настройка коэффициентов сезонности для правил автозаказа</li>
+<li>Поддержаны помесячные коэффициенты</li>
+<li>Коэффициенты учитываются при расчете автозаказа</li>
+</ul>
+<h4 id="_53"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.11.3</span> Критерии приемки:</h4>
+<ul>
+<li>Технолог может настраивать коэффициент сезонности для правил автозаказа</li>
+<li>Увеличение запасов в периоды высокого спроса</li>
+<li>Помесячные коэффициенты с выбором шаблона</li>
+</ul>
+<h4 id="_54"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.11.4</span> Задачи:</h4>
+<ul>
+<li>Добавить настройку коэффициентов сезонности в UI</li>
+<li>Интегрировать сезонность в алгоритм расчета</li>
+<li>Реализовать шаблоны коэффициентов</li>
+</ul>
+<hr/>
+<h3 id="us93"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.12</span> US9.3: Групповая настройка правил</h3>
+<h4 id="definition-of-ready-dor_23"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.12.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US9.1, US9.2 завершены и протестированы</li>
+<li>Определены механизмы группового применения правил</li>
+<li>Утвержден интерфейс групповых операций</li>
+</ul>
+<h4 id="definition-of-done-dod_23"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.12.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализовано применение настроек правил к группе товаров</li>
+<li>Поддержана фильтрация товаров по категориям</li>
+<li>Обеспечена валидация групповых изменений</li>
+</ul>
+<h4 id="_55"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.12.3</span> Критерии приемки:</h4>
+<ul>
+<li>Технолог может применять настройки правил к группе товаров одновременно</li>
+<li>Экономия времени на конфигурации</li>
+<li>Фильтр по категориям товаров</li>
+</ul>
+<h4 id="_56"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.12.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать групповые операции с правилами</li>
+<li>Разработать фильтры по категориям</li>
+<li>Настроить валидацию групповых изменений</li>
+</ul>
+<hr/>
+<h3 id="us101"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.13</span> US10.1: Автоматическая отправка заказов в ЛЦ</h3>
+<h4 id="definition-of-ready-dor_24"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.13.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>Завершены US3.1-US3.4 (управление заказами)</li>
+<li>Настроена интеграция с системой ЛЦ через API</li>
+<li>Определен формат данных для передачи заказов</li>
+</ul>
+<h4 id="definition-of-done-dod_24"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.13.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализована автоматическая отправка утвержденных заказов в ЛЦ</li>
+<li>Используется API интеграции с логистическим центром</li>
+<li>Исключен ручной ввод данных</li>
+</ul>
+<h4 id="_57"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.13.3</span> Критерии приемки:</h4>
+<ul>
+<li>Система автоматически отправляет утвержденные заказы в систему ЛЦ через API</li>
+<li>Исключен ручной ввод и связанные с ним ошибки</li>
+<li>Формат данных соответствует требованиям ЛЦ</li>
+</ul>
+<h4 id="_58"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.13.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать интеграцию с API ЛЦ</li>
+<li>Настроить форматирование данных заказов</li>
+<li>Автоматизировать процесс отправки</li>
+</ul>
+<hr/>
+<h3 id="us102"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.14</span> US10.2: Обработка ответов от ЛЦ</h3>
+<h4 id="definition-of-ready-dor_25"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.14.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US10.1 завершена и протестирована</li>
+<li>Определены callback endpoints для получения статусов</li>
+<li>Утверждены сценарии обработки ответов</li>
+</ul>
+<h4 id="definition-of-done-dod_25"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.14.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализована обработка ответов от ЛЦ (подтверждение, ошибка, изменение)</li>
+<li>Статус заказа автоматически обновляется в системе</li>
+<li>Поддержано автоматическое применение изменений от ЛЦ</li>
+</ul>
+<h4 id="_59"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.14.3</span> Критерии приемки:</h4>
+<ul>
+<li>Система обрабатывает ответы от ЛЦ (подтверждение, ошибка, изменение количества)</li>
+<li>Автоматическое обновление статуса заказа в системе</li>
+<li>Сквозная видимость процесса</li>
+<li>Автоматическое применение изменений при статусе "Изменен"</li>
+</ul>
+<h4 id="_60"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.14.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать callback endpoints</li>
+<li>Настроить обработку статусов от ЛЦ</li>
+<li>Автоматизировать применение изменений</li>
+</ul>
+<hr/>
+<h3 id="us103"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.15</span> US10.3: Отслеживание статусов заказов</h3>
+<h4 id="definition-of-ready-dor_26"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.15.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>US10.2 завершена и протестирована</li>
+<li>Определены статусы заказов для отображения</li>
+<li>Утвержден интерфейс отслеживания статусов</li>
+</ul>
+<h4 id="definition-of-done-dod_26"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.15.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализовано отображение статусов заказов в системе</li>
+<li>Технолог видит текущий статус без обращения в ЛЦ</li>
+<li>Поддержаны статусы: "Передан в ЛЦ", "Подтвержден", "В пути"</li>
+</ul>
+<h4 id="_61"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.15.3</span> Критерии приемки:</h4>
+<ul>
+<li>Технолог видит в системе статус заказа ("Передан в ЛЦ", "Подтвержден", "В пути")</li>
+<li>Не требуется связываться с ЛЦ для выяснения обстановки</li>
+<li>Актуальная информация о статусе выполнения заказа</li>
+</ul>
+<h4 id="_62"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.15.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать отображение статусов заказов</li>
+<li>Настроить обновление статусов в реальном времени</li>
+<li>Разработать UI для отслеживания заказов</li>
+</ul>
+<hr/>
+<h3 id="us111"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.16</span> US11.1: Фиксация списаний по разным причинам</h3>
+<h4 id="definition-of-ready-dor_27"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.16.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>Завершены US4.3, US6.3 (процессы утилизации)</li>
+<li>Определен справочник причин списания</li>
+<li>Утвержден процесс фиксации списаний</li>
+</ul>
+<h4 id="definition-of-done-dod_27"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.16.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализована фиксация списаний не только по просрочке, но и по другим причинам</li>
+<li>Поддержан выбор причины из справочника</li>
+<li>Унифицирован учет всех потерь</li>
+</ul>
+<h4 id="_63"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.16.3</span> Критерии приемки:</h4>
+<ul>
+<li>Оператор может зафиксировать списание не только по причине просрочки</li>
+<li>Доступны причины: брак, бой, порча, хищение</li>
+<li>Выбор из справочника причин</li>
+<li>Унифицированный учет всех потерь</li>
+</ul>
+<h4 id="_64"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.16.4</span> Задачи:</h4>
+<ul>
+<li>Создать справочник причин списания</li>
+<li>Расширить функциональность списаний</li>
+<li>Унифицировать учет потерь</li>
+</ul>
+<hr/>
+<h3 id="us112"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.17</span> US11.2: Журнал аудита действий системы и пользователей</h3>
+<h4 id="definition-of-ready-dor_28"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.17.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>Определены события для аудита</li>
+<li>Утвержден формат журнала аудита</li>
+<li>Определены требования к хранению логов</li>
+</ul>
+<h4 id="definition-of-done-dod_28"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.17.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализован полный и неизменяемый журнал аудита</li>
+<li>Фиксируются все действия системы и пользователей</li>
+<li>Журнал доступен для расследования инцидентов</li>
+</ul>
+<h4 id="_65"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.17.3</span> Критерии приемки:</h4>
+<ul>
+<li>Технолог видит полный и неизменяемый журнал аудита</li>
+<li>Фиксируются все действия системы (блокировки, списания) и пользователей</li>
+<li>Проведение расследования инцидентов</li>
+<li>Полная трассируемость операций</li>
+</ul>
+<h4 id="_66"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.17.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать систему аудита</li>
+<li>Настроить логирование критических действий</li>
+<li>Разработать интерфейс просмотра журнала</li>
+</ul>
+<hr/>
+<h3 id="us121"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.18</span> US12.1: Асинхронные очереди для интеграций</h3>
+<h4 id="definition-of-ready-dor_29"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.18.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>Определены интеграции для асинхронной обработки</li>
+<li>Выбрана и настроена система очередей (Kafka)</li>
+<li>Утверждены архитектурные решения</li>
+</ul>
+<h4 id="definition-of-done-dod_29"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.18.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Все взаимодействия с внешними системами используют асинхронные очереди</li>
+<li>Реализована надежность и устойчивость к сбоям</li>
+<li>Поддержаны механизмы повторных попыток</li>
+</ul>
+<h4 id="_67"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.18.3</span> Критерии приемки:</h4>
+<ul>
+<li>Все взаимодействия с внешними системами (ЛЦ, робот) используют асинхронные очереди сообщений</li>
+<li>Обеспечена надежность и устойчивость к сбоям</li>
+<li>Использование Kafka для асинхронной коммуникации</li>
+</ul>
+<h4 id="_68"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.18.4</span> Задачи:</h4>
+<ul>
+<li>Настроить Kafka для асинхронной обработки</li>
+<li>Реализовать механизмы повторных попыток</li>
+<li>Интегрировать внешние системы через очереди</li>
+</ul>
+<hr/>
+<h3 id="us122"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.19</span> US12.2: Производительность критических запросов</h3>
+<h4 id="definition-of-ready-dor_30"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.19.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>Определены критические endpoints (запросы от робота)</li>
+<li>Установлены целевые показатели производительности</li>
+<li>Проведено базовое нагрузочное тестирование</li>
+</ul>
+<h4 id="definition-of-done-dod_30"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.19.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Критические запросы (от робота) обрабатываются менее чем за 100 мс</li>
+<li>Обеспечена стабильность производительности под нагрузкой</li>
+<li>Реализовано кэширование для быстрого доступа</li>
+</ul>
+<h4 id="_69"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.19.3</span> Критерии приемки:</h4>
+<ul>
+<li>Критические запросы (от робота) обрабатываются системой менее чем за 100 мс</li>
+<li>Непростаивание производства</li>
+<li>Гарантированное время ответа для роботизированных линий</li>
+</ul>
+<h4 id="_70"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.19.4</span> Задачи:</h4>
+<ul>
+<li>Оптимизировать производительность критических endpoints</li>
+<li>Реализовать кэширование данных</li>
+<li>Провести нагрузочное тестирование</li>
+</ul>
+<hr/>
+<h3 id="us123"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.20</span> US12.3: Ролевая модель и разграничение прав</h3>
+<h4 id="definition-of-ready-dor_31"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.20.1</span> Definition of Ready (DoR):</h4>
+<ul>
+<li>Определены роли пользователей (кассир, оператор линии, администратор, техник)</li>
+<li>Утверждена матрица прав доступа</li>
+<li>Определены требования к аутентификации</li>
+</ul>
+<h4 id="definition-of-done-dod_31"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.20.2</span> Definition of Done (DoD):</h4>
+<ul>
+<li>Реализована ролевая модель доступа (RBAC)</li>
+<li>Настроено разграничение прав для разных ролей</li>
+<li>Обеспечена безопасность данных</li>
+</ul>
+<h4 id="_71"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.20.3</span> Критерии приемки:</h4>
+<ul>
+<li>Система имеет ролевую модель и разграничение прав доступа к функциям</li>
+<li>Роли: кассир, оператор линии, администратор, техник</li>
+<li>Защита от несанкционированных действий</li>
+<li>Обеспечение безопасности данных</li>
+</ul>
+<h4 id="_72"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2.20.4</span> Задачи:</h4>
+<ul>
+<li>Реализовать систему ролей и прав</li>
+<li>Настроить разграничение доступа</li>
+<li>Интегрировать с системой аутентификации</li>
+</ul>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  К началу
+</button>
+</main>
+<footer class="md-footer">
+<nav aria-label="Нижний колонтитул" class="md-footer__inner md-grid">
+<a aria-label="Назад: API для управления оперативным запасом роботизированных линий" class="md-footer__link md-footer__link--prev" href="../api_operational_stock/">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</div>
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Назад
+              </span>
+<div class="md-ellipsis">
+                API для управления оперативным запасом роботизированных линий
+              </div>
+</div>
+</a>
+<a aria-label="Вперед: Постановки на разработку по Use Case" class="md-footer__link md-footer__link--next" href="../task_UC/">
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Вперед
+              </span>
+<div class="md-ellipsis">
+                Постановки на разработку по Use Case
+              </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      © 2025 <a href="https://github.com/TimIrkutsk/Otus-Project" rel="noopener" target="_blank">Тимохин Антон</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.instant", "navigation.tracking", "navigation.path", "navigation.sections", "toc.integrate", "navigation.expand", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+<script src="../js/print-site.js"></script>
+</body>
+</html>

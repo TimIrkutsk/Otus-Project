@@ -1,0 +1,1696 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="../task/" rel="prev"/>
+<link href="../test_case/" rel="next"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.6.21" name="generator"/>
+<title>Постановки на разработку по Use Case - Проект "Инвентаризация, автозаказ, контроль сроков хранения"</title>
+<link href="../assets/stylesheets/main.2a3383ac.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../css/print-site.css" rel="stylesheet"/>
+<link href="../css/print-site-material.css" rel="stylesheet"/>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="purple" data-md-color-primary="teal" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#use-case">
+          Перейти к содержанию
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Верхний колонтитул" class="md-header__inner md-grid">
+<a aria-label="Проект " class="md-header__button md-logo" data-md-component="logo" href=".." title='Проект "Инвентаризация, автозаказ, контроль сроков хранения"' автозаказ,="" инвентаризация,="" контроль="" сроков="" хранения""="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Проект "Инвентаризация, автозаказ, контроль сроков хранения"
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Постановки на разработку по Use Case
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="purple" data-md-color-media="" data-md-color-primary="teal" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="lime" data-md-color-media="" data-md-color-primary="teal" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Поиск" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Поиск" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Поиск" class="md-search__options">
+<button aria-label="Очистить" class="md-search__icon md-icon" tabindex="-1" title="Очистить" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Инициализация поиска
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="Вкладки" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+          
+  
+  
+  Домашняя страница
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../page_2/">
+          
+  
+  
+  Документация проекта
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../object_characteristics/">
+          
+  
+  
+  Документация подсистемы
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../api_robots/">
+          
+  
+  
+  API
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../task/">
+          
+  
+  
+  Задачи
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../test_case/">
+          
+  
+  
+  Тест-кейсы
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../print_page/">
+        
+  
+  
+    
+  
+  Print Site
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Навигация" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Проект " class="md-nav__button md-logo" data-md-component="logo" href=".." title='Проект "Инвентаризация, автозаказ, контроль сроков хранения"' автозаказ,="" инвентаризация,="" контроль="" сроков="" хранения""="">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Проект "Инвентаризация, автозаказ, контроль сроков хранения"
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+<span class="md-ellipsis">
+    Домашняя страница
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_1_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_1">
+<span class="md-nav__icon md-icon"></span>
+            Домашняя страница
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    О проектной работе
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    Документация проекта
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            Документация проекта
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../page_2/">
+<span class="md-ellipsis">
+    Глоссарий
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../general_info/">
+<span class="md-ellipsis">
+    Общие сведения
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../project_goals/">
+<span class="md-ellipsis">
+    Паспорт проекта
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../goals/">
+<span class="md-ellipsis">
+    Назначение и цели создания системы
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../system_requirements/">
+<span class="md-ellipsis">
+    Нефункциональные требования
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    Документация подсистемы
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            Документация подсистемы
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../object_characteristics/">
+<span class="md-ellipsis">
+    Характеристика объекта автоматизации
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../business_processes/">
+<span class="md-ellipsis">
+    Описание бизнес-процессов
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../subsystem_func_requirements/">
+<span class="md-ellipsis">
+    Функциональные требования к подсистеме
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../subsystem_requirements/">
+<span class="md-ellipsis">
+    Варианты использования и порядок их реализации
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../User_story/">
+<span class="md-ellipsis">
+    Пользовательские истории (User Story) и порядок их реализации
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../information_model/">
+<span class="md-ellipsis">
+    Информационная модель
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../C4_model/">
+<span class="md-ellipsis">
+    Компонентная архитектура
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../Seq_diagram/">
+<span class="md-ellipsis">
+    Интеграционное взаимодействие
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../UI/">
+<span class="md-ellipsis">
+    Демонстрация UI макета
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    API
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_robots/">
+<span class="md-ellipsis">
+    API для интеграции с роботизированной линией
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_logict/">
+<span class="md-ellipsis">
+    API для интеграции с логистическими центрами
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_mobile_task/">
+<span class="md-ellipsis">
+    API для мобильного приложения оператора линии
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_shelf_life_control/">
+<span class="md-ellipsis">
+    API для контроля сроков годности партий полуфабрикатов
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_stock_management/">
+<span class="md-ellipsis">
+    API для управления складскими запасами
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api/">
+<span class="md-ellipsis">
+    API для получения прогнозов продаж
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_auto_order/">
+<span class="md-ellipsis">
+    API для автоматического расчета и управления заказами полуфабрикатов
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../api_operational_stock/">
+<span class="md-ellipsis">
+    API для управления оперативным запасом роботизированных линий
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+<span class="md-ellipsis">
+    Задачи
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            Задачи
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../task/">
+<span class="md-ellipsis">
+    Постановки на разработку по UserStory
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    Постановки на разработку по Use Case
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    Постановки на разработку по Use Case
+    
+  </span>
+</a>
+<nav aria-label="Содержание" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Содержание
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#mvp">
+<span class="md-ellipsis">
+      Постановки на разработку функционала, реализуемого в рамках MVP
+    </span>
+</a>
+<nav aria-label="Постановки на разработку функционала, реализуемого в рамках MVP" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc1-">
+<span class="md-ellipsis">
+      UC1 - Сформировать отчет по сроку годности
+    </span>
+</a>
+<nav aria-label="UC1 - Сформировать отчет по сроку годности" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#11-api-endpoint">
+<span class="md-ellipsis">
+      Задача 1.1: Разработать API endpoint для формирования отчета
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#12">
+<span class="md-ellipsis">
+      Задача 1.2: Реализовать фронтенд интерфейс для отчета
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#13-">
+<span class="md-ellipsis">
+      Задача 1.3: Реализовать бизнес-логику фильтрации и сортировки
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc2-mvp-">
+<span class="md-ellipsis">
+      UC2-MVP - Утилизировать партию по отчету
+    </span>
+</a>
+<nav aria-label="UC2-MVP - Утилизировать партию по отчету" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#21">
+<span class="md-ellipsis">
+      Задача 2.1: Разработать мобильный интерфейс для утилизации
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#22-api">
+<span class="md-ellipsis">
+      Задача 2.2: Реализовать API для подтверждения утилизации
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#23">
+<span class="md-ellipsis">
+      Задача 2.3: Реализовать валидацию и проверки
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc3-mvp-">
+<span class="md-ellipsis">
+      UC3-MVP - Пополнить оперативный запас у робота по отчету
+    </span>
+</a>
+<nav aria-label="UC3-MVP - Пополнить оперативный запас у робота по отчету" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#31">
+<span class="md-ellipsis">
+      Задача 3.1: Разработать интерфейс выбора партии для пополнения
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#32-api">
+<span class="md-ellipsis">
+      Задача 3.2: Реализовать API для фиксации перемещения
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#33">
+<span class="md-ellipsis">
+      Задача 3.3: Реализовать проверки при перемещении
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc4-">
+<span class="md-ellipsis">
+      UC4 - Провести инвентаризацию
+    </span>
+</a>
+<nav aria-label="UC4 - Провести инвентаризацию" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#41-">
+<span class="md-ellipsis">
+      Задача 4.1: Реализовать оффлайн-режим мобильного приложения
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#42-api">
+<span class="md-ellipsis">
+      Задача 4.2: Разработать API для управления инвентаризацией
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#43">
+<span class="md-ellipsis">
+      Задача 4.3: Реализовать процесс сканирования и ввода данных
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#44">
+<span class="md-ellipsis">
+      Задача 4.4: Реализовать обработку конфликтов при синхронизации
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc5-">
+<span class="md-ellipsis">
+      UC5 - Вести справочники
+    </span>
+</a>
+<nav aria-label="UC5 - Вести справочники" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#51-">
+<span class="md-ellipsis">
+      Задача 5.1: Разработать веб-интерфейс для управления номенклатурой
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#52">
+<span class="md-ellipsis">
+      Задача 5.2: Реализовать управление складскими зонами
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#53">
+<span class="md-ellipsis">
+      Задача 5.3: Реализовать ролевую модель доступа
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc6-">
+<span class="md-ellipsis">
+      UC6 - Скорректировать заказ
+    </span>
+</a>
+<nav aria-label="UC6 - Скорректировать заказ" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#61">
+<span class="md-ellipsis">
+      Задача 6.1: Разработать интерфейс просмотра и редактирования заказов
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#62-workflow">
+<span class="md-ellipsis">
+      Задача 6.2: Реализовать workflow утверждения/отклонения заказов
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      Постановки на разработку функционала, реализуемого в рамках первого релиза
+    </span>
+</a>
+<nav aria-label="Постановки на разработку функционала, реализуемого в рамках первого релиза" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc2-">
+<span class="md-ellipsis">
+      UC2 - Утилизировать партию
+    </span>
+</a>
+<nav aria-label="UC2 - Утилизировать партию" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#21_1">
+<span class="md-ellipsis">
+      Задача 2.1: Реализовать систему автоматического создания заданий на утилизацию
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#22-push-">
+<span class="md-ellipsis">
+      Задача 2.2: Разработать механизм push-уведомлений оператору
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#23_1">
+<span class="md-ellipsis">
+      Задача 2.3: Реализовать мониторинг выполнения заданий
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc3-">
+<span class="md-ellipsis">
+      UC3 - Пополнить оперативный запас
+    </span>
+</a>
+<nav aria-label="UC3 - Пополнить оперативный запас" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#31_1">
+<span class="md-ellipsis">
+      Задача 3.1: Реализовать мониторинг остатков на линии в реальном времени
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#32-fefo">
+<span class="md-ellipsis">
+      Задача 3.2: Разработать алгоритм автоматического выбора партий по FEFO
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#33_1">
+<span class="md-ellipsis">
+      Задача 3.3: Реализовать процесс подтверждения пополнения с пересчетом сроков
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc7-">
+<span class="md-ellipsis">
+      UC7 - Заблокировать просроченную партию
+    </span>
+</a>
+<nav aria-label="UC7 - Заблокировать просроченную партию" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#71">
+<span class="md-ellipsis">
+      Задача 7.1: Реализовать фоновое задание проверки сроков годности
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#72">
+<span class="md-ellipsis">
+      Задача 7.2: Разработать механизм автоматической блокировки партий
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#73">
+<span class="md-ellipsis">
+      Задача 7.3: Реализовать систему уведомлений о блокировках
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc8-">
+<span class="md-ellipsis">
+      UC8 - Рассчитать автозаказ
+    </span>
+</a>
+<nav aria-label="UC8 - Рассчитать автозаказ" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#81">
+<span class="md-ellipsis">
+      Задача 8.1: Реализовать алгоритм расчета автозаказа
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#82">
+<span class="md-ellipsis">
+      Задача 8.2: Разработать интеграцию с системой прогноза продаж
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#83">
+<span class="md-ellipsis">
+      Задача 8.3: Реализовать формирование и валидацию черновика заказа
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc9-">
+<span class="md-ellipsis">
+      UC9 - Подтвердить списание
+    </span>
+</a>
+<nav aria-label="UC9 - Подтвердить списание" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#91">
+<span class="md-ellipsis">
+      Задача 9.1: Реализовать систему выбора причин списания
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#92">
+<span class="md-ellipsis">
+      Задача 9.2: Разработать механизм аудита списаний
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#93">
+<span class="md-ellipsis">
+      Задача 9.3: Реализовать лимиты и эскалацию списаний
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc10-">
+<span class="md-ellipsis">
+      UC10 - Настроить правила автозаказа
+    </span>
+</a>
+<nav aria-label="UC10 - Настроить правила автозаказа" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#101-">
+<span class="md-ellipsis">
+      Задача 10.1: Разработать веб-интерфейс для настройки правил
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#102">
+<span class="md-ellipsis">
+      Задача 10.2: Реализовать управление параметрами поставщика
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#103">
+<span class="md-ellipsis">
+      Задача 10.3: Реализовать массовую настройку и коэффициенты
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc11-">
+<span class="md-ellipsis">
+      UC11 - Проверить срок годности
+    </span>
+</a>
+<nav aria-label="UC11 - Проверить срок годности" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#111-api">
+<span class="md-ellipsis">
+      Задача 11.1: Реализовать высокопроизводительный API для робота
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#112">
+<span class="md-ellipsis">
+      Задача 11.2: Разработать алгоритм проверки сроков годности
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#113">
+<span class="md-ellipsis">
+      Задача 11.3: Реализовать механизмы отказоустойчивости
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc12-">
+<span class="md-ellipsis">
+      UC12 - Передать заказ в ЛЦ
+    </span>
+</a>
+<nav aria-label="UC12 - Передать заказ в ЛЦ" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#121-api">
+<span class="md-ellipsis">
+      Задача 12.1: Реализовать интеграцию с API логистического центра
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#122">
+<span class="md-ellipsis">
+      Задача 12.2: Разработать систему повторных попыток отправки
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#123-callback">
+<span class="md-ellipsis">
+      Задача 12.3: Реализовать обработку callback от ЛЦ
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#uc13-">
+<span class="md-ellipsis">
+      UC13 - Сформировать задание на утилизацию
+    </span>
+</a>
+<nav aria-label="UC13 - Сформировать задание на утилизацию" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#131">
+<span class="md-ellipsis">
+      Задача 13.1: Реализовать систему планирования заданий
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#132">
+<span class="md-ellipsis">
+      Задача 13.2: Разработать механизм распределения заданий операторам
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#133">
+<span class="md-ellipsis">
+      Задача 13.3: Реализовать мониторинг и эскалацию заданий
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    Тест-кейсы
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            Тест-кейсы
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case/">
+<span class="md-ellipsis">
+    Тест кейсы для UserStory MVP
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case_release/">
+<span class="md-ellipsis">
+    Тест кейсы для UserStory первого релиза
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case_UC/">
+<span class="md-ellipsis">
+    Тест кейсы для UC MVP
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../test_case_UC_release/">
+<span class="md-ellipsis">
+    Тест кейсы для UC первого релиза
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../print_page/">
+<span class="md-ellipsis">
+    Print Site
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="use-case"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.</span> Постановки на разработку по Use Case</h1>
+<h2 id="mvp"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1</span> Постановки на разработку функционала, реализуемого в рамках MVP</h2>
+<h3 id="uc1-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.1</span> UC1 - Сформировать отчет по сроку годности</h3>
+<h4 id="11-api-endpoint"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.1.1</span> Задача 1.1: Разработать API endpoint для формирования отчета</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Утверждена спецификация API согласно проекту</li>
+<li>Определены параметры отчета из UC1: зона хранения, группа товаров, статус срока годности, формат вывода</li>
+<li>Готовы модели данных для партий из ER-диаграммы</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Endpoint возвращает данные с колонками из UC1: Штрих-код, Наименование, Партия, Срок годности, Остаток, Локация, Статус</li>
+<li>Поддерживает фильтрацию по зонам хранения из справочника UC5</li>
+<li>Время формирования отчета на экран не превышает 5-7 секунд (требование UC1)</li>
+<li>Данные в отчете строго соответствуют данным на момент формирования</li>
+</ul>
+<h4 id="12"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.1.2</span> Задача 1.2: Реализовать фронтенд интерфейс для отчета</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Утвержден дизайн интерфейса с цветовой индикацией статусов</li>
+<li>Готовы компоненты для фильтрации и отображения таблицы</li>
+<li>Настроена интеграция с API endpoint</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Цветовая индикация: красный - просроченные, желтый - истекает сегодня, оранжевый - истекает завтра, серый - заблокированные</li>
+<li>Сортировка по умолчанию по полю "Срок годности" (по возрастанию)</li>
+<li>Отчет доступен для просмотра на веб-интерфейсе</li>
+<li>Интерфейс интуитивно понятен (требование USA2)</li>
+</ul>
+<h4 id="13-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.1.3</span> Задача 1.3: Реализовать бизнес-логику фильтрации и сортировки</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены алгоритмы фильтрации по статусам сроков годности</li>
+<li>Готовы SQL-запросы для выборки данных с учетом FEFO</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Фильтрация работает по всем заданным параметрам: зона, группа товаров, статус</li>
+<li>Сортировка по сроку годности корректно отображает самые проблемные партии вверху</li>
+<li>Алгоритм обработки данных эффективен для 2000+ заказов в сутки</li>
+</ul>
+<h3 id="uc2-mvp-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.2</span> UC2-MVP - Утилизировать партию по отчету</h3>
+<h4 id="21"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.2.1</span> Задача 2.1: Разработать мобильный интерфейс для утилизации</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Утвержден UX flow для процесса утилизации в мобильном приложении</li>
+<li>Готовы компоненты сканирования штрих-кодов</li>
+<li>Реализована интеграция с камерой устройства</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Оператор может сканировать штрих-код партии из отчета UC1</li>
+<li>Система подтверждает, что партия находится в отчете "к утилизации"</li>
+<li>Процесс подтверждения утилизации занимает не более 10 секунд</li>
+</ul>
+<h4 id="22-api"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.2.2</span> Задача 2.2: Реализовать API для подтверждения утилизации</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определена структура запроса/ответа для подтверждения утилизации</li>
+<li>Готовы сервисы для работы со статусами партий</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>API списывает остаток партии до нуля при подтверждении</li>
+<li>Статус партии изменяется на "Утилизирована"</li>
+<li>Фиксируется акт списания с причиной "Утилизация по сроку годности"</li>
+<li>Остатки обновляются в реальном времени</li>
+</ul>
+<h4 id="23"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.2.3</span> Задача 2.3: Реализовать валидацию и проверки</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены бизнес-правила для валидации операций утилизации</li>
+<li>Готовы механизмы проверки соответствия партии отчету</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Система предотвращает утилизацию партий не из отчета UC1</li>
+<li>При сканировании несоответствующей партии выводится предупреждение</li>
+<li>Поддерживается ручной ввод ID партии при повреждении штрих-кода</li>
+</ul>
+<h3 id="uc3-mvp-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.3</span> UC3-MVP - Пополнить оперативный запас у робота по отчету</h3>
+<h4 id="31"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.3.1</span> Задача 3.1: Разработать интерфейс выбора партии для пополнения</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Утвержден процесс выбора партии из отчета UC1</li>
+<li>Реализован доступ к отчету сроков годности из мобильного приложения</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Оператор может открыть отчет UC1 для нужного полуфабриката</li>
+<li>Отчет показывает партии отсортированные по FEFO</li>
+<li>Оператор может выбрать партию из верхней строки отчета</li>
+</ul>
+<h4 id="32-api"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.3.2</span> Задача 3.2: Реализовать API для фиксации перемещения</h4>
+<p><strong>Критерий готовности к работы:</strong></p>
+<ul>
+<li>Определена структура данных для операций перемещения</li>
+<li>Готовы сервисы для обновления остатков</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>API списывает количество со складской партии</li>
+<li>API добавляет количество к оперативному запасу линии</li>
+<li>Фиксируется акт внутреннего перемещения</li>
+<li>Процесс фиксации занимает не более 15-20 секунд</li>
+</ul>
+<h4 id="33"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.3.3</span> Задача 3.3: Реализовать проверки при перемещении</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены правила валидации операций перемещения</li>
+<li>Готовы механизмы проверки доступности партий</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Система проверяет, что выбранная партия доступна и не заблокирована</li>
+<li>При обнаружении просроченной партии выводится предупреждение</li>
+<li>Поддерживается выбор альтернативной партии при недостатке количества</li>
+</ul>
+<h3 id="uc4-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.4</span> UC4 - Провести инвентаризацию</h3>
+<h4 id="41-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.4.1</span> Задача 4.1: Реализовать оффлайн-режим мобильного приложения</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Утверждена архитектура оффлайн-хранения данных</li>
+<li>Реализованы механизмы кэширования данных на устройстве</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Данные всех партий ресторана кэшируются на мобильном устройстве</li>
+<li>Сканирование и ввод данных работают без сетевого соединения</li>
+<li>Автоматическая синхронизация при восстановлении связи</li>
+</ul>
+<h4 id="42-api"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.4.2</span> Задача 4.2: Разработать API для управления инвентаризацией</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены endpoints для создания заданий и синхронизации данных</li>
+<li>Готовы сервисы для расчета расхождений</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Система формирует задания по расписанию или по инициативе оператора</li>
+<li>Автоматический расчет расхождений между фактом и системой</li>
+<li>Автоматическая коррекция остатков при расхождениях ≤ 4000 ед.</li>
+<li>Уведомление технолога при расхождениях &gt; 4000 ед.</li>
+</ul>
+<h4 id="43"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.4.3</span> Задача 4.3: Реализовать процесс сканирования и ввода данных</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Утвержден UX для последовательного сканирования партий</li>
+<li>Реализованы компоненты для работы со штрих-кодами</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Внесение данных по одной партии занимает 3-5 секунд</li>
+<li>Автозаполнение данных при распознавании штрих-кода</li>
+<li>Поддержка ручного ввода при поврежденных штрих-кодах</li>
+<li>Фокус автоматически переходит к следующему сканированию</li>
+</ul>
+<h4 id="44"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.4.4</span> Задача 4.4: Реализовать обработку конфликтов при синхронизации</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены алгоритмы разрешения конфликтующих изменений</li>
+<li>Готовы механизмы уведомления о конфликтах</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Обнаружение конфликтующих изменений при синхронизации</li>
+<li>Запрос решения оператора по приоритету данных</li>
+<li>Применение выбранного оператором приоритета</li>
+</ul>
+<h3 id="uc5-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.5</span> UC5 - Вести справочники</h3>
+<h4 id="51-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.5.1</span> Задача 5.1: Разработать веб-интерфейс для управления номенклатурой</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Утвержден дизайн интерфейса для CRUD операций со справочниками</li>
+<li>Готовы компоненты формы создания/редактирования позиций</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Возможность создания/редактирования полуфабрикатов с атрибутами: название, ед. измерения, категория, срок хранения</li>
+<li>Проверка уникальности наименования</li>
+<li>Валидация вводимых данных (срок хранения - положительное число)</li>
+<li>Пагинация и поиск при большом объеме данных</li>
+</ul>
+<h4 id="52"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.5.2</span> Задача 5.2: Реализовать управление складскими зонами</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определена структура иерархии складских зон</li>
+<li>Готовы компоненты для древовидного отображения зон</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Создание/редактирование зон с атрибутами: название, тип, родительская зона</li>
+<li>Иерархическое отображение структуры склада</li>
+<li>Назначение штрих-кодов зонам для сканирования оператором</li>
+</ul>
+<h4 id="53"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.5.3</span> Задача 5.3: Реализовать ролевую модель доступа</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены роли и права доступа согласно FR7.1-FR7.3</li>
+<li>Реализована система аутентификации и авторизации</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Доступ к редактированию справочников только для технолога и администратора</li>
+<li>Запрет удаления позиций с историей операций</li>
+<li>Деактивация/архивация неиспользуемых позиций</li>
+</ul>
+<h3 id="uc6-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.6</span> UC6 - Скорректировать заказ</h3>
+<h4 id="61"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.6.1</span> Задача 6.1: Разработать интерфейс просмотра и редактирования заказов</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Утвержден дизайн интерфейса для работы с черновиками заказов</li>
+<li>Готовы компоненты отображения обоснования расчетов</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Просмотр черновика заказа с обоснованием по каждой позиции</li>
+<li>Возможность ручного изменения количества</li>
+<li>Добавление/удаление позиций в заказе</li>
+<li>Цветовая индикация измененных технологом позиций</li>
+</ul>
+<h4 id="62-workflow"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1.6.2</span> Задача 6.2: Реализовать workflow утверждения/отклонения заказов</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены статусы заказов и переходы между ними</li>
+<li>Реализованы механизмы уведомлений</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Утверждение заказа с отправкой в ЛЦ</li>
+<li>Отклонение заказа с указанием причины</li>
+<li>Логирование всех действий технолога</li>
+<li>Уведомление о появлении новых черновиков заказов</li>
+</ul>
+<h2 id="_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2</span> Постановки на разработку функционала, реализуемого в рамках первого релиза</h2>
+<h3 id="uc2-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.1</span> UC2 - Утилизировать партию</h3>
+<h4 id="21_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.1.1</span> Задача 2.1: Реализовать систему автоматического создания заданий на утилизацию</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Утверждены критерии блокировки партий согласно UC7</li>
+<li>Реализована интеграция с сервисом контроля сроков</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Автоматическое создание заданий при блокировке партий</li>
+<li>Приоритеты: просроченные &gt; истекающие сегодня &gt; истекающие завтра</li>
+<li>Задание содержит: локацию, штрих-код партии, причину утилизации</li>
+<li>Предотвращение дублирования заданий для одной партии</li>
+</ul>
+<h4 id="22-push-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.1.2</span> Задача 2.2: Разработать механизм push-уведомлений оператору</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Настроена интеграция с FCM/APNS для мобильных уведомлений</li>
+<li>Реализована очередь заданий для операторов</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Мгновенная доставка заданий на мобильные устройства операторов</li>
+<li>Уведомление о новых заданиях с высоким приоритетом</li>
+<li>Отображение заданий в очереди оператора</li>
+</ul>
+<h4 id="23_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.1.3</span> Задача 2.3: Реализовать мониторинг выполнения заданий</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены сроки выполнения заданий (1 час)</li>
+<li>Реализованы механизмы эскалации</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Автоматическое повышение приоритета просроченных заданий</li>
+<li>Уведомление технолога при массовой блокировке (&gt;50% партий)</li>
+<li>Повторные уведомления для заданий старше 1 часа</li>
+</ul>
+<h3 id="uc3-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.2</span> UC3 - Пополнить оперативный запас</h3>
+<h4 id="31_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.2.1</span> Задача 3.1: Реализовать мониторинг остатков на линии в реальном времени</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Настроена интеграция с роботизированной линией через API</li>
+<li>Реализованы механизмы получения данных о списаниях</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Отслеживание остатков каждого полуфабриката в оперативном запасе</li>
+<li>Автоматическое определение момента необходимости пополнения</li>
+<li>Расчет точки пополнения на основе прогноза продаж</li>
+</ul>
+<h4 id="32-fefo"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.2.2</span> Задача 3.2: Разработать алгоритм автоматического выбора партий по FEFO</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определена логика выбора партий для пополнения</li>
+<li>Реализованы сервисы для работы с виртуальными сроками годности</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Автоматический выбор партии с самым близким сроком годности</li>
+<li>Указание точного количества для перемещения (емкость контейнера)</li>
+<li>Исключение заблокированных партий из выбора</li>
+</ul>
+<h4 id="33_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.2.3</span> Задача 3.3: Реализовать процесс подтверждения пополнения с пересчетом сроков</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определен алгоритм пересчета виртуального срока годности</li>
+<li>Реализована интеграция с роботом для обновления данных</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Пересчет виртуального срока годности при пополнении</li>
+<li>Формула: (Y1<em>T1 + Y2</em>T2) / (Y1 + Y2)</li>
+<li>Принятие более раннего срока при добавлении партии</li>
+<li>Подтверждение роботу об обновлении данных о сроке годности</li>
+</ul>
+<h3 id="uc7-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.3</span> UC7 - Заблокировать просроченную партию</h3>
+<h4 id="71"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.3.1</span> Задача 7.1: Реализовать фоновое задание проверки сроков годности</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определена периодичность проверки (каждые N минут)</li>
+<li>Реализован планировщик задач для регулярного сканирования</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Автоматическое сканирование всех активных партий по расписанию</li>
+<li>Проверка тысяч партий за десятки секунд</li>
+<li>Выявление партий по критериям: просроченные, истекающие сегодня</li>
+</ul>
+<h4 id="72"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.3.2</span> Задача 7.2: Разработать механизм автоматической блокировки партий</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены статусы партий и переходы между ними</li>
+<li>Реализованы сервисы для изменения статусов</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Автоматическое изменение статуса на "Заблокирована"</li>
+<li>Исключение заблокированных партий из алгоритмов пополнения и автозаказа</li>
+<li>Транзакционность изменения статуса и распространения информации</li>
+</ul>
+<h4 id="73"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.3.3</span> Задача 7.3: Реализовать систему уведомлений о блокировках</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены получатели уведомлений и каналы доставки</li>
+<li>Реализованы механизмы интеграции с сервисом уведомлений</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Немедленное уведомление оператора о блокировках</li>
+<li>Уведомление технолога о критических ситуациях</li>
+<li>Журналирование всех действий по блокировке/разблокировке</li>
+</ul>
+<h3 id="uc8-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.4</span> UC8 - Рассчитать автозаказ</h3>
+<h4 id="81"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.4.1</span> Задача 8.1: Реализовать алгоритм расчета автозаказа</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определена формула расчета: Max - Текущий остаток - Незавершенные заказы + Прогноз</li>
+<li>Реализованы сервисы для сбора входных данных</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Расчет для каждой позиции с активными правилами</li>
+<li>Учет текущих остатков, незавершенных заказов, прогноза продаж</li>
+<li>Применение ограничений: минимальная партия, кратность, точка заказа</li>
+</ul>
+<h4 id="82"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.4.2</span> Задача 8.2: Разработать интеграцию с системой прогноза продаж</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Настроена интеграция с системой продаж через REST API</li>
+<li>Реализованы механизмы обработки ошибок связи</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Получение прогноза продаж на период поставки</li>
+<li>Использование исторических данных при недоступности системы продаж</li>
+<li>Валидация отклонений прогноза (&gt;75% от среднего)</li>
+</ul>
+<h4 id="83"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.4.3</span> Задача 8.3: Реализовать формирование и валидацию черновика заказа</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определена структура черновика заказа</li>
+<li>Реализованы механизмы проверки данных</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Включение только позиций с Заказ &gt; 0</li>
+<li>Проверка на дубликаты и валидность данных</li>
+<li>Сохранение черновика со статусом "Рассчитан"</li>
+<li>Уведомление технолога о готовности черновика</li>
+</ul>
+<h3 id="uc9-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.5</span> UC9 - Подтвердить списание</h3>
+<h4 id="91"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.5.1</span> Задача 9.1: Реализовать систему выбора причин списания</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определен фиксированный перечень причин списания</li>
+<li>Реализованы справочники причин и их валидация</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Выбор причины из системного перечня: просрочка, брак, бой, порча</li>
+<li>Проверка соответствия причины и статуса партии</li>
+<li>Дополнительное подтверждение технолога для не заблокированных партий</li>
+</ul>
+<h4 id="92"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.5.2</span> Задача 9.2: Разработать механизм аудита списаний</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определена структура акта списания с обязательными реквизитами</li>
+<li>Реализовано неизменяемое хранение данных</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Фиксация акта списания: дата, время, партия, причина, количество, ответственный</li>
+<li>Невозможность изменения зафиксированных актов</li>
+<li>Полный журнал аудита по всем действиям системы и пользователей</li>
+</ul>
+<h4 id="93"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.5.3</span> Задача 9.3: Реализовать лимиты и эскалацию списаний</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены лимиты списаний для разных категорий</li>
+<li>Реализованы механизмы уведомления технолога</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Требование подтверждения технолога при превышении лимитов</li>
+<li>Уведомление технолога через Push/email/SMS</li>
+<li>Запрет списания в оффлайн-режиме для заблокированных партий</li>
+</ul>
+<h3 id="uc10-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.6</span> UC10 - Настроить правила автозаказа</h3>
+<h4 id="101-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.6.1</span> Задача 10.1: Разработать веб-интерфейс для настройки правил</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Утвержден дизайн интерфейса с визуализацией параметров</li>
+<li>Реализованы компоненты для работы с правилами</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Настройка Min Stock, Max Stock, Reorder Point для каждой позиции</li>
+<li>Визуализация в виде графика уровня запасов</li>
+<li>Валидация правил: Min &lt; Reorder Point &lt; Max</li>
+</ul>
+<h4 id="102"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.6.2</span> Задача 10.2: Реализовать управление параметрами поставщика</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены параметры связанные с ЛЦ</li>
+<li>Реализованы механизмы валидации значений</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Настройка минимальной партии заказа и кратности</li>
+<li>Указание срока поставки в днях</li>
+<li>Проверка: минимальная партия ≤ Max запас</li>
+</ul>
+<h4 id="103"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.6.3</span> Задача 10.3: Реализовать массовую настройку и коэффициенты</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены алгоритмы группового применения правил</li>
+<li>Реализованы механизмы работы с коэффициентами</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Применение настроек к группе товаров</li>
+<li>Настройка помесячных коэффициентов сезонности</li>
+<li>Включение/выключение учета прогноза продаж</li>
+<li>Логирование изменений правил</li>
+</ul>
+<h3 id="uc11-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.7</span> UC11 - Проверить срок годности</h3>
+<h4 id="111-api"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.7.1</span> Задача 11.1: Реализовать высокопроизводительный API для робота</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Настроена интеграция по gRPC/WebSocket согласно диаграмме</li>
+<li>Реализованы механизмы кэширования в Redis</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Время ответа на запрос &lt; 100 мс</li>
+<li>Доступность сервиса 99.99%</li>
+<li>Обработка сотен запросов в минуту</li>
+</ul>
+<h4 id="112"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.7.2</span> Задача 11.2: Разработать алгоритм проверки сроков годности</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определена логика проверки с учетом виртуальных сроков</li>
+<li>Реализованы сервисы для работы с оперативным запасом</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Проверка статуса партии (заблокирована/активна)</li>
+<li>Сравнение текущего времени с сроком годности</li>
+<li>Проверка с запасом на период готовки блюда</li>
+</ul>
+<h4 id="113"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.7.3</span> Задача 11.3: Реализовать механизмы отказоустойчивости</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определена стратегия кэширования данных на роботе</li>
+<li>Реализованы fallback-механизмы при недоступности системы</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Использование кэшированных данных при недоступности системы</li>
+<li>Автоматическое обновление кэша каждые 1 час</li>
+<li>Уведомление оператора при проблемах связи</li>
+</ul>
+<h3 id="uc12-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.8</span> UC12 - Передать заказ в ЛЦ</h3>
+<h4 id="121-api"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.8.1</span> Задача 12.1: Реализовать интеграцию с API логистического центра</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Настроено подключение к API ЛЦ согласно спецификации</li>
+<li>Реализованы механизмы аутентификации и авторизации</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Формирование сообщения в формате ЛЦ</li>
+<li>Передача данных: ID заказа, ресторана, дата поставки, список позиций</li>
+<li>Обработка ответов: подтверждение, ошибка, изменение количества</li>
+</ul>
+<h4 id="122"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.8.2</span> Задача 12.2: Разработать систему повторных попыток отправки</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определена стратегия повторных попыток (15 раз через 1 минуту)</li>
+<li>Реализована очередь сообщений в Kafka</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Автоматические повторные попытки при ошибках связи</li>
+<li>Перевод заказа в статус "Ошибка отправки" после исчерпания попыток</li>
+<li>Идемпотентность процесса отправки</li>
+</ul>
+<h4 id="123-callback"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.8.3</span> Задача 12.3: Реализовать обработку callback от ЛЦ</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены endpoint для приема статусов от ЛЦ</li>
+<li>Реализованы механизмы обновления статусов заказов</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Обработка статусов: подтвержден, изменен, отклонен</li>
+<li>Автоматическое применение изменений от ЛЦ</li>
+<li>Уведомление технолога об изменениях и отклонениях</li>
+</ul>
+<h3 id="uc13-"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.9</span> UC13 - Сформировать задание на утилизацию</h3>
+<h4 id="131"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.9.1</span> Задача 13.1: Реализовать систему планирования заданий</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены критерии создания заданий согласно UC13</li>
+<li>Реализован планировщик для регулярного сканирования</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Сканирование партий по расписанию</li>
+<li>Выявление партий для утилизации по трем критериям</li>
+<li>Создание заданий с приоритетами на основе срочности</li>
+</ul>
+<h4 id="132"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.9.2</span> Задача 13.2: Разработать механизм распределения заданий операторам</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определена логика распределения заданий между операторами</li>
+<li>Реализована система очередей заданий</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Автоматическое назначение заданий операторам ресторана</li>
+<li>Учет загрузки операторов при распределении</li>
+<li>Балансировка нагрузки между операторами</li>
+</ul>
+<h4 id="133"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2.9.3</span> Задача 13.3: Реализовать мониторинг и эскалацию заданий</h4>
+<p><strong>Критерий готовности к работе:</strong></p>
+<ul>
+<li>Определены сроки выполнения заданий (1 час)</li>
+<li>Реализованы механизмы контроля выполнения</li>
+</ul>
+<p><strong>Критерий проверки требований:</strong></p>
+<ul>
+<li>Автоматическое повышение приоритета просроченных заданий</li>
+<li>Уведомление о массовой блокировке (&gt;50% партий)</li>
+<li>Создание новых заданий при просрочке выполнения</li>
+</ul>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  К началу
+</button>
+</main>
+<footer class="md-footer">
+<nav aria-label="Нижний колонтитул" class="md-footer__inner md-grid">
+<a aria-label="Назад: Постановки на разработку по UserStory" class="md-footer__link md-footer__link--prev" href="../task/">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</div>
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Назад
+              </span>
+<div class="md-ellipsis">
+                Постановки на разработку по UserStory
+              </div>
+</div>
+</a>
+<a aria-label="Вперед: Тест кейсы для UserStory MVP" class="md-footer__link md-footer__link--next" href="../test_case/">
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                Вперед
+              </span>
+<div class="md-ellipsis">
+                Тест кейсы для UserStory MVP
+              </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      © 2025 <a href="https://github.com/TimIrkutsk/Otus-Project" rel="noopener" target="_blank">Тимохин Антон</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.instant", "navigation.tracking", "navigation.path", "navigation.sections", "toc.integrate", "navigation.expand", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+<script src="../js/print-site.js"></script>
+</body>
+</html>

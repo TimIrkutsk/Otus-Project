@@ -1,0 +1,47 @@
+@startuml
+!include <C4/C4_Component>
+
+title Сервис заказов - Компонентная диаграмма (Уровень 3)
+
+Container_Boundary(order_service, "Сервис заказов") {
+    Component(auto_order_engine, "Движок автозаказа", "Spring Bean", "Автоматический расчет заказов по правилам")
+    Component(rule_validator, "Валидатор правил", "Spring Bean", "Проверка корректности правил пополнения")
+    Component(order_approval_manager, "Менеджер утверждения", "Spring Bean", "Управление процессом утверждения заказов")
+    Component(seasonality_calculator, "Калькулятор сезонности", "Spring Bean", "Учет сезонных коэффициентов в расчетах")
+    
+    Component(order_controller, "REST Контроллер", "Spring MVC", "API для управления заказами и правилами")
+    Component(order_repository, "Репозиторий заказов", "Spring Data", "Доступ к данным заказов и правил")
+    Component(supplier_integration, "Интеграция с поставщиками", "Spring Bean", "Управление подключениями к ЛЦ")
+}
+
+' Внутренние связи
+Rel(auto_order_engine, rule_validator, "Проверка правил", "Метод вызов")
+Rel(auto_order_engine, seasonality_calculator, "Учет сезонности", "Метод вызов")
+Rel(order_approval_manager, auto_order_engine, "Запуск расчета", "Метод вызов")
+Rel(order_controller, auto_order_engine, "API вызовы расчета", "Метод вызов")
+Rel(order_controller, order_approval_manager, "API утверждения", "Метод вызов")
+Rel(order_repository, auto_order_engine, "Сохранение заказов", "Метод вызов")
+
+' Внешние зависимости
+ContainerDb(orders_db, "База заказов", "PostgreSQL")
+Container_Ext(message_broker, "Брокер сообщений", "Kafka")
+Container_Ext(stock_service, "Сервис остатков", "REST API")
+Container_Ext(logistics, "Логистический центр", "REST API")
+Container_Ext(sales_system, "Система продаж", "REST API")
+
+' Внешние связи
+Rel(order_repository, orders_db, "Чтение/запись", "JDBC")
+Rel(auto_order_engine, stock_service, "Запрос текущих остатков", "REST")
+Rel(auto_order_engine, sales_system, "Получение прогнозов продаж", "REST")
+Rel(supplier_integration, logistics, "Передача заказов", "REST")
+Rel(order_approval_manager, message_broker, "События утверждения", "Kafka")
+Rel(supplier_integration, message_broker, "События интеграции", "Kafka")
+
+Note right of auto_order_engine {
+    <b>Алгоритм расчета:</b>
+    • Max - Текущий остаток - Незавершенные заказы
+    • Учет прогноза продаж
+    • Применение кратности партии
+    • Проверка точки заказа
+}
+@enduml

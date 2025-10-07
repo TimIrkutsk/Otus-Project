@@ -1,0 +1,41 @@
+@startuml
+!include <C4/C4_Component>
+
+title Сервис остатков - Компонентная диаграмма (Уровень 3)
+
+Container_Boundary(stock_service, "Сервис остатков") {
+    Component(batch_manager, "Менеджер партий", "Spring Bean", "Управление жизненным циклом партий")
+    Component(stock_calculator, "Калькулятор остатков", "Spring Bean", "Расчет текущих остатков, FEFO логика")
+    Component(movement_processor, "Процессор перемещений", "Spring Bean", "Обработка перемещений между зонами")
+    Component(inventory_handler, "Обработчик инвентаризации", "Spring Bean", "Поддержка процессов инвентаризации")
+    
+    Component(stock_controller, "REST Контроллер", "Spring MVC", "REST API для управления остатками")
+    Component(stock_repository, "Репозиторий остатков", "Spring Data", "Доступ к данным партий и остатков")
+}
+
+' Внутренние связи
+Rel(batch_manager, stock_calculator, "Запросы расчета", "Метод вызов")
+Rel(movement_processor, batch_manager, "Обновление партий", "Метод вызов")
+Rel(inventory_handler, batch_manager, "Корректировка остатков", "Метод вызов")
+Rel(stock_controller, batch_manager, "API вызовы", "Метод вызов")
+Rel(stock_controller, movement_processor, "API вызовы", "Метод вызов")
+Rel(stock_repository, batch_manager, "Сохранение данных", "Метод вызов")
+
+' Внешние зависимости
+ContainerDb(stock_db, "База остатков", "PostgreSQL")
+Container_Ext(cache_db, "Кэш-хранилище", "Redis")
+Container_Ext(message_broker, "Брокер сообщений", "Kafka")
+
+' Внешние связи
+Rel(stock_repository, stock_db, "Чтение/запись", "JDBC")
+Rel(stock_calculator, cache_db, "Кэширование расчетов", "Redis Protocol")
+Rel(batch_manager, message_broker, "События изменений", "Kafka")
+Rel(movement_processor, message_broker, "События перемещений", "Kafka")
+
+Note right of batch_manager {
+    <b>Ключевая логика:</b>
+    • Управление статусами партий
+    • FEFO при списаниях
+    • Консистентность остатков
+}
+@enduml

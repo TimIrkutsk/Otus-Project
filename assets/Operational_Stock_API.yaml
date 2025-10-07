@@ -1,0 +1,911 @@
+openapi: 3.0.3
+info:
+  title: Operational Stock API
+  description: |
+    API для управления оперативным запасом роботизированных линий.
+    **Особенности:**
+    - Мониторинг остатков на производственных линиях
+    - Автоматическое создание заданий на пополнение
+    - Управление виртуальными сроками годности
+    - Интеграция с роботизированными линиями
+  version: 1.0.0
+  contact:
+    name: Operational Stock Team
+    email: operational-stock@automated-restaurant.ru
+
+servers:
+  - url: https://api.automated-restaurant.ru/operational-stock/v1
+    description: Production server
+  - url: https://api-staging.automated-restaurant.ru/operational-stock/v1
+    description: Staging server
+
+tags:
+  - name: Monitoring
+    description: Мониторинг остатков (UC3)
+  - name: Replenishment
+    description: Пополнение оперативного запаса (UC3)
+  - name: VirtualExpiration
+    description: Управление виртуальными сроками годности
+  - name: Lines
+    description: Управление производственными линиями
+
+paths:
+  /lines/{line_id}/levels:
+    get:
+      tags: [Monitoring]
+      summary: Получение уровней остатков на линии (UC3)
+      description: |
+        Получение текущих остатков полуфабрикатов в оперативном запасе конкретной линии.
+      operationId: getLineStockLevels
+      parameters:
+        - name: line_id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "line_001"
+      responses:
+        '200':
+          description: Уровни остатков на линии
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LineStockLevelsResponse'
+              examples:
+                LineWithMultipleProducts:
+                  summary: Линия с несколькими продуктами
+                  value:
+                    line_id: "line_001"
+                    line_name: "Линия приготовления бургеров"
+                    monitored_at: "2024-01-15T14:30:00Z"
+                    stock_levels:
+                      - container_id: "container_A12"
+                        product_id: "PF-1001"
+                        product_name: "Котлета куриная"
+                        current_quantity: 15.5
+                        min_threshold: 20.0
+                        max_capacity: 50.0
+                        unit: "кг"
+                        virtual_expiration_date: "2024-01-18T15:30:00Z"
+                        status: "LOW"
+                        last_replenishment: "2024-01-15T09:20:00Z"
+                      - container_id: "container_B08"
+                        product_id: "PF-1002"
+                        product_name: "Булочка для бургера"
+                        current_quantity: 45.0
+                        min_threshold: 25.0
+                        max_capacity: 100.0
+                        unit: "шт"
+                        virtual_expiration_date: "2024-01-19T12:00:00Z"
+                        status: "NORMAL"
+                        last_replenishment: "2024-01-15T08:45:00Z"
+
+  /monitor/low-stock:
+    post:
+      tags: [Monitoring]
+      summary: Мониторинг низкого уровня запаса (UC3)
+      description: |
+        Проверка всех линий на предмет низкого уровня оперативного запаса.
+        Запускается в реальном времени при получении уведомлений от роботов о списаниях.
+      operationId: monitorLowStock
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LowStockMonitorRequest'
+            examples:
+              TriggeredByRobot:
+                summary: Мониторинг по триггеру от робота
+                value:
+                  trigger_type: "ROBOT_CONSUMPTION"
+                  line_id: "line_001"
+                  product_id: "PF-1001"
+                  consumed_quantity: 1.0
+                  remaining_quantity: 15.5
+                  trigger_timestamp: "2024-01-15T14:30:00Z"
+                  initiated_by: "robot_integration"
+      responses:
+        '200':
+          description: Мониторинг завершен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LowStockMonitorResponse'
+
+  /replenishment/tasks:
+    post:
+      tags: [Replenishment]
+      summary: Создание задания на пополнение (UC3)
+      description: |
+        Автоматическое создание задания на пополнение оперативного запаса при достижении минимального порога.
+      operationId: createReplenishmentTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReplenishmentTaskRequest'
+            examples:
+              LowStockTask:
+                summary: Задание при низком запасе
+                value:
+                  line_id: "line_001"
+                  container_id: "container_A12"
+                  product_id: "PF-1001"
+                  product_name: "Котлета куриная"
+                  current_quantity: 15.5
+                  min_threshold: 20.0
+                  required_quantity: 10.0
+                  unit: "кг"
+                  selected_batch_barcode: "BC-001-20240116-001"
+                  selected_batch_expiration: "2024-01-22"
+                  selection_method: "FEFO"
+                  priority: "HIGH"
+                  created_by: "operational_stock_monitor"
+                  created_timestamp: "2024-01-15T14:30:00Z"
+      responses:
+        '200':
+          description: Задание на пополнение создано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReplenishmentTaskResponse'
+
+  /virtual-expiration/update:
+    post:
+      tags: [VirtualExpiration]
+      summary: Обновление виртуального срока годности (UC3)
+      description: |
+        Пересчет виртуального срока годности после пополнения оперативного запаса.
+        Формула: (Y1*T1 + Y2*T2) / (Y1 + Y2)
+      operationId: updateVirtualExpiration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VirtualExpirationUpdate'
+            examples:
+              AfterReplenishment:
+                summary: Обновление после пополнения
+                value:
+                  line_id: "line_001"
+                  container_id: "container_A12"
+                  product_id: "PF-1001"
+                  current_mixture:
+                    - batch_barcode: "BC-001-20240116-001"
+                      quantity: 40.0
+                      expiration_date: "2024-01-20"
+                    - batch_barcode: "BC-001-20240116-002"
+                      quantity: 10.0
+                      expiration_date: "2024-01-22"
+                  new_virtual_expiration: "2024-01-21"
+                  total_quantity: 50.0
+                  updated_by: "operator_001"
+                  updated_at: "2024-01-15T09:20:00Z"
+      responses:
+        '200':
+          description: Виртуальный срок годности обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VirtualExpirationResponse'
+
+  /lines/{line_id}/containers/{container_id}/usage:
+    post:
+      tags: [Monitoring]
+      summary: Регистрация использования полуфабриката (UC3)
+      description: |
+        Регистрация факта использования полуфабриката роботом.
+        Используется для отслеживания остатков в реальном времени.
+      operationId: registerProductUsage
+      parameters:
+        - name: line_id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "line_001"
+        - name: container_id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "container_A12"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUsage'
+            examples:
+              RobotUsage:
+                summary: Использование роботом
+                value:
+                  product_id: "PF-1001"
+                  quantity: 1.0
+                  unit: "кг"
+                  robot_id: "robot_alpha_001"
+                  usage_timestamp: "2024-01-15T14:25:00Z"
+                  remaining_quantity: 15.5
+      responses:
+        '200':
+          description: Использование зарегистрировано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductUsageResponse'
+
+  /emergency/low-stock:
+    post:
+      tags: [Monitoring]
+      summary: Обработка критического уровня запаса (UC3)
+      description: |
+        Обработка ситуации, когда запас на линии приближается к нулю.
+        Создает задания с высшим приоритетом и уведомляет технолога.
+      operationId: handleEmergencyLowStock
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmergencyLowStock'
+            examples:
+              CriticalLevel:
+                summary: Критический уровень запаса
+                value:
+                  line_id: "line_001"
+                  container_id: "container_A12"
+                  product_id: "PF-1001"
+                  product_name: "Котлета куриная"
+                  current_quantity: 2.5
+                  min_threshold: 20.0
+                  estimated_time_until_empty: "10 minutes"
+                  emergency_level: "CRITICAL"
+                  detected_at: "2024-01-15T14:35:00Z"
+                  initiated_by: "operational_stock_monitor"
+      responses:
+        '200':
+          description: Чрезвычайная ситуация обработана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmergencyResponse'
+
+  /lines:
+    get:
+      tags: [Lines]
+      summary: Получение списка производственных линий
+      description: Получение информации о всех роботизированных линиях
+      operationId: getProductionLines
+      parameters:
+        - name: include_stock_levels
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: Включать информацию об остатках
+      responses:
+        '200':
+          description: Список производственных линий
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductionLinesResponse'
+
+components:
+  schemas:
+    LineStockLevelsResponse:
+      type: object
+      required:
+        - line_id
+        - monitored_at
+        - stock_levels
+      properties:
+        line_id:
+          type: string
+          example: "line_001"
+        line_name:
+          type: string
+          example: "Линия приготовления бургеров"
+        monitored_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T14:30:00Z"
+        stock_levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/StockLevel'
+        summary:
+          type: object
+          properties:
+            total_containers:
+              type: integer
+              example: 2
+            low_stock_containers:
+              type: integer
+              example: 1
+            critical_stock_containers:
+              type: integer
+              example: 0
+
+    StockLevel:
+      type: object
+      required:
+        - container_id
+        - product_id
+        - product_name
+        - current_quantity
+        - min_threshold
+        - max_capacity
+        - unit
+        - status
+      properties:
+        container_id:
+          type: string
+          example: "container_A12"
+        product_id:
+          type: string
+          example: "PF-1001"
+        product_name:
+          type: string
+          example: "Котлета куриная"
+        current_quantity:
+          type: number
+          format: float
+          example: 15.5
+        min_threshold:
+          type: number
+          format: float
+          example: 20.0
+        max_capacity:
+          type: number
+          format: float
+          example: 50.0
+        unit:
+          type: string
+          example: "кг"
+        virtual_expiration_date:
+          type: string
+          format: date-time
+          example: "2024-01-18T15:30:00Z"
+        status:
+          type: string
+          enum: [NORMAL, LOW, CRITICAL, EMPTY]
+          example: "LOW"
+        last_replenishment:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:20:00Z"
+        consumption_rate:
+          type: number
+          format: float
+          description: Скорость потребления (ед/час)
+          example: 5.2
+
+    LowStockMonitorRequest:
+      type: object
+      required:
+        - trigger_type
+        - trigger_timestamp
+        - initiated_by
+      properties:
+        trigger_type:
+          type: string
+          enum: [ROBOT_CONSUMPTION, SCHEDULED_CHECK, MANUAL]
+          example: "ROBOT_CONSUMPTION"
+        line_id:
+          type: string
+          example: "line_001"
+        product_id:
+          type: string
+          example: "PF-1001"
+        consumed_quantity:
+          type: number
+          format: float
+          example: 1.0
+        remaining_quantity:
+          type: number
+          format: float
+          example: 15.5
+        trigger_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T14:30:00Z"
+        initiated_by:
+          type: string
+          example: "robot_integration"
+
+    LowStockMonitorResponse:
+      type: object
+      properties:
+        monitor_id:
+          type: string
+          example: "monitor_20240115_001"
+        trigger_type:
+          type: string
+          example: "ROBOT_CONSUMPTION"
+        lines_checked:
+          type: integer
+          example: 5
+        low_stock_detected:
+          type: integer
+          example: 1
+        replenishment_tasks_created:
+          type: integer
+          example: 1
+        monitored_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T14:30:00Z"
+        message:
+          type: string
+          example: "Мониторинг завершен, создано 1 задание на пополнение"
+
+    ReplenishmentTaskRequest:
+      type: object
+      required:
+        - line_id
+        - container_id
+        - product_id
+        - product_name
+        - current_quantity
+        - min_threshold
+        - required_quantity
+        - unit
+        - selected_batch_barcode
+        - priority
+        - created_by
+        - created_timestamp
+      properties:
+        line_id:
+          type: string
+          example: "line_001"
+        container_id:
+          type: string
+          example: "container_A12"
+        product_id:
+          type: string
+          example: "PF-1001"
+        product_name:
+          type: string
+          example: "Котлета куриная"
+        current_quantity:
+          type: number
+          format: float
+          example: 15.5
+        min_threshold:
+          type: number
+          format: float
+          example: 20.0
+        required_quantity:
+          type: number
+          format: float
+          example: 10.0
+        unit:
+          type: string
+          example: "кг"
+        selected_batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        selected_batch_expiration:
+          type: string
+          format: date
+          example: "2024-01-22"
+        selection_method:
+          type: string
+          enum: [FEFO, FIFO, MANUAL]
+          example: "FEFO"
+        priority:
+          type: string
+          enum: [HIGH, MEDIUM, LOW]
+          example: "HIGH"
+        created_by:
+          type: string
+          example: "operational_stock_monitor"
+        created_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T14:30:00Z"
+
+    ReplenishmentTaskResponse:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: "task_repl_001"
+        line_id:
+          type: string
+          example: "line_001"
+        container_id:
+          type: string
+          example: "container_A12"
+        product_id:
+          type: string
+          example: "PF-1001"
+        status:
+          type: string
+          example: "CREATED"
+        assigned_operator_id:
+          type: string
+          example: "operator_001"
+        required_quantity:
+          type: number
+          format: float
+          example: 10.0
+        selected_batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T14:30:00Z"
+        message:
+          type: string
+          example: "Задание на пополнение создано"
+
+    VirtualExpirationUpdate:
+      type: object
+      required:
+        - line_id
+        - container_id
+        - product_id
+        - current_mixture
+        - new_virtual_expiration
+        - total_quantity
+        - updated_by
+        - updated_at
+      properties:
+        line_id:
+          type: string
+          example: "line_001"
+        container_id:
+          type: string
+          example: "container_A12"
+        product_id:
+          type: string
+          example: "PF-1001"
+        current_mixture:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchMixture'
+        new_virtual_expiration:
+          type: string
+          format: date-time
+          example: "2024-01-21"
+        total_quantity:
+          type: number
+          format: float
+          example: 50.0
+        updated_by:
+          type: string
+          example: "operator_001"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:20:00Z"
+
+    BatchMixture:
+      type: object
+      required:
+        - batch_barcode
+        - quantity
+        - expiration_date
+      properties:
+        batch_barcode:
+          type: string
+          example: "BC-001-20240116-001"
+        quantity:
+          type: number
+          format: float
+          example: 40.0
+        expiration_date:
+          type: string
+          format: date-time
+          example: "2024-01-20"
+
+    VirtualExpirationResponse:
+      type: object
+      properties:
+        line_id:
+          type: string
+          example: "line_001"
+        container_id:
+          type: string
+          example: "container_A12"
+        product_id:
+          type: string
+          example: "PF-1001"
+        previous_virtual_expiration:
+          type: string
+          format: date-time
+          example: "2024-01-20"
+        new_virtual_expiration:
+          type: string
+          format: date-time
+          example: "2024-01-21"
+        total_quantity:
+          type: number
+          format: float
+          example: 50.0
+        calculation_formula:
+          type: string
+          example: "(Y1*T1 + Y2*T2) / (Y1 + Y2)"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T09:20:00Z"
+        message:
+          type: string
+          example: "Виртуальный срок годности обновлен"
+
+    ProductUsage:
+      type: object
+      required:
+        - product_id
+        - quantity
+        - unit
+        - robot_id
+        - usage_timestamp
+        - remaining_quantity
+      properties:
+        product_id:
+          type: string
+          example: "PF-1001"
+        quantity:
+          type: number
+          format: float
+          example: 1.0
+        unit:
+          type: string
+          example: "кг"
+        robot_id:
+          type: string
+          example: "robot_alpha_001"
+        usage_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T14:25:00Z"
+        remaining_quantity:
+          type: number
+          format: float
+          example: 15.5
+
+    ProductUsageResponse:
+      type: object
+      properties:
+        usage_id:
+          type: string
+          example: "usage_20240115_001"
+        line_id:
+          type: string
+          example: "line_001"
+        container_id:
+          type: string
+          example: "container_A12"
+        product_id:
+          type: string
+          example: "PF-1001"
+        previous_quantity:
+          type: number
+          format: float
+          example: 16.5
+        new_quantity:
+          type: number
+          format: float
+          example: 15.5
+        usage_timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T14:25:00Z"
+        message:
+          type: string
+          example: "Использование зарегистрировано"
+
+    EmergencyLowStock:
+      type: object
+      required:
+        - line_id
+        - container_id
+        - product_id
+        - product_name
+        - current_quantity
+        - min_threshold
+        - emergency_level
+        - detected_at
+        - initiated_by
+      properties:
+        line_id:
+          type: string
+          example: "line_001"
+        container_id:
+          type: string
+          example: "container_A12"
+        product_id:
+          type: string
+          example: "PF-1001"
+        product_name:
+          type: string
+          example: "Котлета куриная"
+        current_quantity:
+          type: number
+          format: float
+          example: 2.5
+        min_threshold:
+          type: number
+          format: float
+          example: 20.0
+        estimated_time_until_empty:
+          type: string
+          example: "10 minutes"
+        emergency_level:
+          type: string
+          enum: [CRITICAL, URGENT]
+          example: "CRITICAL"
+        detected_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T14:35:00Z"
+        initiated_by:
+          type: string
+          example: "operational_stock_monitor"
+
+    EmergencyResponse:
+      type: object
+      properties:
+        emergency_id:
+          type: string
+          example: "emergency_20240115_001"
+        line_id:
+          type: string
+          example: "line_001"
+        container_id:
+          type: string
+          example: "container_A12"
+        product_id:
+          type: string
+          example: "PF-1001"
+        emergency_level:
+          type: string
+          example: "CRITICAL"
+        replenishment_task_created:
+          type: boolean
+          example: true
+        task_id:
+          type: string
+          example: "task_repl_002"
+        priority:
+          type: string
+          example: "HIGH"
+        technologist_notified:
+          type: boolean
+          example: true
+        handled_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T14:35:00Z"
+        message:
+          type: string
+          example: "Чрезвычайная ситуация обработана, создано задание с высшим приоритетом"
+
+    ProductionLinesResponse:
+      type: object
+      properties:
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductionLine'
+        total_count:
+          type: integer
+          example: 5
+        active_count:
+          type: integer
+          example: 4
+
+    ProductionLine:
+      type: object
+      required:
+        - line_id
+        - line_name
+        - status
+      properties:
+        line_id:
+          type: string
+          example: "line_001"
+        line_name:
+          type: string
+          example: "Линия приготовления бургеров"
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE, MAINTENANCE]
+          example: "ACTIVE"
+        capacity_per_day:
+          type: integer
+          example: 5000
+        location:
+          type: string
+          example: "Производственный цех А"
+        last_maintenance:
+          type: string
+          format: date
+          example: "2024-01-10"
+        containers:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineContainer'
+
+    LineContainer:
+      type: object
+      required:
+        - container_id
+        - product_id
+        - product_name
+        - max_capacity
+        - unit
+      properties:
+        container_id:
+          type: string
+          example: "container_A12"
+        product_id:
+          type: string
+          example: "PF-1001"
+        product_name:
+          type: string
+          example: "Котлета куриная"
+        max_capacity:
+          type: number
+          format: float
+          example: 50.0
+        unit:
+          type: string
+          example: "кг"
+        current_quantity:
+          type: number
+          format: float
+          example: 15.5
+        status:
+          type: string
+          example: "LOW"
+
+    Error:
+      type: object
+      properties:
+        error_id:
+          type: string
+          example: "err_op_stock_001"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T14:30:00.200Z"
+        code:
+          type: string
+          enum: [LINE_NOT_FOUND, CONTAINER_NOT_FOUND, INSUFFICIENT_DATA, MONITORING_ERROR]
+          example: "LINE_NOT_FOUND"
+        message:
+          type: string
+          example: "Производственная линия не найдена"
+        details:
+          type: string
+          example: "Линия с ID line_999 не существует"
+
+securitySchemes:
+  BearerAuth:
+    type: http
+    scheme: bearer
+    description: JWT токен для аутентификации
+  ServiceAuth:
+    type: apiKey
+    in: header
+    name: X-Service-API-Key
+    description: API ключ для сервисной аутентификации
+  RobotAuth:
+    type: apiKey
+    in: header
+    name: X-Robot-API-Key
+    description: API ключ для роботизированных линий
+
+security:
+  - BearerAuth: []
+  - ServiceAuth: []
+  - RobotAuth: []

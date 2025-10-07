@@ -1,0 +1,64 @@
+@startuml
+!include <C4/C4_Container>
+
+title Система управления запасами - Интеграция с производством (Уровень 2)
+
+' Внешние системы
+System_Ext(robot, "Роботизированная линия", "Промышленный робот")
+
+' Граница системы
+System_Boundary(production_system, "Интеграция с производством") {
+
+    ' Backend сервисы
+    Container(robot_integration, "Сервис интеграции с роботом", "Spring Boot, gRPC", "Реальное время взаимодействие")
+    Container(operational_stock_service, "Сервис оперативного запаса", "Spring Boot", "Управление запасом на линии")
+    
+    ' Базы данных и кэш
+    ContainerDb(cache_db, "Кэш-хранилище", "Redis", "Высокопроизводительный кэш")
+    ContainerDb(analytics_db, "База аналитики", "ClickHouse", "Метрики и мониторинг")
+}
+
+' Сервисы из ядра системы
+Container_Ext(stock_service, "Сервис остатков", "Spring Boot", "Управление партиями и остатками")
+Container_Ext(shelf_life_service, "Сервис контроля сроков", "Spring Boot", "Блокировка партий")
+Container_Ext(task_service, "Сервис заданий", "Spring Boot", "Управление заданиями операторам")
+Container_Ext(notification_service, "Сервис уведомлений", "Spring Boot", "Уведомления")
+
+' Критические взаимодействия (<100 мс)
+Rel(robot, robot_integration, "Запрос разрешения на использование\nУведомление о списаниях", "gRPC/WebSocket\n<100 мс")
+Rel(robot_integration, robot, "Блокировка партий\nДанные об остатках", "gRPC/WebSocket\nРеальное время")
+
+' Высокопроизводительный доступ к данным
+Rel(robot_integration, cache_db, "Прямой доступ к кэшу остатков", "Redis Protocol\n<10 мс")
+Rel(operational_stock_service, cache_db, "Кэш оперативного запаса", "Redis Protocol")
+
+' Фоновая синхронизация
+Rel(robot_integration, stock_service, "Синхронизация списаний", "Kafka")
+Rel(robot_integration, shelf_life_service, "Проверка блокировок", "REST")
+
+' Управление оперативным запасом
+Rel(operational_stock_service, stock_service, "Запросы партий для пополнения", "REST")
+Rel(operational_stock_service, task_service, "Создание заданий на пополнение", "Kafka")
+Rel(operational_stock_service, robot_integration, "Обновление данных робота", "Kafka")
+
+' Мониторинг и аналитика
+Rel(robot_integration, analytics_db, "Запись метрик производительности", "JDBC")
+Rel(operational_stock_service, analytics_db, "Статистика оперативного запаса", "JDBC")
+
+' Уведомления о критических событиях
+Rel(robot_integration, notification_service, "Уведомления об остановках", "Kafka")
+Rel(operational_stock_service, notification_service, "Уведомления о низком запасе", "Kafka")
+
+' Загрузка данных в кэш
+Rel(stock_service, cache_db, "Предзагрузка критичных данных", "Redis Protocol")
+Rel(shelf_life_service, cache_db, "Предзагрузка блокировок", "Redis Protocol")
+
+Note left of robot_integration {
+  <b>Критические требования:</b>
+  • Ответ <100 мс для робота
+  • Прямой доступ к Redis кэшу
+  • Изоляция от медленных сервисов
+  • Резервирование при недоступности
+}
+
+@enduml

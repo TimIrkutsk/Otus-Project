@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система управления запасами - Технолог</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .ui-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #34495e;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            min-height: 600px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: #34495e;
+            color: white;
+            padding: 1.5rem 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            padding: 0 1.5rem 0.5rem;
+            font-size: 0.9rem;
+            color: #bdc3c7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-item {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .sidebar-item:hover {
+            background: #3c556d;
+            text-decoration: none;
+            color: white;
+        }
+
+        .sidebar-item.active {
+            background: #2c3e50;
+            border-left-color: #e74c3c;
+        }
+
+        .sidebar-icon {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            background: #ecf0f1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .welcome-section {
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: #bdc3c7;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            border-top: 3px solid #34495e;
+        }
+
+        /* Feedback */
+        .feedback {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+            
+            .stats-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ui-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🏭</span>
+                <span>Управление запасами</span>
+            </div>
+            
+            <div class="user-menu">
+                <div class="user-avatar" onclick="showFeedback('Профиль технолога')">ТХ</div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Управление заказами</div>
+                    <a href="orders.html" class="sidebar-item">
+                        <span class="sidebar-icon">📦</span>
+                        <span>Управление заказами</span>
+                    </a>
+                    <a href="auto-order.html" class="sidebar-item" >
+                        <span class="sidebar-icon">🤖</span>
+                        <span>Автозаказ</span>
+                    </a>
+                </div>
+                
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Отчеты и аналитика</div>
+                    <a href="shelf-life-report.html" class="sidebar-item" >
+                        <span class="sidebar-icon">📊</span>
+                        <span>Отчет по срокам годности</span>
+                    </a>
+                    <a href="stock-report.html" class="sidebar-item" onclick="showFeedback('Переход к отчету по остаткам')">
+                        <span class="sidebar-icon">📈</span>
+                        <span>Отчет по остаткам</span>
+                    </a>
+                    <a href="disposal-analytics.html" class="sidebar-item" onclick="showFeedback('Переход к аналитике списаний')">
+                        <span class="sidebar-icon">♻️</span>
+                        <span>Аналитика списаний</span>
+                    </a>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Контроль сроков годности</div>
+                    <a href="blocked-batches.html" class="sidebar-item" onclick="showFeedback('Переход к заблокированным партиям')">
+                        <span class="sidebar-icon">⛔</span>
+                        <span>Заблокированные партии</span>
+                    </a>
+                    <a href="shelf-life-settings.html" class="sidebar-item" onclick="showFeedback('Переход к настройкам контроля сроков')">
+                        <span class="sidebar-icon">⚙️</span>
+                        <span>Настройки контроля</span>
+                    </a>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Управление справочниками</div>
+                    <a href="products.html" class="sidebar-item" onclick="showFeedback('Переход к номенклатуре')">
+                        <span class="sidebar-icon">🏷️</span>
+                        <span>Номенклатура</span>
+                    </a>
+                    <a href="storage-zones.html" class="sidebar-item" onclick="showFeedback('Переход к складским зонам')">
+                        <span class="sidebar-icon">📦</span>
+                        <span>Складские зоны</span>
+                    </a>
+                    <a href="categories.html" class="sidebar-item" onclick="showFeedback('Переход к категориям')">
+                        <span class="sidebar-icon">📑</span>
+                        <span>Категории</span>
+                    </a>
+                    <a href="replenishment-rules.html" class="sidebar-item" onclick="showFeedback('Переход к правилам автозаказа')">
+                        <span class="sidebar-icon">📋</span>
+                        <span>Правила автозаказа</span>
+                    </a>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Мониторинг заданий</div>
+                    <a href="tasks-monitoring.html" class="sidebar-item" onclick="showFeedback('Переход к мониторингу заданий')">
+                        <span class="sidebar-icon">👀</span>
+                        <span>Мониторинг заданий</span>
+                    </a>
+                    <a href="task-history.html" class="sidebar-item" onclick="showFeedback('Переход к истории заданий')">
+                        <span class="sidebar-icon">📚</span>
+                        <span>История заданий</span>
+                    </a>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Настройки системы</div>
+                    <a href="inventory-schedule.html" class="sidebar-item" onclick="showFeedback('Переход к расписанию инвентаризации')">
+                        <span class="sidebar-icon">📅</span>
+                        <span>Расписание инвентаризации</span>
+                    </a>
+                    <a href="forecast-schedule.html" class="sidebar-item" onclick="showFeedback('Переход к расписанию прогнозов')">
+                        <span class="sidebar-icon">🔮</span>
+                        <span>Расписание прогнозов</span>
+                    </a>
+                    <a href="notification-settings.html" class="sidebar-item" onclick="showFeedback('Переход к настройкам уведомлений')">
+                        <span class="sidebar-icon">🔔</span>
+                        <span>Настройки уведомлений</span>
+                    </a>
+                </div>
+            </aside>
+
+            <!-- Content -->
+            <main class="content">
+                <div class="welcome-section">
+                    <h1 class="welcome-title">Добро пожаловать, Технолог!</h1>
+                    <p class="welcome-subtitle">
+                        Система управления запасами ресторана. Здесь вы можете управлять заказами, 
+                        контролировать сроки годности, настраивать правила автозаказа и анализировать 
+                        эффективность управления запасами.
+                    </p>
+                    
+                    <div class="stats-overview">
+                        <div class="stat-item">
+                            <span class="stat-number">12</span>
+                            <span class="stat-label">активных заказов</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">3</span>
+                            <span class="stat-label">заблокированные партии</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">8</span>
+                            <span class="stat-label">заданий в работе</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">24</span>
+                            <span class="stat-label">истекающих срока</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 Система управления запасами. Ресторан "Рога и копыта"</p>
+        </footer>
+    </div>
+
+    <!-- Feedback Message -->
+    <div class="feedback" id="feedback"></div>
+
+    <script>
+        function showFeedback(message) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.classList.add('show');
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 3000);
+            
+            // Prevent default link behavior for demo
+            event.preventDefault();
+            return false;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Главное меню технолога загружено');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инвентаризация - Система управления запасами</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .ui-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #34495e;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+        }
+
+        .nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: #e74c3c;
+            transform: translateY(-2px);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 2rem;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+        }
+
+        .scan-status {
+            background: #ecf0f1;
+            padding: 0.7rem 1.2rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-online {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .status-offline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        /* Scanner Section */
+        .scanner-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .scanner-placeholder {
+            background: #f8f9fa;
+            border: 3px dashed #bdc3c7;
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scanner-placeholder:hover {
+            border-color: #3498db;
+            background: #ebf5fb;
+        }
+
+        .scanner-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #7f8c8d;
+        }
+
+        .scanner-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .scanner-description {
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        /* Manual Input Section */
+        .manual-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            font-size: 1.3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ecf0f1;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        /* Scanned Items List */
+        .items-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .item-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s ease;
+        }
+
+        .item-card.synced {
+            border-left-color: #27ae60;
+            background: #f5fff9;
+        }
+
+        .item-card.pending {
+            border-left-color: #f39c12;
+            background: #fffbf0;
+        }
+
+        .item-icon {
+            font-size: 1.5rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        .item-content {
+            flex: 1;
+        }
+
+        .item-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+
+        .item-details {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-input {
+            width: 80px;
+            padding: 0.3rem;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-remove {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-remove:hover {
+            background: #c0392b;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-stats {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #27ae60;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: #bdc3c7;
+            padding: 1rem 2rem;
+            text-align: center;
+            border-top: 3px solid #34495e;
+            font-size: 0.8rem;
+        }
+
+        /* Feedback */
+        .feedback {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ui-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🏭</span>
+                <span>Умный Склад</span>
+            </div>
+            
+            <nav class="nav">
+                <a href="operator-main-menu.html" class="nav-link">Главная</a>
+                <a href="dashboard.html" class="nav-link">Дашборд</a>
+                <a href="tasks.html" class="nav-link">Задания</a>
+                <a href="inventory.html" class="nav-link active">Инвентаризация</a>
+            </nav>
+            
+            <div class="user-menu">
+                <div class="user-avatar" onclick="showFeedback('Профиль оператора')">ОП</div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="content-header">
+                <h1 class="page-title">Инвентаризация</h1>
+                <div class="scan-status">
+                    <span class="status-online">●</span> 
+                    <span>Связь: Онлайн</span>
+                    • 
+                    <span>Сканировано: 8 из 24 партий</span>
+                </div>
+            </div>
+
+            <!-- Scanner Section -->
+            <div class="scanner-section">
+                <div class="scanner-placeholder" onclick="simulateScan()">
+                    <div class="scanner-icon">📷</div>
+                    <div class="scanner-title">Сканирование штрих-кода</div>
+                    <div class="scanner-description">
+                        Наведите камеру на штрих-код партии или нажмите для ручного ввода
+                    </div>
+                    <button class="btn btn-primary">
+                        <span>🔍</span> Активировать сканер
+                    </button>
+                </div>
+            </div>
+
+            <!-- Manual Input Section -->
+            <div class="manual-section">
+                <h2 class="section-title">
+                    <span class="section-icon">⌨️</span>
+                    Ручной ввод
+                </h2>
+                <div class="form-group">
+                    <label class="form-label">Штрих-код партии</label>
+                    <input type="text" class="form-input" placeholder="Введите штрих-код вручную" id="manualBarcode">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Фактическое количество</label>
+                    <input type="number" class="form-input" placeholder="Введите количество" id="manualQuantity">
+                </div>
+                <button class="btn btn-secondary" onclick="addManualItem()">
+                    <span>➕</span> Добавить в список
+                </button>
+            </div>
+
+            <!-- Scanned Items List -->
+            <div class="items-section">
+                <h2 class="section-title">
+                    <span class="section-icon">📋</span>
+                    Отсканированные партии
+                </h2>
+                <div class="items-list" id="itemsList">
+                    <!-- Items will be added here dynamically -->
+                </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-section">
+                <div class="progress-info">
+                    <div class="progress-stats">
+                        📊 Прогресс: <span id="scannedCount">0</span> из <span id="totalCount">24</span> партий
+                    </div>
+                    <div class="progress-stats" id="syncStatus">
+                        💾 Данные синхронизированы
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="pauseInventory()">
+                        <span>⏸️</span> Приостановить
+                    </button>
+                    <button class="btn btn-primary" onclick="completeInventory()">
+                        <span>✅</span> Завершить инвентаризацию
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 Умный Склад • Инвентаризация • Автосохранение включено</p>
+        </footer>
+    </div>
+
+    <!-- Feedback Message -->
+    <div class="feedback" id="feedback"></div>
+
+    <script>
+        let scannedItems = [];
+        let totalItems = 24;
+
+        function showFeedback(message) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.classList.add('show');
+            
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 3000);
+            
+            event.preventDefault();
+        }
+
+        function simulateScan() {
+            const barcodes = ['B-001', 'B-002', 'B-003', 'B-004', 'B-005'];
+            const products = ['Котлеты говяжьи', 'Булочки для бургеров', 'Сыр чеддар', 'Листья салата', 'Помидоры'];
+            const locations = ['Холодильник А1', 'Холодильник А2', 'Холодильник Б1', 'Стеллаж В1', 'Стеллаж В2'];
+            
+            const randomIndex = Math.floor(Math.random() * barcodes.length);
+            const barcode = barcodes[randomIndex];
+            const product = products[randomIndex];
+            const location = locations[randomIndex];
+            const systemQty = Math.floor(Math.random() * 50) + 10;
+            const actualQty = systemQty + Math.floor(Math.random() * 5) - 2;
+            
+            addScannedItem(barcode, product, location, systemQty, actualQty);
+            showFeedback(`Отсканирована партия: ${barcode} - ${product}`);
+        }
+
+        function addManualItem() {
+            const barcodeInput = document.getElementById('manualBarcode');
+            const quantityInput = document.getElementById('manualQuantity');
+            
+            const barcode = barcodeInput.value.trim();
+            const quantity = parseInt(quantityInput.value);
+            
+            if (!barcode || isNaN(quantity)) {
+                showFeedback('Заполните все поля корректно');
+                return;
+            }
+            
+            const products = ['Полуфабрикат ручного ввода', 'Дополнительная партия', 'Резервный запас'];
+            const locations = ['Ручной ввод', 'Доп. склад', 'Резерв'];
+            
+            const randomIndex = Math.floor(Math.random() * products.length);
+            const product = products[randomIndex];
+            const location = locations[randomIndex];
+            const systemQty = Math.floor(Math.random() * 30) + 5;
+            
+            addScannedItem(barcode, product, location, systemQty, quantity);
+            
+            // Clear inputs
+            barcodeInput.value = '';
+            quantityInput.value = '';
+            
+            showFeedback(`Добавлена партия: ${barcode}`);
+        }
+
+        function addScannedItem(barcode, product, location, systemQty, actualQty) {
+            const item = {
+                id: Date.now(),
+                barcode: barcode,
+                product: product,
+                location: location,
+                systemQty: systemQty,
+                actualQty: actualQty,
+                synced: false,
+                timestamp: new Date().toLocaleTimeString()
+            };
+            
+            scannedItems.push(item);
+            updateItemsList();
+            updateProgress();
+        }
+
+        function updateItemsList() {
+            const itemsList = document.getElementById('itemsList');
+            itemsList.innerHTML = '';
+            
+            scannedItems.forEach(item => {
+                const discrepancy = item.actualQty - item.systemQty;
+                const discrepancyClass = discrepancy !== 0 ? 'pending' : 'synced';
+                const discrepancyText = discrepancy > 0 ? `+${discrepancy}` : discrepancy;
+                const discrepancyColor = discrepancy > 0 ? '#27ae60' : discrepancy < 0 ? '#e74c3c' : '#7f8c8d';
+                
+                const itemElement = document.createElement('div');
+                itemElement.className = `item-card ${item.synced ? 'synced' : discrepancyClass}`;
+                itemElement.innerHTML = `
+                    <span class="item-icon">📦</span>
+                    <div class="item-content">
+                        <div class="item-title">${item.product}</div>
+                        <div class="item-details">
+                            <span>Штрих-код: ${item.barcode}</span>
+                            <span>Локация: ${item.location}</span>
+                            <span>Система: ${item.systemQty} шт</span>
+                            <span style="color: ${discrepancyColor}">Расхождение: ${discrepancyText} шт</span>
+                            <span>Время: ${item.timestamp}</span>
+                        </div>
+                    </div>
+                    <div class="item-quantity">
+                        <input type="number" class="quantity-input" value="${item.actualQty}" 
+                               onchange="updateItemQuantity(${item.id}, this.value)">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-small btn-remove" onclick="removeItem(${item.id})">🗑️</button>
+                    </div>
+                `;
+                itemsList.appendChild(itemElement);
+            });
+        }
+
+        function updateItemQuantity(itemId, newQuantity) {
+            const item = scannedItems.find(i => i.id === itemId);
+            if (item) {
+                item.actualQty = parseInt(newQuantity);
+                item.synced = false;
+                updateItemsList();
+                showFeedback(`Количество обновлено для ${item.barcode}`);
+            }
+        }
+
+        function removeItem(itemId) {
+            scannedItems = scannedItems.filter(i => i.id !== itemId);
+            updateItemsList();
+            updateProgress();
+            showFeedback('Партия удалена из списка');
+        }
+
+        function updateProgress() {
+            const scannedCount = scannedItems.length;
+            const progressFill = document.getElementById('progressFill');
+            const scannedCountElement = document.getElementById('scannedCount');
+            const syncStatusElement = document.getElementById('syncStatus');
+            
+            const progress = (scannedCount / totalItems) * 100;
+            progressFill.style.width = `${progress}%`;
+            scannedCountElement.textContent = scannedCount;
+            
+            const unsyncedItems = scannedItems.filter(item => !item.synced).length;
+            if (unsyncedItems > 0) {
+                syncStatusElement.innerHTML = `💾 <span style="color: #f39c12">Ожидание синхронизации: ${unsyncedItems}</span>`;
+            } else {
+                syncStatusElement.innerHTML = '💾 Данные синхронизированы';
+            }
+        }
+
+        function pauseInventory() {
+            showFeedback('Инвентаризация приостановлена. Данные сохранены локально.');
+        }
+
+        function completeInventory() {
+            if (scannedItems.length === 0) {
+                showFeedback('Нет отсканированных партий для завершения');
+                return;
+            }
+            
+            const unsyncedItems = scannedItems.filter(item => !item.synced).length;
+            if (unsyncedItems > 0) {
+                showFeedback(`Сначала синхронизируйте ${unsyncedItems} несинхронизированных партий`);
+                return;
+            }
+            
+            showFeedback('Инвентаризация завершена! Отчет отправлен на согласование.');
+            
+            // Simulate sync
+            setTimeout(() => {
+                scannedItems.forEach(item => item.synced = true);
+                updateItemsList();
+                updateProgress();
+            }, 2000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Экран инвентаризации загружен');
+            
+            // Add some demo items
+            setTimeout(() => {
+                addScannedItem('B-001', 'Котлеты говяжьи', 'Холодильник А1', 25, 23);
+                addScannedItem('B-002', 'Булочки для бургеров', 'Стеллаж В1', 50, 48);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
